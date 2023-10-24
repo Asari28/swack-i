@@ -1,0 +1,17 @@
+HELP.md
+
+bin/
+build/
+target/
+*.war
+*.tar
+
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**
+!**/src/test/**
+
+.apt_generated
+.factorypath
+.settings
+.springBeans
+.sts4-cache
