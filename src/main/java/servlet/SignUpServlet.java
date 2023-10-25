@@ -1,11 +1,18 @@
 package servlet;
 
+import static parameter.Messages.*;
+
 import java.io.IOException;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import bean.User;
+import exception.SwackException;
+import model.SignUpModel;
 
 /**
  * Servlet implementation class SignUpServlet
@@ -13,29 +20,80 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/SignUpServlet")
 public class SignUpServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public SignUpServlet() {
-        super();
-        // TODO Auto-generated constructor stub
-    }
+
+	/**
+	 * @see HttpServlet#HttpServlet()
+	 */
+	public SignUpServlet() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		request.getRequestDispatcher("/WEB-INF/jsp/signup.jsp").forward(request, response);
 	}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		doGet(request, response);
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+
+		// パラメータ取得
+		String username = request.getParameter("userName");
+		String mailAddress = request.getParameter("mailAddress");
+		String password = request.getParameter("password");
+		System.out.println(username);
+		System.out.println(mailAddress);
+		System.out.println(password);
+
+		// パラメータチェック
+		StringBuilder errorMsg = new StringBuilder();
+		if (username == null || username.length() == 0) {
+			errorMsg.append("ユーザー名が入っていません<br>");
+		}
+		if (mailAddress == null || mailAddress.length() == 0) {
+			errorMsg.append("メールアドレスが入っていません<br>");
+		}
+		if (password == null || password.length() == 0) {
+			errorMsg.append("パスワードが入っていません<br>");
+		}
+		if (errorMsg.length() > 0) {
+			// エラー
+			request.setAttribute("errorMsg", errorMsg.toString());
+			request.getRequestDispatcher("/WEB-INF/jsp/signup.jsp").forward(request, response);
+			return;
+		}
+
+		// 処理
+		try {
+			// 登録内容チェック
+			boolean result = new SignUpModel().CheckSignup(mailAddress);
+			if (result) {
+				// 登録内容に不備あり
+				request.setAttribute("errorMsg", ERR_USERS_ISREGISTERED);
+				request.getRequestDispatcher("/WEB-INF/jsp/signup.jsp").forward(request, response);
+				return;
+			} else {
+				// 登録内容に不備なし
+				//				HttpSession session = request.getSession();
+				//				session.setAttribute("user", user);
+				//				response.sendRedirect("MainServlet?roomId=R0000");
+				//				return;
+				User users = new SignUpModel().insertSignup(username, mailAddress, password);
+				return;
+			}
+
+		} catch (SwackException e) {
+			e.printStackTrace();
+			request.setAttribute("errorMsg", ERR_SYSTEM);
+			request.getRequestDispatcher("/WEB-INF/jsp/signup.jsp").forward(request, response);
+			return;
+		}
 	}
 
 }
