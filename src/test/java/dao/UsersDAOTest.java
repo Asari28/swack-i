@@ -39,13 +39,23 @@ class UsersDAOTest {
 	}
 
 	//@Test
-	void testSelectMaxUserId() {
-		fail("まだ実装されていません");
+	void testSelectMaxUserId() throws SwackException {
+		String userId = usersDAO.maxUserId();
+		System.out.println("testSelectMaxUserId():" + userId);
+		assertNotNull(userId);
 	}
 
 	//@Test
-	void testInsert() {
-		fail("まだ実装されていません");
+	void testInsert() throws SwackException {
+		User user = new User("UTEST", "TESTUSER", "example.Test", "test");
+		boolean result = usersDAO.insert(user);
+		assertTrue(result);
+		if (result) {
+			System.out.println("testSelectMaxUserId():true");
+		} else {
+			System.out.println("testSelectMaxUserId():false");
+		}
+
 	}
 
 }
