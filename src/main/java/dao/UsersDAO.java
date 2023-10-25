@@ -45,6 +45,34 @@ public class UsersDAO extends BaseDAO {
 		return user;
 	}
 
+	public boolean checkMailAddress(String mailAddress) throws SwackException {
+		//Userの中にUserIDも入っている状態で受け取る
+		//SQL
+		String sql = "SELECT mailAddress FROM users WHERE mailAddress = ?";
+		//userId,userName,mailAddress,passwordの順番でセットする
+		try (Connection conn = dataSource.getConnection()) {
+			PreparedStatement pStmt = conn.prepareStatement(sql);
+			//SQL組み立て
+			pStmt.setString(1, mailAddress);
+
+			//SQL実行
+			ResultSet rs = pStmt.executeQuery();
+
+			//結果
+			rs.next();
+			String uMailAddress = rs.getString("mailAddress");
+			if (uMailAddress == null) {
+				return true;//nullなら成功
+			} else {
+				return false;//人いたら失敗
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new SwackException(ERR_DB_PROCESS, e);
+		}
+	}
+
 	/**
 	 * 新規ユーザのために現時点でのユーザIDの最大値を取得
 	 * @return String maxUserId
