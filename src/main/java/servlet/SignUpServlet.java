@@ -10,7 +10,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import bean.User;
 import exception.SwackException;
 import model.SignUpModel;
 
@@ -72,7 +71,7 @@ public class SignUpServlet extends HttpServlet {
 		// 処理
 		try {
 			// 登録内容チェック
-			boolean result = new SignUpModel().CheckSignup(mailAddress);
+			boolean result = new SignUpModel().checkSignup(mailAddress);
 			if (result) {
 				// 登録内容に不備あり
 				request.setAttribute("errorMsg", ERR_USERS_ISREGISTERED);
@@ -84,7 +83,7 @@ public class SignUpServlet extends HttpServlet {
 				//				session.setAttribute("user", user);
 				//				response.sendRedirect("MainServlet?roomId=R0000");
 				//				return;
-				User users = new SignUpModel().insertSignup(username, mailAddress, password);
+				boolean results = new SignUpModel().insert(username, mailAddress, password);
 				return;
 			}
 
