@@ -6,6 +6,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import bean.User;
 import exception.SwackException;
@@ -140,6 +141,32 @@ public class UsersDAO extends BaseDAO {
 
 		//結果の返却
 		return true;
+	}
+
+	public ArrayList<User> selectAllUser() throws SwackException {
+		//SQL
+		String sql = "SELECT userid,username FROM users";
+		try (Connection conn = dataSource.getConnection()) {
+			PreparedStatement pStmt = conn.prepareStatement(sql);
+
+			//SQL実行
+			ResultSet rs = pStmt.executeQuery();
+
+			//結果をリストに詰める
+			ArrayList<User> userList = new ArrayList<User>();
+			while (rs.next()) {
+				String userId = rs.getString("userId");
+				String userName = rs.getString("userName");
+				User user = new User(userId, userName);
+				userList.add(user);
+			}
+
+			return userList;
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new SwackException(ERR_DB_PROCESS, e);
+		}
 	}
 
 }

@@ -21,6 +21,11 @@ public class User implements Serializable {
 		// for JSP
 	}
 
+	public User(String userId, String userName) {
+		this.userId = userId;
+		this.userName = userName;
+	}
+
 	public User(String userId, String userName, String mailAddress, String password) {
 		this.userId = userId;
 		this.userName = userName;

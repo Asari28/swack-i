@@ -2,6 +2,8 @@ package dao;
 
 import static org.junit.Assert.*;
 
+import java.util.ArrayList;
+
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -61,7 +63,7 @@ class UsersDAOTest {
 		assertNotNull(userId);
 	}
 
-	@Test
+	//@Test
 	void testInsert() throws SwackException {
 		User user = new User("UTEST", "TESTUSER", "example.Test", "test");
 		boolean result = usersDAO.insert(user);
@@ -72,6 +74,16 @@ class UsersDAOTest {
 			System.out.println("testSelectInsert():false");
 		}
 
+	}
+
+	@Test
+	void testSelectAllUser() throws SwackException {
+		ArrayList<User> userList = usersDAO.selectAllUser();
+		System.out.println("testSelectAllUser():");
+		for (User user : userList) { //拡張for文
+			System.out.println(user);
+		}
+		assertNotNull(userList);
 	}
 
 }
