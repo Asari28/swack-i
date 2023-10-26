@@ -34,7 +34,6 @@
 		<a href="LoginServlet">>> ログイン画面へ</a>
 	</div>
 	<!-- container -->
-	<script src="js/login.js"></script>
 	<script src="js/sigup.js"></script>
 </body>
 </html>
