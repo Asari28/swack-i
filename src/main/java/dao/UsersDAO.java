@@ -143,6 +143,12 @@ public class UsersDAO extends BaseDAO {
 		return true;
 	}
 
+	/**
+	 * ユーザIDとユーザ名を一覧で取得する
+	 * @return ArrayList<User> ※ユーザIDとユーザ名しかセットされていない
+	 * @throws SwackException
+	 */
+
 	public ArrayList<User> selectAllUser() throws SwackException {
 		//SQL
 		String sql = "SELECT userid,username FROM users";
