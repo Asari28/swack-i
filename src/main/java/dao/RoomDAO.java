@@ -19,20 +19,26 @@ public class RoomDAO extends BaseDAO {
 		super();
 	}
 
-	boolean createRoom(String roomId, String roomName, String createdUserId,
+	public boolean createRoom(String roomId, String roomName, String createdUserId,
 			boolean directed, boolean privated) throws SwackException {
 		//Userの中にUserIDも入っている状態で受け取る
 		//ルームID,ルーム名、ルーム作成ユーザID、ダイレクトフラグ、フラグの順番
-		//SQL insert into rooms (roomid,roomname,createduserid,directed,privated) values ('RTEST','テストルーム','test',true,true)
-		String sql = "SELECT mailAddress FROM users WHERE mailAddress = ?";
+		String sql = "INSERT INTO rooms (roomid,roomname,createduserid,directed,privated) VALUES (?,?,?,?,?)";
 		//userId,userName,mailAddress,passwordの順番でセットする
 		try (Connection conn = dataSource.getConnection()) {
 			PreparedStatement pStmt = conn.prepareStatement(sql);
 			//SQL組み立て
 			pStmt.setString(1, roomId);
+			pStmt.setString(2, roomName);
+			pStmt.setString(3, createdUserId);
+			pStmt.setBoolean(4, directed);
+			pStmt.setBoolean(5, privated);
 			//SQL実行
-
 			int result = pStmt.executeUpdate();
+
+			if (result != 1) {
+				return false;
+			}
 			//結果
 			return true;
 
