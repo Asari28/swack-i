@@ -73,17 +73,18 @@ public class SignUpServlet extends HttpServlet {
 			// 登録内容チェック
 			boolean result = new SignUpModel().checkSignup(mailAddress);
 			if (result) {
+				// 登録内容に不備なし
+				boolean results = new SignUpModel().insert(username, mailAddress, password);
+				if (results) {
+					request.setAttribute("errorMsg", INFO_USERS_ENTRY_SUCCESS);
+					request.getRequestDispatcher("/WEB-INF/jsp/login.jsp").forward(request, response);
+				}
+				return;
+			} else {
+
 				// 登録内容に不備あり
 				request.setAttribute("errorMsg", ERR_USERS_ISREGISTERED);
 				request.getRequestDispatcher("/WEB-INF/jsp/signup.jsp").forward(request, response);
-				return;
-			} else {
-				// 登録内容に不備なし
-				//				HttpSession session = request.getSession();
-				//				session.setAttribute("user", user);
-				//				response.sendRedirect("MainServlet?roomId=R0000");
-				//				return;
-				boolean results = new SignUpModel().insert(username, mailAddress, password);
 				return;
 			}
 
