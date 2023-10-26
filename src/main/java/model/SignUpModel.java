@@ -18,10 +18,10 @@ public class SignUpModel {
 		boolean result = usersDAO.checkMailAddress(mailaddress);
 		if (result) {
 			//不備なし
-			return false;
+			return true;
 		} else {
 			//不備あり
-			return true;
+			return false;
 		}
 	}
 

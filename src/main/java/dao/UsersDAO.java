@@ -66,8 +66,11 @@ public class UsersDAO extends BaseDAO {
 			ResultSet rs = pStmt.executeQuery();
 
 			//結果
-			rs.next();
-			String uMailAddress = rs.getString("mailAddress");
+			String uMailAddress = null;
+			if (rs.next()) {
+				uMailAddress = rs.getString("mailAddress");
+			}
+			System.out.println(uMailAddress);
 			if (uMailAddress == null) {
 				return true;//nullなら成功
 			} else {
