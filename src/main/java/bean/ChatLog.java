@@ -21,7 +21,6 @@ public class ChatLog implements Serializable {
 	private String message;
 	/** 投稿日時 */
 	private Timestamp createdAt;
-	
 
 	public ChatLog() {
 		// for JSP
@@ -58,6 +57,12 @@ public class ChatLog implements Serializable {
 
 	public Timestamp getCreatedAt() {
 		return createdAt;
+	}
+
+	@Override
+	public String toString() {
+		return "ChatLog [chatLogId=" + chatLogId + ", roomId=" + roomId + ", userId=" + userId + ", userName="
+				+ userName + ", message=" + message + ", createdAt=" + createdAt + "]";
 	}
 
 }

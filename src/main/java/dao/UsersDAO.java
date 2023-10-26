@@ -45,6 +45,13 @@ public class UsersDAO extends BaseDAO {
 		return user;
 	}
 
+	/**
+	 * メールアドレスに重複がないか確認する
+	 * @param mailAddress
+	 * @return true = 使っている人がいないので成功
+	 * 			false = 使っている人がいるので失敗
+	 * @throws SwackException
+	 */
 	public boolean checkMailAddress(String mailAddress) throws SwackException {
 		//Userの中にUserIDも入っている状態で受け取る
 		//SQL
@@ -64,7 +71,7 @@ public class UsersDAO extends BaseDAO {
 			if (uMailAddress == null) {
 				return true;//nullなら成功
 			} else {
-				return false;//人いたら失敗
+				return false;//人いたから失敗
 			}
 
 		} catch (SQLException e) {
@@ -79,15 +86,15 @@ public class UsersDAO extends BaseDAO {
 	 * @throws SwackException
 	 */
 	public String maxUserId() throws SwackException {
-		String sql = "SELECT MAX(USERID) FROM USERS";
+		String sql = "SELECT MAX(USERID) AS userId FROM USERS";
 		String userId = null;
 		try (Connection conn = dataSource.getConnection()) {
 			PreparedStatement pStmt = conn.prepareStatement(sql);
 
 			ResultSet rs = pStmt.executeQuery();
-			if (rs.next()) {
-				userId = rs.getString("USERID");
-			}
+			rs.next();
+			userId = rs.getString("userId");
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new SwackException(ERR_DB_PROCESS, e);
@@ -120,7 +127,7 @@ public class UsersDAO extends BaseDAO {
 
 			//結果
 			if (result != 1) {
-				return false;
+				return false;//失敗
 			}
 
 		} catch (SQLException e) {
