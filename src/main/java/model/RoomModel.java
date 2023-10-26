@@ -4,9 +4,9 @@ import bean.User;
 import dao.RoomDAO;
 import exception.SwackException;
 
-public class CreateRoomModel {
+public class RoomModel {
 
-	public boolean getusername(User user) throws SwackException {
+	public boolean createRoom(User user) throws SwackException {
 		//				System.out.println("[getChatlogList] " + roomId);
 		//		ArrayList<Room> list = new ArrayList<Room>();
 		//		list.add(new Room("U0001", "ダミー太郎"));
