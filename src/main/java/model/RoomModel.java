@@ -1,12 +1,12 @@
 package model;
 
-import bean.User;
 import dao.RoomDAO;
 import exception.SwackException;
 
 public class RoomModel {
 
-	public boolean createRoom(User user) throws SwackException {
+	public boolean createRoom(String roomId, String roomName, String createdUserId,
+			boolean directed, boolean privated) throws SwackException {
 		//				System.out.println("[getChatlogList] " + roomId);
 		//		ArrayList<Room> list = new ArrayList<Room>();
 		//		list.add(new Room("U0001", "ダミー太郎"));
@@ -16,8 +16,18 @@ public class RoomModel {
 		//		list.add(new Room("U0005", "ダミー四郎"));
 
 		RoomDAO roomDAO = new RoomDAO();
-		boolean result = roomDAO.insert(user);
+		boolean result = roomDAO.createRoom(roomId, roomName, createdUserId, directed, privated);
 
 		return result;
+	}
+
+	public boolean joinUser(String roomId, String joinUserId) throws SwackException {
+		RoomDAO roomDAO = new RoomDAO();
+		boolean result = roomDAO.insertJoinRoom(roomId, joinUserId);
+		if (result) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 }
