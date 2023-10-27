@@ -146,13 +146,12 @@ public class UsersDAO extends BaseDAO {
 	/**
 	 * ユーザIDとユーザ名を一覧で取得する
 	 * @return ArrayList<User> 
-	 * ※ユーザIDとユーザ名しかセットされていないのでメールアドレス・パスワードはgetしてもnullになる
 	 * @throws SwackException
 	 */
 
 	public ArrayList<User> selectAllUser() throws SwackException {
 		//SQL
-		String sql = "SELECT userid,username FROM users";
+		String sql = "SELECT userid,username,mailAddress FROM users";
 		try (Connection conn = dataSource.getConnection()) {
 			PreparedStatement pStmt = conn.prepareStatement(sql);
 
@@ -164,7 +163,8 @@ public class UsersDAO extends BaseDAO {
 			while (rs.next()) {
 				String userId = rs.getString("userId");
 				String userName = rs.getString("userName");
-				User user = new User(userId, userName);
+				String mailAddress = rs.getString("mailAddress");
+				User user = new User(userId, userName, mailAddress);
 				userList.add(user);
 			}
 
