@@ -145,7 +145,8 @@ public class UsersDAO extends BaseDAO {
 
 	/**
 	 * ユーザIDとユーザ名を一覧で取得する
-	 * @return ArrayList<User> ※ユーザIDとユーザ名しかセットされていない
+	 * @return ArrayList<User> 
+	 * ※ユーザIDとユーザ名しかセットされていないのでメールアドレス・パスワードはgetしてもnullになる
 	 * @throws SwackException
 	 */
 
