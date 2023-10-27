@@ -10,6 +10,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import bean.User;
 import exception.SwackException;
@@ -28,7 +29,6 @@ public class CreateRoomServlet extends HttpServlet {
 	 */
 	public CreateRoomServlet() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	/**
@@ -40,11 +40,11 @@ public class CreateRoomServlet extends HttpServlet {
 		try {
 			ArrayList<User> userlist = usermodel.getUsers();
 			request.setAttribute("userList", userlist);
-			request.getRequestDispatcher("/webapp/Mycreateroom.jsp").forward(request, response);
+			request.getRequestDispatcher("/Mycreateroom.jsp").forward(request, response);
 		} catch (SwackException e) {
 			e.printStackTrace();
 			request.setAttribute("errorMsg", ERR_SYSTEM);
-			request.getRequestDispatcher("/webapp/Mycreateroom.jsp").forward(request, response);
+			request.getRequestDispatcher("/WEB-INF/jsp/main.jsp").forward(request, response);
 			return;
 		}
 
@@ -59,12 +59,28 @@ public class CreateRoomServlet extends HttpServlet {
 		// パラメータ取得
 		String roomname = request.getParameter("roomName");
 		String joinuserid = request.getParameter("joinUserId");
-		String directed = request.getParameter("privated");
+		boolean directed = request.getParameter("privated");
 		//セッションからuserを取得する
+		HttpSession session = request.getSession();
+		User user = (User) session.getAttribute("user");
 
-		//GetIdModelからroomIdを取得する
 		RoomModel roommodel = new RoomModel();
-		roomModel = RoomModel.createRoom(roomId, roomName, user.getUserId(), directed, privated);
+		boolean result = roommodel.createRoom(roomname, user.getUserId(), directed, privated);
+		if (result) {
+			boolean Result = roommodel.joinUser(roomId, joinuserid);
+			if (Result) {
+				session.setAttribute("user", user);
+				response.sendRedirect("MainServlet");
+			} else {
+				request.setAttribute("errorMsg", ERR_SYSTEM);
+				request.getRequestDispatcher("/Mycreateroom.jsp").forward(request, response);
+				return;
+			}
+		} else {
+			request.setAttribute("errorMsg", ERR_SYSTEM);
+			request.getRequestDispatcher("/Mycreateroom.jsp").forward(request, response);
+			return;
+		}
 
 	}
 
