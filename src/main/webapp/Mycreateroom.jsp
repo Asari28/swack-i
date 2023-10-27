@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html>
   <head>
@@ -33,9 +34,10 @@ pageEncoding="UTF-8"%>
             (例: #営業)。
           </p>
 
-          <form action="#">
+          <form action="CreateRoomServlet" method="post">
             <div class="form-check form-switch mt-3">
               <input
+              	name="privated"
                 class="form-check-input"
                 id="chk"
                 type="checkbox"
@@ -52,6 +54,7 @@ pageEncoding="UTF-8"%>
             <div class="form-group mt-5">
               <label class="control-label">名前</label>
               <input
+              	name="roomName"
                 id="name"
                 class="form-control"
                 type="text"
@@ -63,27 +66,10 @@ pageEncoding="UTF-8"%>
 
             <div class="form-group mt-5">
               <label class="control-label">招待の送信先:(任意)</label>
-              <select id="names" class="form-select" multiple>
-                <option value="joho01">情報 太郎１</option>
-                <option value="joho02">情報 太郎２</option>
-                <option value="joho03">情報 太郎３</option>
-                <option value="joho04">情報 太郎４</option>
-                <option value="joho05">情報 太郎５</option>
-                <option value="joho06">情報 太郎６</option>
-                <option value="joho07">情報 太郎７</option>
-                <option value="joho08">情報 太郎８</option>
-                <option value="joho09">情報 太郎９</option>
-                <option value="joho10">情報 太郎１０</option>
-                <option value="joho11">情報 太郎１１</option>
-                <option value="joho12">情報 太郎１２</option>
-                <option value="joho13">情報 太郎１３</option>
-                <option value="joho14">情報 太郎１４</option>
-                <option value="joho15">情報 太郎１５</option>
-                <option value="joho16">情報 太郎１６</option>
-                <option value="joho17">情報 太郎１７</option>
-                <option value="joho18">情報 太郎１８</option>
-                <option value="joho19">情報 太郎１９</option>
-                <option value="joho20">情報 太郎２０</option>
+              <select name="joinUserId" id="names" class="form-select" multiple>
+	              <c:forEach var="user" items="${userList }">
+	              	<option value="${user.userId}">${user.userName}</option>
+	              </c:forEach>
               </select>
               <span class="users-note"
                 >このルームに追加したい人を選んでください。</span
@@ -91,10 +77,8 @@ pageEncoding="UTF-8"%>
             </div>
 
             <div class="room-form-btn">
-              <button class="btn btn-default">キャンセル</button>
-              <button id="send" class="btn btn-default">
-                ルームを作成する
-              </button>
+              <a href = "MainServlet"><button class="btn btn-default">キャンセル</button></a>
+              <input type="submit" id="send" class="btn btn-default" value="ルームを作成する"/>
             </div>
           </form>
         </div>
