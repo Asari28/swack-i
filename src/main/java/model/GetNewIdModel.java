@@ -7,7 +7,6 @@ import exception.SwackException;
 public class GetNewIdModel {
 
 	/**
-	 * Insertから呼び出されて新しいユーザIDを作る
 	 * Usersから最大値を取得して新しいユーザIDを返す
 	 * @return String userId
 	 * @throws SwackException 
@@ -29,6 +28,11 @@ public class GetNewIdModel {
 		}
 	}
 
+	/**
+	 * Roomsから最大値を取得して新しいルームIDを返す
+	 * @return String roomId
+	 * @throws SwackException
+	 */
 	public String RoomId() throws SwackException {
 		// 登録済ルームIDの最大値を取得
 		RoomDAO roomDAO = new RoomDAO();
