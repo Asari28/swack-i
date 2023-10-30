@@ -59,27 +59,41 @@ public class CreateRoomServlet extends HttpServlet {
 		// パラメータ取得
 		String roomname = request.getParameter("roomName");
 		String joinuserid = request.getParameter("joinUserId");
-		boolean directed = request.getParameter("privated");
+		//		String directed = request.getParameter("privated");
+		boolean privated = true;
+		System.out.println(roomname);
+		System.out.println(joinuserid);
+		System.out.println(privated);
 		//セッションからuserを取得する
 		HttpSession session = request.getSession();
 		User user = (User) session.getAttribute("user");
 
 		RoomModel roommodel = new RoomModel();
-		boolean result = roommodel.createRoom(roomname, user.getUserId(), directed, privated);
-		if (result) {
-			boolean Result = roommodel.joinUser(roomId, joinuserid);
-			if (Result) {
-				session.setAttribute("user", user);
-				response.sendRedirect("MainServlet");
+		boolean result = false;
+		try {
+			result = roommodel.createRoom(roomname, user.getUserId(), privated, false);
+
+			if (result) {
+				String roomId;
+
+				roomId = roommodel.getMaxRoomId();
+				boolean Result = roommodel.joinUser(roomId, joinuserid);
+				if (Result) {
+					session.setAttribute("user", user);
+					response.sendRedirect("MainServlet");
+				} else {
+					request.setAttribute("errorMsg", ERR_SYSTEM);
+					request.getRequestDispatcher("/Mycreateroom.jsp").forward(request, response);
+					return;
+				}
 			} else {
 				request.setAttribute("errorMsg", ERR_SYSTEM);
 				request.getRequestDispatcher("/Mycreateroom.jsp").forward(request, response);
 				return;
 			}
-		} else {
-			request.setAttribute("errorMsg", ERR_SYSTEM);
-			request.getRequestDispatcher("/Mycreateroom.jsp").forward(request, response);
-			return;
+		} catch (SwackException e) {
+
+			e.printStackTrace();
 		}
 
 	}
