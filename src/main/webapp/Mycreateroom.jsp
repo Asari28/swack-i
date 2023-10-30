@@ -29,6 +29,7 @@ pageEncoding="UTF-8"%>
       <div class="row">
         <div class="col-md-12 room-form">
           <h3>ルームを作成する</h3>
+          <p class="error" id="errorMsg">${errorMsg }</p>
           <p class="input_note_special medium_bottom_margin">
             ルームとはメンバーがコミュニケーションを取る場所です。特定のトピックに基づいてルームを作ると良いでしょう
             (例: #営業)。

@@ -74,3 +74,9 @@ label {
 	font-weight: 600;
 	text-decoration: none;
 }
+
+.error {
+	background-color: pink;
+	color: red;
+	width: fit-content;
+}
