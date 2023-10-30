@@ -36,9 +36,12 @@ public class CreateRoomServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		//セッションからuserを取得する
+		HttpSession session = request.getSession();
+		User user = (User) session.getAttribute("user");
 		UserModel usermodel = new UserModel();
 		try {
-			ArrayList<User> userlist = usermodel.getUsers();
+			ArrayList<User> userlist = usermodel.getUsers(user.getUserId());
 			request.setAttribute("userList", userlist);
 			request.getRequestDispatcher("/Mycreateroom.jsp").forward(request, response);
 		} catch (SwackException e) {
@@ -59,25 +62,34 @@ public class CreateRoomServlet extends HttpServlet {
 		// パラメータ取得
 		String roomname = request.getParameter("roomName");
 		String joinuserid = request.getParameter("joinUserId");
-		//		String directed = request.getParameter("privated");
-		boolean privated = true;
-		System.out.println(roomname);
-		System.out.println(joinuserid);
-		System.out.println(privated);
+		String privated = request.getParameter("privated");
+		boolean directed = false;
+		//		System.out.println(roomname);
+		//		System.out.println(joinuserid);
+		//		System.out.println(privated);
 		//セッションからuserを取得する
 		HttpSession session = request.getSession();
 		User user = (User) session.getAttribute("user");
 
 		RoomModel roommodel = new RoomModel();
 		boolean result = false;
+		boolean Privated;
+		if (privated == "on") {
+			Privated = true;
+		} else {
+			Privated = false;
+		}
 		try {
-			result = roommodel.createRoom(roomname, user.getUserId(), privated, false);
+			result = roommodel.createRoom(roomname, user.getUserId(), Privated, false);
 
 			if (result) {
-				String roomId;
+				boolean Result = false;
+				String roomId = roommodel.getMaxRoomId();
+				boolean userresult = roommodel.joinUser(roomId, user.getUserId());
+				if (userresult) {
+					Result = roommodel.joinUser(roomId, joinuserid);
+				}
 
-				roomId = roommodel.getMaxRoomId();
-				boolean Result = roommodel.joinUser(roomId, joinuserid);
 				if (Result) {
 					session.setAttribute("user", user);
 					response.sendRedirect("MainServlet");
