@@ -30,6 +30,19 @@ public class RoomModel {
 	}
 
 	/**
+	 * 新しく作ったルームのI1Dを取得するメソッド
+	 * CreateRoomServletで使用する
+	 * @return Striang roomId 新しく作ったルームのID 
+	 * @throws SwackException
+	 */
+	public String getMaxRoomId() throws SwackException {
+		// 登録済ルームIDの最大値を取得
+		RoomDAO roomDAO = new RoomDAO();
+		String maxRoomId = roomDAO.getMaxRoomId();
+		return maxRoomId;
+	}
+
+	/**
 	 * ルームに人を追加する
 	 * @param roomId ルームID
 	 * @param joinUserId 参加するユーザのユーザID

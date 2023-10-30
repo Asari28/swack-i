@@ -22,6 +22,12 @@ public class ChatDAO extends BaseDAO {
 		super();
 	}
 
+	/**
+	 * 指定したルームのチャットログを取得する
+	 * @param roomId ログが欲しいルームのルームID
+	 * @return List<ChatLog> 
+	 * @throws SwackException
+	 */
 	public List<ChatLog> getChatlogList(String roomId) throws SwackException {
 		String sql = "SELECT CHATLOGID, U.USERID AS USERID, U.USERNAME AS USERNAME, MESSAGE, CREATED_AT "
 				+ "FROM CHATLOG C JOIN USERS U ON C.USERID = U.USERID WHERE ROOMID = ? " + "ORDER BY CREATED_AT ASC";
