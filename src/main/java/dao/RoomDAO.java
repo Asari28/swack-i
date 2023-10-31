@@ -7,6 +7,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import bean.Room;
 import exception.SwackException;
 
 /**
@@ -22,6 +23,7 @@ public class RoomDAO extends BaseDAO {
 
 	/**
 	 * 現時点でのルームIDの最大値を取得
+	 * ルーム作成と同時にINSERTするために使用している
 	 * @return String maxRoomId
 	 * @throws SwackException
 	 */
@@ -43,7 +45,7 @@ public class RoomDAO extends BaseDAO {
 	}
 
 	/**
-	 * roomテーブルにINSERTする
+	 * roomテーブルに新規作成したルームをINSERTする
 	 * @param roomId ルームID(モデルで作成)
 	 * @param roomName ルーム名
 	 * @param createdUserId ルーム作成者ユーザID
@@ -83,7 +85,7 @@ public class RoomDAO extends BaseDAO {
 	}
 
 	/**
-	 * joinroomテーブルにINSERTする
+	 * joinroomテーブルに新たに参加するユーザをINSERTする
 	 * @param roomId ルームID
 	 * @param userId ユーザID
 	 * @return boolean 成功(true)失敗(false)
@@ -110,6 +112,28 @@ public class RoomDAO extends BaseDAO {
 			}
 			return true;
 
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new SwackException(ERR_DB_PROCESS, e);
+		}
+	}
+
+	public Room getRoom(String roomId) throws SwackException {
+		//SQL
+		String sql = "SELECT roomid,roomname,createduserid,directed,privated FROM rooms WHERE roomid=?";
+		try (Connection conn = dataSource.getConnection()) {
+			PreparedStatement pStmt = conn.prepareStatement(sql);
+			//SQL組み立て
+			pStmt.setString(1, roomId);
+
+			//SQL実行
+			ResultSet rs = pStmt.executeQuery();
+			rs.next();
+			String roomid = rs.getString("roomId");
+			String roomname = rs.getString("roomname");
+			Room room = new Room(roomid, roomname);
+
+			return room;
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new SwackException(ERR_DB_PROCESS, e);

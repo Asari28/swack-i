@@ -14,6 +14,7 @@ import exception.SwackException;
 class UsersDAOTest {
 
 	/*
+	 * testInsert()について
 	 * @Testの前のコメント//を消去してから実行してください
 	 * テスト終わったらテストデータ消さないとバグります
 	 * DELETE文コピペ
@@ -81,6 +82,16 @@ class UsersDAOTest {
 		ArrayList<User> userList = usersDAO.selectAllUser("U0001");
 		System.out.println("testSelectAllUser():Adminと情報太郎が出力されなければ成功");
 		for (User user : userList) { //拡張for文
+			System.out.println(user);
+		}
+		assertNotNull(userList);
+	}
+
+	@Test
+	void testSelectNotJoinUser() throws SwackException {
+		ArrayList<User> userList = usersDAO.selectNotJoinUser("R0001");
+		System.out.println("testSelectNotJoinUser():Admin、情報太郎、情報花子が出力されなければ成功");
+		for (User user : userList) {//拡張for文
 			System.out.println(user);
 		}
 		assertNotNull(userList);

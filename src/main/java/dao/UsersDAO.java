@@ -179,4 +179,38 @@ public class UsersDAO extends BaseDAO {
 		}
 	}
 
+	/**
+	 * 招待するルームに参加していないユーザのユーザIDとユーザ名を取得する
+	 * @param roomId 招待するルームID
+	 * @return ArrayList<User> ルームにまだ参加していないユーザのユーザIDとユーザ名
+	 * @throws SwackException
+	 */
+
+	public ArrayList<User> selectNotJoinUser(String roomId) throws SwackException {
+		//SQL
+		//Adminとすでに参加しているユーザを除去したリストを取得するSQL
+		String sql = "SELECT userid,username FROM users WHERE userid not in (SELECT userid FROM joinroom WHERE roomid=?) AND userid<>'U0000'";
+		try (Connection conn = dataSource.getConnection()) {
+			PreparedStatement pStmt = conn.prepareStatement(sql);
+			pStmt.setString(1, roomId);
+
+			//SQL実行
+			ResultSet rs = pStmt.executeQuery();
+
+			//結果をリストに詰める
+			ArrayList<User> userList = new ArrayList<User>();
+			while (rs.next()) {
+				String listUserId = rs.getString("userId");
+				String userName = rs.getString("userName");
+				User user = new User(listUserId, userName);
+				userList.add(user);
+			}
+
+			return userList;
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new SwackException(ERR_DB_PROCESS, e);
+		}
+	}
 }
