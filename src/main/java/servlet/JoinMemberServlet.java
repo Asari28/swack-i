@@ -38,12 +38,8 @@ public class JoinMemberServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		String roomId = request.getParameter("roomid");
+		String roomId = request.getParameter("roomId");
 		System.out.println(roomId);
-		//セッションからuserを取得する
-		HttpSession session = request.getSession();
-		//		User user = (User) session.getAttribute("user");
-
 		UserModel usermodel = new UserModel();
 		RoomModel roommodel = new RoomModel();
 		try {
