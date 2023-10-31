@@ -66,7 +66,7 @@ public class RoomModel {
 	 * @return Room room ルームIDのルーム情報 
 	 * @throws SwackException
 	 */
-	public String getRoomId(String roomId) throws SwackException {
+	public Room getRoomId(String roomId) throws SwackException {
 		// ルームIDをもとにルーム情報を取得
 		RoomDAO roomDAO = new RoomDAO();
 		Room room = roomDAO.getRoom(roomId);

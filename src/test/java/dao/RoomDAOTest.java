@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import bean.Room;
 import context.SetUpDBConnectionPool;
 import exception.SwackException;
 
@@ -57,5 +58,12 @@ class RoomDAOTest {
 		} else {
 			System.out.println("testInsertJoinRoom():失敗");
 		}
+	}
+
+	@Test
+	void testGetRoom() throws SwackException {
+		Room room = RoomDAO.getRoom("R0000");
+		assertNotNull(room);
+		System.out.println("testGetRoom():" + room.getRoomId() + room.getRoomName());
 	}
 }
