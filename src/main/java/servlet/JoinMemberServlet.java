@@ -48,12 +48,11 @@ public class JoinMemberServlet extends HttpServlet {
 		RoomModel roommodel = new RoomModel();
 		try {
 			ArrayList<User> userlist = usermodel.getJoinUsers(room.getRoomId());
-			String nowroom = roommodel.getRoomId(room.getRoomId());
+			Room nowroom = roommodel.getRoomId(room.getRoomId());
 			request.setAttribute("userList", userlist);
 			request.setAttribute("nowRoom", nowroom);
 			request.getRequestDispatcher("/joinmember.jsp").forward(request, response);
 		} catch (SwackException e) {
-			e.printStackTrace();
 			request.setAttribute("errorMsg", ERR_SYSTEM);
 			request.getRequestDispatcher("/WEB-INF/jsp/main.jsp").forward(request, response);
 			return;
@@ -74,17 +73,34 @@ public class JoinMemberServlet extends HttpServlet {
 		String[] joinUseridlist = request.getParameterValues("joinUserIdList");
 		System.out.println(RoomId);
 		System.out.println(joinUseridlist);
+		RoomModel roommodel = new RoomModel();
 
-		boolean result = RoomModel.joinUser(RoomId, joinUseridlist);
-		if (result) {
-			session.setAttribute("user", user);
-			session.setAttribute("room", room);
-			response.sendRedirect("MainServlet");
-		} else {
+		try {
+			boolean result = false;
+			for (String joinuser : joinUseridlist) {
+				result = roommodel.joinUser(RoomId, joinuser);
+				if (result) {
+					return;
+				} else {
+					break;
+				}
+			}
+			if (result) {
+				session.setAttribute("user", user);
+				session.setAttribute("room", room);
+				response.sendRedirect("MainServlet");
+			} else {
+				request.setAttribute("errorMsg", ERR_SYSTEM);
+				request.getRequestDispatcher("/joinmember.jsp").forward(request, response);
+				return;
+			}
+		} catch (SwackException e) {
 			request.setAttribute("errorMsg", ERR_SYSTEM);
 			request.getRequestDispatcher("/joinmember.jsp").forward(request, response);
 			return;
+
 		}
+
 	}
 
 }
