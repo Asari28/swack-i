@@ -1,5 +1,6 @@
 package model;
 
+import bean.Room;
 import dao.RoomDAO;
 import exception.SwackException;
 
@@ -30,7 +31,7 @@ public class RoomModel {
 	}
 
 	/**
-	 * 新しく作ったルームのI1Dを取得するメソッド
+	 * 新しく作ったルームのIDを取得するメソッド
 	 * CreateRoomServletで使用する
 	 * @return Striang roomId 新しく作ったルームのID 
 	 * @throws SwackException
@@ -57,5 +58,18 @@ public class RoomModel {
 		} else {
 			return false;
 		}
+	}
+
+	/**
+	 * ルームのIDからルーム情報を取得するメソッド
+	 * JoinMemberServletで使用する
+	 * @return Room room ルームIDのルーム情報 
+	 * @throws SwackException
+	 */
+	public String getRoomId(String roomId) throws SwackException {
+		// ルームIDをもとにルーム情報を取得
+		RoomDAO roomDAO = new RoomDAO();
+		Room room = roomDAO.getRoom(roomId);
+		return room;
 	}
 }
