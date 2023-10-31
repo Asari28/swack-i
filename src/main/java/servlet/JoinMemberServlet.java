@@ -43,12 +43,12 @@ public class JoinMemberServlet extends HttpServlet {
 		//セッションからuserを取得する
 		HttpSession session = request.getSession();
 		//		User user = (User) session.getAttribute("user");
-		Room room = (Room) session.getAttribute(roomId);
+
 		UserModel usermodel = new UserModel();
 		RoomModel roommodel = new RoomModel();
 		try {
-			ArrayList<User> userlist = usermodel.getJoinUsers(room.getRoomId());
-			Room nowroom = roommodel.getRoomId(room.getRoomId());
+			ArrayList<User> userlist = usermodel.getJoinUsers(roomId);
+			Room nowroom = roommodel.getRoomId(roomId);
 			request.setAttribute("userList", userlist);
 			request.setAttribute("nowRoom", nowroom);
 			request.getRequestDispatcher("/joinmember.jsp").forward(request, response);
@@ -69,7 +69,7 @@ public class JoinMemberServlet extends HttpServlet {
 		User user = (User) session.getAttribute("user");
 		Room room = (Room) session.getAttribute("room");
 		//パラメーター取得
-		String RoomId = request.getParameter("roomName");
+		String RoomId = request.getParameter("roomId");
 		String[] joinUseridlist = request.getParameterValues("joinUserIdList");
 		System.out.println(RoomId);
 		System.out.println(joinUseridlist);
