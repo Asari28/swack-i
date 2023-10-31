@@ -39,11 +39,12 @@ public class JoinMemberServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		String roomId = request.getParameter("roomId");
-		System.out.println(roomId);
+		//		System.out.println(roomId);
 		UserModel usermodel = new UserModel();
 		RoomModel roommodel = new RoomModel();
 		try {
 			ArrayList<User> userlist = usermodel.getJoinUsers(roomId);
+			System.out.println(userlist);
 			Room nowroom = roommodel.getRoomId(roomId);
 			request.setAttribute("userList", userlist);
 			request.setAttribute("nowRoom", nowroom);
