@@ -7,10 +7,10 @@ import dao.UsersDAO;
 import exception.SwackException;
 
 public class UserModel {
-	public ArrayList<User> getUsers() throws SwackException {
+	public ArrayList<User> getUsers(String userId) throws SwackException {
 		// UserDAOからユーザ一覧を取得
 		UsersDAO usersDAO = new UsersDAO();
-		ArrayList<User> userList = usersDAO.selectAllUser();
+		ArrayList<User> userList = usersDAO.selectAllUser(userId);
 		return userList;
 
 	}

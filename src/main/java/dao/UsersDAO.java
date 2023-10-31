@@ -145,15 +145,18 @@ public class UsersDAO extends BaseDAO {
 
 	/**
 	 * ユーザIDとユーザ名を一覧で取得する
+	 * @param userId リストから除外するユーザID
 	 * @return ArrayList<User> 
 	 * @throws SwackException
 	 */
 
-	public ArrayList<User> selectAllUser() throws SwackException {
+	public ArrayList<User> selectAllUser(String userId) throws SwackException {
 		//SQL
-		String sql = "SELECT userid,username,mailAddress FROM users";
+		//Adminと自分を除去したリストを取得するSQL
+		String sql = "SELECT * FROM USERS WHERE userid <> 'U0000' AND userid<>?";
 		try (Connection conn = dataSource.getConnection()) {
 			PreparedStatement pStmt = conn.prepareStatement(sql);
+			pStmt.setString(1, userId);
 
 			//SQL実行
 			ResultSet rs = pStmt.executeQuery();
@@ -161,10 +164,10 @@ public class UsersDAO extends BaseDAO {
 			//結果をリストに詰める
 			ArrayList<User> userList = new ArrayList<User>();
 			while (rs.next()) {
-				String userId = rs.getString("userId");
+				String listUserId = rs.getString("userId");
 				String userName = rs.getString("userName");
 				String mailAddress = rs.getString("mailAddress");
-				User user = new User(userId, userName, mailAddress);
+				User user = new User(listUserId, userName, mailAddress);
 				userList.add(user);
 			}
 

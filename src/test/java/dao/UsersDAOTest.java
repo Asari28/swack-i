@@ -78,8 +78,8 @@ class UsersDAOTest {
 
 	@Test
 	void testSelectAllUser() throws SwackException {
-		ArrayList<User> userList = usersDAO.selectAllUser();
-		System.out.println("testSelectAllUser():");
+		ArrayList<User> userList = usersDAO.selectAllUser("U0001");
+		System.out.println("testSelectAllUser():Adminと情報太郎が出力されなければ成功");
 		for (User user : userList) { //拡張for文
 			System.out.println(user);
 		}
