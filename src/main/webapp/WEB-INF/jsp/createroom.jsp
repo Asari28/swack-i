@@ -78,7 +78,7 @@ pageEncoding="UTF-8"%>
             </div>
 
             <div class="room-form-btn">
-              <a href = "MainServlet"><button class="btn btn-default">キャンセル</button></a>
+              <a href="MainServlet"><input type="button" class="btn btn-default" value="キャンセル"/></a>
               <input type="submit" id="send" class="btn btn-default" value="ルームを作成する"/>
             </div>
           </form>
