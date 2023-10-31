@@ -27,33 +27,16 @@ pageEncoding="UTF-8"%>
     <div class="container form-container">
       <div class="row">
         <div class="col-md-12 member-form">
-          <h3>他のユーザを #ここにルーム名 に招待する</h3>
-
+          <h3>他のユーザを<span>${nowRoom.roomName}</span>に招待する</h3>
+		  <p class="error" id="errorMsg">${errorMsg }</p>
           <form action="JoinMemberServlet" method="post">
             <input type="hidden" name="roomId" value="${roomId}" />
             <div class="form-group">
               <label class="control-label">招待の送信先:(任意)</label>
-              <select id="users" class="form-select" multiple>
-                <option value="joho01">情報 太郎１</option>
-                <option value="joho02">情報 太郎２</option>
-                <option value="joho03">情報 太郎３</option>
-                <option value="joho04">情報 太郎４</option>
-                <option value="joho05">情報 太郎５</option>
-                <option value="joho06">情報 太郎６</option>
-                <option value="joho07">情報 太郎７</option>
-                <option value="joho08">情報 太郎８</option>
-                <option value="joho09">情報 太郎９</option>
-                <option value="joho10">情報 太郎１０</option>
-                <option value="joho11">情報 太郎１１</option>
-                <option value="joho12">情報 太郎１２</option>
-                <option value="joho13">情報 太郎１３</option>
-                <option value="joho14">情報 太郎１４</option>
-                <option value="joho15">情報 太郎１５</option>
-                <option value="joho16">情報 太郎１６</option>
-                <option value="joho17">情報 太郎１７</option>
-                <option value="joho18">情報 太郎１８</option>
-                <option value="joho19">情報 太郎１９</option>
-                <option value="joho20">情報 太郎２０</option>
+              <select id="users" name="joinUserIdList" class="form-select" multiple>
+              	<c:forEach var="user" items="${userList }">
+	            	<option value="${user.userId}">${user.userName}</option>
+	            </c:forEach>
               </select>
               <span class="users-note"
                 >このルームに追加したい人を選んでください。</span
