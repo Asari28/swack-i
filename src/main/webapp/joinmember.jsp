@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html>
   <head>
@@ -34,7 +35,7 @@ pageEncoding="UTF-8"%>
             <div class="form-group">
               <label class="control-label">招待の送信先:(任意)</label>
               <select id="users" name="joinUserIdList" class="form-select" multiple>
-              	<c:forEach var="user" items="${userList }">
+              	<c:forEach var="user" items="${userList}">
 	            	<option value="${user.userId}">${user.userName}</option>
 	            </c:forEach>
               </select>
