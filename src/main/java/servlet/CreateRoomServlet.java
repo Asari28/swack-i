@@ -40,7 +40,7 @@ public class CreateRoomServlet extends HttpServlet {
 		HttpSession session = request.getSession();
 		User user = (User) session.getAttribute("user");
 
-		String errorMsg = (String) request.getParameter("errorMsg");
+		String errorMsg = (String) request.getAttribute("errorMsg");
 		System.out.println(errorMsg);
 		UserModel usermodel = new UserModel();
 		try {
@@ -99,11 +99,12 @@ public class CreateRoomServlet extends HttpServlet {
 					response.sendRedirect("MainServlet");
 				} else {
 					request.setAttribute("errorMsg", ERR_SYSTEM);
-					request.getRequestDispatcher("CreateRoomServlet").forward(request, response);
+					doGet(request, response);
 					return;
 				}
 			} else {
-				response.sendRedirect("CreateRoomServlet?errorMsg=ああ");
+				request.setAttribute("errorMsg", ERR_SYSTEM);
+				doGet(request, response);
 				return;
 			}
 		} catch (SwackException e) {
