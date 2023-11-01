@@ -38,18 +38,23 @@ public class JoinMemberServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		//招待するルームIDのパラメータをmain.jspから取得
 		String roomId = request.getParameter("roomId");
-		//		System.out.println(roomId);
+		//準備
 		UserModel usermodel = new UserModel();
 		RoomModel roommodel = new RoomModel();
 		try {
+			//自分とすでに参加しているユーザ以外のユーザ一覧を取得
 			ArrayList<User> userlist = usermodel.getJoinUsers(roomId);
-			System.out.println(userlist);
+			//ルーム情報取得
 			Room nowroom = roommodel.getRoomId(roomId);
+			//joinmember.jspに値を入れる
 			request.setAttribute("userList", userlist);
 			request.setAttribute("nowRoom", nowroom);
+			//joinmember.jspにフォワード
 			request.getRequestDispatcher("/joinmember.jsp").forward(request, response);
 		} catch (SwackException e) {
+			//何らかのエラーになった場合はエラーメッセージをmain.jspに表示
 			request.setAttribute("errorMsg", ERR_SYSTEM);
 			request.getRequestDispatcher("/WEB-INF/jsp/main.jsp").forward(request, response);
 			return;
@@ -61,7 +66,7 @@ public class JoinMemberServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		//セッションからuserを取得する
+		//セッションからuserとroomを取得する
 		HttpSession session = request.getSession();
 		User user = (User) session.getAttribute("user");
 		Room room = (Room) session.getAttribute("room");
@@ -70,9 +75,11 @@ public class JoinMemberServlet extends HttpServlet {
 		String[] joinUseridlist = request.getParameterValues("joinUserIdList");
 		System.out.println(RoomId);
 		System.out.println(joinUseridlist);
+		//準備
 		RoomModel roommodel = new RoomModel();
 
 		try {
+			//受け取った招待するIDリストを順番にデータベースに格納させる
 			boolean result = false;
 			for (String joinuser : joinUseridlist) {
 				result = roommodel.joinUser(RoomId, joinuser);
@@ -83,15 +90,18 @@ public class JoinMemberServlet extends HttpServlet {
 				}
 			}
 			if (result) {
+				//正常に終了した場合はuser,roomをセットしてMainServletにリダイレクト
 				session.setAttribute("user", user);
 				session.setAttribute("room", room);
 				response.sendRedirect("MainServlet");
 			} else {
+				//falseだった場合はエラーメッセージをjoinmember.jspに表示
 				request.setAttribute("errorMsg", ERR_SYSTEM);
 				request.getRequestDispatcher("/joinmember.jsp").forward(request, response);
 				return;
 			}
 		} catch (SwackException e) {
+			//何らかのExceptionになった場合はエラーメッセージをjoinmember.jspに表示
 			request.setAttribute("errorMsg", ERR_SYSTEM);
 			request.getRequestDispatcher("/joinmember.jsp").forward(request, response);
 			return;
