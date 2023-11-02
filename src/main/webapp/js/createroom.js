@@ -9,6 +9,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const elCheckText = document.querySelector(".check_text");
   const elInputTypeChk = document.getElementById("chk");
   const elInputTypeText = document.querySelector("input[type=text]");
+  const eltext = document.getElementById("name");
 
   if (elNames.value.length == 0) {
     elSendButton.style.color = "rgba(44, 45, 48, 0.75)";
@@ -56,5 +57,9 @@ document.addEventListener("DOMContentLoaded", () => {
     } else {
       return true;
     }
+  });
+  
+  eltext.addEventListener("mousedown",(e) =>{
+	 e.target.value = "# ";
   });
 });
