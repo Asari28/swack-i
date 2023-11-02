@@ -16,10 +16,10 @@ import bean.Room;
 import bean.User;
 import exception.SwackException;
 import model.ChatModel;
-import model.ChatModelDummy;
+//import model.ChatModelDummy;
 
 @WebServlet("/MainServlet")
-public class MainServlet extends  LoginCheckServlet{
+public class MainServlet extends LoginCheckServlet {
 	private static final long serialVersionUID = 1L;
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -35,7 +35,7 @@ public class MainServlet extends  LoginCheckServlet{
 		User user = (User) session.getAttribute("user");
 		try {
 			// ダミーデータ起動時はこちら
-//			ChatModelDummy chatModel = new ChatModelDummy();
+			//			ChatModelDummy chatModel = new ChatModelDummy();
 			ChatModel chatModel = new ChatModel();
 			Room room = chatModel.getRoom(roomId, user.getUserId());
 			List<Room> roomList = chatModel.getRoomList(user.getUserId());
@@ -56,7 +56,8 @@ public class MainServlet extends  LoginCheckServlet{
 		request.getRequestDispatcher("/WEB-INF/jsp/main.jsp").forward(request, response);
 	}
 
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		//画面から取得
 		String roomId = request.getParameter("roomId");
 		String message = request.getParameter("message");
@@ -67,7 +68,7 @@ public class MainServlet extends  LoginCheckServlet{
 
 		try {
 			new ChatModel().saveChatLog(roomId, user.getUserId(), message);
-		}catch (SwackException e) {
+		} catch (SwackException e) {
 			e.printStackTrace();
 			request.setAttribute("errorMsg", ERR_SYSTEM);
 			request.getRequestDispatcher("/WEB-INF/jsp/login.jsp").forward(request, response);
