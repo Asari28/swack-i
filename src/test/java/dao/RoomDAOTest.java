@@ -2,6 +2,8 @@ package dao;
 
 import static org.junit.Assert.*;
 
+import java.util.ArrayList;
+
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -24,7 +26,7 @@ class RoomDAOTest {
 
 	private static RoomDAO RoomDAO;
 
-	//テスト動かす前に準備
+	//テスト動かす前の準備
 	@BeforeAll
 	static void setUpBeforeClass() throws SwackException {
 		SetUpDBConnectionPool.setUp();
@@ -64,6 +66,16 @@ class RoomDAOTest {
 	void testGetRoom() throws SwackException {
 		Room room = RoomDAO.getRoom("R0000");
 		assertNotNull(room);
-		System.out.println("testGetRoom():" + room.getRoomId() + room.getRoomName());
+		System.out.println("testGetRoom():R0000:everyoneが表示されれば成功");
+		System.out.println(room.getRoomId() + ":" + room.getRoomName());
+	}
+
+	@Test
+	void testSelectUnJoinedRoom() throws SwackException {
+		ArrayList<Room> roomList = RoomDAO.selectUnJoinedRoom("U0003");
+		assertNotNull(roomList);
+		System.out.println("testSelectUnJoinedRoom():R0001:randomが表示されれば成功");
+		for (Room room : roomList)
+			System.out.println(room.getRoomId() + ":" + room.getRoomName());
 	}
 }

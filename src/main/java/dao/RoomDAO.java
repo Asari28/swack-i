@@ -6,6 +6,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import bean.Room;
 import exception.SwackException;
@@ -118,6 +119,12 @@ public class RoomDAO extends BaseDAO {
 		}
 	}
 
+	/**
+	 * 指定したルームIDのルーム情報(ルームID,ルーム名)を取得する
+	 * @param roomId ほしいルームのID
+	 * @return Room(roomId,roomName) ルームID,ルーム名が入ったRoom型で返却
+	 * @throws SwackException
+	 */
 	public Room getRoom(String roomId) throws SwackException {
 		//SQL
 		String sql = "SELECT roomid,roomname,createduserid,directed,privated FROM rooms WHERE roomid=?";
@@ -134,6 +141,34 @@ public class RoomDAO extends BaseDAO {
 			Room room = new Room(roomid, roomname);
 
 			return room;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new SwackException(ERR_DB_PROCESS, e);
+		}
+	}
+
+	public ArrayList<Room> selectUnJoinedRoom(String userId) throws SwackException {
+		//SQL
+		String sql = "SELECT r.roomid,r.roomname FROM rooms r WHERE directed IS FALSE AND privated IS FALSE AND roomid NOT IN (SELECT j.roomid FROM joinroom j WHERE j.userid=?)";
+		try (Connection conn = dataSource.getConnection()) {
+			PreparedStatement pStmt = conn.prepareStatement(sql);
+			//SQL組み立て
+			pStmt.setString(1, userId);
+
+			//SQL実行
+			ResultSet rs = pStmt.executeQuery();
+
+			//結果をリストに詰める
+			ArrayList<Room> roomList = new ArrayList<Room>();
+			while (rs.next()) {
+				String listRoomId = rs.getString("roomid");
+				String roomName = rs.getString("roomname");
+				Room room = new Room(listRoomId, roomName);
+				roomList.add(room);
+			}
+
+			return roomList;
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new SwackException(ERR_DB_PROCESS, e);

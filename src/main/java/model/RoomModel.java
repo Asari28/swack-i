@@ -1,5 +1,7 @@
 package model;
 
+import java.util.ArrayList;
+
 import bean.Room;
 import dao.RoomDAO;
 import exception.SwackException;
@@ -71,5 +73,17 @@ public class RoomModel {
 		RoomDAO roomDAO = new RoomDAO();
 		Room room = roomDAO.getRoom(roomId);
 		return room;
+	}
+
+	/**
+	 * 自分が参加していないルーム一覧を取得するメソッド
+	 * @param userId 自分のユーザID
+	 * @return ArrayList<Room> 自分が参加していないルーム一覧
+	 * @throws SwackException
+	 */
+	public ArrayList<Room> getNotJoinRoom(String userId) throws SwackException {
+		RoomDAO roomDAO = new RoomDAO();
+		ArrayList<Room> roomList = roomDAO.selectUnJoinedRoom(userId);
+		return roomList;
 	}
 }
