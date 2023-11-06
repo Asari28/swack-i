@@ -37,17 +37,20 @@ public class JoinRoomServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		// ログイン情報から取得
+		HttpSession session = request.getSession();
+		User user = (User) session.getAttribute("user");
 		//参加するルームIDのパラメータをmain.jspから取得
-		String userId = request.getParameter("userId");
-		String roomId = request.getParameter("roomId");
+		//String userId = request.getParameter("userId");
+		//String roomId = request.getParameter("roomId");
 		//準備
 		RoomModel roommodel = new RoomModel();
 		try {
 			//自分が参加していないルーム一覧を取得
-			ArrayList<Room> allRoom = roommodel.getRoomId(roomId);
+			ArrayList<Room> allRoom = roommodel.getNotJoinRoom(user.getUserId());
 			//allRoom.jspに値を入れる
 			request.setAttribute("nowRoom", allRoom);
-			request.setAttribute("userId", userId);
+			request.setAttribute("userId", user.getUserId());
 			//allRoom.jspにフォワード
 			request.getRequestDispatcher("/allRoom.jsp").forward(request, response);
 		} catch (SwackException e) {
@@ -63,24 +66,26 @@ public class JoinRoomServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		//セッションからuserとroomを取得する
+		//セッションからuserを取得する
 		HttpSession session = request.getSession();
 		User user = (User) session.getAttribute("user");
-		Room room = (Room) session.getAttribute("room");
+		//		Room room = (Room) session.getAttribute("room");
 		//パラメーター取得
 		String RoomId = request.getParameter("roomId");
 		System.out.println(RoomId);
 		//準備
 		RoomModel roommodel = new RoomModel();
-		
+
 		try {
-			//受け取った参加するroomIdでデータベースにuserIdを格納させる
+			//受け取った参加するroomIdとuserIdをでデータベースに格納させる
 			boolean result = false;
-			result=
+			result = roommodel.joinUser(RoomId, user.getUserId());
 			if (result) {
-				//正常に終了した場合はuser,roomをセットしてMainServletにリダイレクト
-				session.setAttribute("user", user);
-				session.setAttribute("room", room);
+				//正常に終了した場合は新しくなったuser,roomを取得後セットしてMainServletにリダイレクト
+				User newuser = (User) session.getAttribute("user");
+				Room newroom = (Room) session.getAttribute("room");
+				session.setAttribute("user", newuser);
+				session.setAttribute("room", newroom);
 				response.sendRedirect("MainServlet");
 			} else {
 				//falseだった場合はエラーメッセージをallRoom.jspに表示
