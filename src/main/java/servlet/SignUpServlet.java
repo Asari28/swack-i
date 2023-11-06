@@ -10,7 +10,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import bean.User;
 import exception.SwackException;
+import model.LoginModel;
+import model.RoomModel;
 import model.SignUpModel;
 
 /**
@@ -74,10 +77,17 @@ public class SignUpServlet extends HttpServlet {
 			boolean result = new SignUpModel().checkSignup(mailAddress);
 			if (result) {
 				// 登録内容に不備なし
+				//Users表に新規ユーザを追加するINSERT
 				boolean results = new SignUpModel().insert(username, mailAddress, password);
 				if (results) {
-					request.setAttribute("errorMsg", INFO_USERS_ENTRY_SUCCESS);
-					request.getRequestDispatcher("/WEB-INF/jsp/login.jsp").forward(request, response);
+					//新規ユーザのユーザIDを取得するためログインモデルを使用してユーザ情報取得
+					User user = new LoginModel().checkLogin(mailAddress, password);
+					//ユーザ登録が成功していたらR0000に参加させる
+					boolean joinResult = new RoomModel().joinUser("R0000", user.getUserId());
+					if (joinResult) {
+						request.setAttribute("errorMsg", INFO_USERS_ENTRY_SUCCESS);
+						request.getRequestDispatcher("/WEB-INF/jsp/login.jsp").forward(request, response);
+					}
 				}
 				return;
 			} else {
