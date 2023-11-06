@@ -72,7 +72,7 @@ public class JoinRoomServlet extends HttpServlet {
 		User user = (User) session.getAttribute("user");
 		//		Room room = (Room) session.getAttribute("room");
 		//パラメーター取得
-		String RoomId = request.getParameter("roomId");
+		String RoomId = request.getParameter("joinRoomId");
 		System.out.println(RoomId);
 		//準備
 		RoomModel roommodel = new RoomModel();
