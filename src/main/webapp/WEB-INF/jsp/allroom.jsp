@@ -34,7 +34,7 @@ pageEncoding="UTF-8"%>
             <input type="hidden" name="roomId" value="${roomId}" />
             <div class="form-group">
               <label class="control-label">参加できるルーム一覧</label>
-              <select id="rooms" name="joinRoomIdList" class="form-select" multiple>
+              <select id="rooms" name="joinRoomId" class="form-select" multiple>
               	<c:forEach var="room" items="${roomList}">
 	            	<option value="${room.roomId}">${room.roomName}</option>
 	            </c:forEach>
@@ -51,7 +51,7 @@ pageEncoding="UTF-8"%>
                   class="btn btn-default"
                   value="キャンセル"
               /></a>
-              <input type="submit" id="send" class="btn btn-default" name="btn" value="参加する" disabled/>
+              <input type="submit" id="send" class="btn btn-default" name="btn" value="参加する" />
             </div>
           </form>
         </div>
