@@ -66,6 +66,6 @@ pageEncoding="UTF-8"%>
       crossorigin="anonymous"
     ></script>
 
-    <script src="js/joinmember.js"></script>
+    <script src="js/allroom.js"></script>
   </body>
 </html>
