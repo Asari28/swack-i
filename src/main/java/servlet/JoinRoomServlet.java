@@ -42,15 +42,16 @@ public class JoinRoomServlet extends HttpServlet {
 		User user = (User) session.getAttribute("user");
 		//参加するルームIDのパラメータをmain.jspから取得
 		//String userId = request.getParameter("userId");
-		//String roomId = request.getParameter("roomId");
+		String roomId = request.getParameter("roomId");
 		//準備
 		RoomModel roommodel = new RoomModel();
 		try {
 			//自分が参加していないルーム一覧を取得
 			ArrayList<Room> allRoom = roommodel.getNotJoinRoom(user.getUserId());
 			//allRoom.jspに値を入れる
-			request.setAttribute("nowRoom", allRoom);
+			request.setAttribute("roomList", allRoom);
 			request.setAttribute("userId", user.getUserId());
+			request.setAttribute("roomId", roomId);
 			//allRoom.jspにフォワード
 			request.getRequestDispatcher("/allRoom.jsp").forward(request, response);
 		} catch (SwackException e) {
