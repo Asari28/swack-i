@@ -30,7 +30,7 @@ pageEncoding="UTF-8"%>
         <div class="col-md-12 member-form">
           <h3>ルームに参加する</h3>
 		  <p class="error" id="errorMsg">${errorMsg }</p>
-          <form action="JoinMemberServlet" method="post">
+          <form action="JoinRoomServlet" method="post">
             <input type="hidden" name="roomId" value="${roomId}" />
             <div class="form-group">
               <label class="control-label">参加できるルーム一覧</label>
@@ -51,7 +51,7 @@ pageEncoding="UTF-8"%>
                   class="btn btn-default"
                   value="キャンセル"
               /></a>
-              <input type="submit" id="send" class="btn btn-default" name="btn" value="参加する"/>
+              <input type="submit" id="send" class="btn btn-default" name="btn" value="参加する" disabled/>
             </div>
           </form>
         </div>
