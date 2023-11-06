@@ -1,5 +1,10 @@
 "use strict";
 
+var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+  return new bootstrap.Tooltip(tooltipTriggerEl)
+})
+
 document.addEventListener("DOMContentLoaded", () => {
   // elements
   const elSendButton = document.getElementById("send");
@@ -7,6 +12,13 @@ document.addEventListener("DOMContentLoaded", () => {
   const elInputTypeText = document.querySelector("input[type=text]");
   const elMessageForm = document.getElementById("messageForm");
   const elLogArea = document.getElementById("logArea");
+	const limit = document.querySelector(".allroom");
+	const str = limit.textContent;
+	const len = 14; // 半角50字（全角約25字）
+	if (str.length > len) {
+		limit.textContent = str.substring(0, len) + "…";
+}
+
 
   // ログ表示部の最下部へ(110はheader+footerのheight)
   elLogArea.scrollTop = elLogArea.scrollHeight + 110;

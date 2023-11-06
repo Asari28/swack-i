@@ -52,6 +52,17 @@
 	color: white;
 }
 
+.left .allroom {
+	margin-left: 15px;
+	text-decoration: none;
+	color: rgba(255, 225, 255, 1);
+}
+
+/*.serchicon{*/
+/*	width: 20px;*/
+/*	height: 20px;*/
+/*}*/
+
 .contents {
 	flex: 1;
 	position: relative;

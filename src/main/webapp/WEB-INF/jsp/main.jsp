@@ -43,6 +43,10 @@
 							${room.roomName}</a>
 						<br>
 					</c:forEach>
+					<a href="JoinRoomServlet?roomid=${room.roomId}" class="allroom" data-bs-toggle="tooltip" data-bs-placement="top" title="参加できるルーム一覧">
+<!-- 					<img src="images/serchicon.svg" class="serchicon"/> -->
+					<span>参加できるルーム一覧</span>
+					</a>
 				</details>
 				<details open>
 					<summary> ダイレクト </summary>
