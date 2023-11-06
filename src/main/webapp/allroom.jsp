@@ -21,7 +21,7 @@ pageEncoding="UTF-8"%>
     />
 
     <link rel="stylesheet" href="css/style.css" />
-    <link rel="stylesheet" href="css/joinmember.css" />
+    <link rel="stylesheet" href="css/allroom.css" />
   </head>
 
   <body>
@@ -34,17 +34,17 @@ pageEncoding="UTF-8"%>
             <input type="hidden" name="roomId" value="${roomId}" />
             <div class="form-group">
               <label class="control-label">参加できるルーム一覧</label>
-              <select id="users" name="joinUserIdList" class="form-select" multiple>
+              <select id="rooms" name="joinRoomIdList" class="form-select" multiple>
               	<c:forEach var="room" items="${roomList}">
 	            	<option value="${room.roomId}">${room.roomName}</option>
 	            </c:forEach>
               </select>
-              <span class="users-note"
+              <span class="join-room"
                 >参加したいルームを選んでください。</span
               >
             </div>
 
-            <div class="member-form-btn">
+            <div class="room-form-btn">
               <a href="MainServlet?roomId=${roomId}"
                 ><input
                   type="button"

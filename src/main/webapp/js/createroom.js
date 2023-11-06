@@ -59,7 +59,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
   
-  eltext.addEventListener("mousedown",(e) =>{
-	 e.target.value = "# ";
-  });
+//  eltext.addEventListener("mousedown",(e) =>{
+//	 e.target.value = "# ";
+//  });
 });
