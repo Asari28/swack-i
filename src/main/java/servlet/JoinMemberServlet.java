@@ -51,6 +51,7 @@ public class JoinMemberServlet extends HttpServlet {
 			//joinmember.jspに値を入れる
 			request.setAttribute("userList", userlist);
 			request.setAttribute("nowRoom", nowroom);
+			request.setAttribute("roomId", roomId);
 			//joinmember.jspにフォワード
 			request.getRequestDispatcher("/joinmember.jsp").forward(request, response);
 		} catch (SwackException e) {
