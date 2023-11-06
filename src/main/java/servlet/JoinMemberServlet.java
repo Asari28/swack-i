@@ -53,7 +53,7 @@ public class JoinMemberServlet extends HttpServlet {
 			request.setAttribute("nowRoom", nowroom);
 			request.setAttribute("roomId", roomId);
 			//joinmember.jspにフォワード
-			request.getRequestDispatcher("/joinmember.jsp").forward(request, response);
+			request.getRequestDispatcher("/WEB-INF/jsp/joinmember.jsp").forward(request, response);
 		} catch (SwackException e) {
 			//何らかのエラーになった場合はエラーメッセージをmain.jspに表示
 			request.setAttribute("errorMsg", ERR_SYSTEM);
@@ -98,13 +98,13 @@ public class JoinMemberServlet extends HttpServlet {
 			} else {
 				//falseだった場合はエラーメッセージをjoinmember.jspに表示
 				request.setAttribute("errorMsg", ERR_SYSTEM);
-				request.getRequestDispatcher("/joinmember.jsp").forward(request, response);
+				request.getRequestDispatcher("/WEB-INF/jsp/joinmember.jsp").forward(request, response);
 				return;
 			}
 		} catch (SwackException e) {
 			//何らかのExceptionになった場合はエラーメッセージをjoinmember.jspに表示
 			request.setAttribute("errorMsg", ERR_SYSTEM);
-			request.getRequestDispatcher("/joinmember.jsp").forward(request, response);
+			request.getRequestDispatcher("/WEB-INF/jsp/joinmember.jsp").forward(request, response);
 			return;
 
 		}
