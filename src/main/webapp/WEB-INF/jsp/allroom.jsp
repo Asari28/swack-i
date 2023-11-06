@@ -51,7 +51,7 @@ pageEncoding="UTF-8"%>
                   class="btn btn-default"
                   value="キャンセル"
               /></a>
-              <input id="send" class="btn btn-default" name="btn" value="参加する"/>
+              <input　type="submit" id="send" class="btn btn-default" name="btn" value="参加する"/>
             </div>
           </form>
         </div>
