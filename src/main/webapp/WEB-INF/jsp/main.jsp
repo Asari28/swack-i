@@ -87,7 +87,7 @@
 									${chatLog.userName} <span class="log-time">[${chatLog.createdAt}]
 										<button type="button" class="deleteicon"
 											data-bs-toggle="modal" data-bs-target="#exampleModal"
-											data-bs-whatever="@mdo">
+											data-bs-whatever="${chatLog.chatLogId}">
 											<img src="images/trash.svg">
 										</button>
 										<button class="editicon">
@@ -116,11 +116,13 @@
 								<h5 class="modal-title" id="exampleModalLabel">削除しますか？</h5>
 							</div>
 							<div class="modal-footer">
-								<form action="DeleteMessageServlet" method="post"></form><!-- 変更の可能性あり -->
-								<input type="hidden" name="chatLogId" value=${chatLogId }> 
+								<form action="DeleteMessageServlet" method="post"></form>
+								<!-- 変更の可能性あり -->
+								<input type="hidden" name="chatLogId" id="chatLogIdInput">
 								<button type="button" class="btn btn-secondary"
 									data-bs-dismiss="modal">キャンセル</button>
-								<button type="button" class="btn btn-primary" name="action" value="delete">削除</button>
+								<button type="button" class="btn btn-primary" name="action"
+									value="delete">削除</button>
 							</div>
 						</div>
 					</div>

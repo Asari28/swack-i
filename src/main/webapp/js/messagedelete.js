@@ -14,3 +14,8 @@ exampleModal.addEventListener('show.bs.modal', function (event) {
   modalTitle.textContent = 'New message to ' + recipient
   modalBodyInput.value = recipient
 })
+
+function setChatLogId() {
+    var chatLogId = document.querySelector("#exampleModal [data-bs-target='#exampleModal']").getAttribute("data-bs-whatever");
+    document.getElementById("chatLogIdInput").value = chatLogId;
+}
