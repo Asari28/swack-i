@@ -151,3 +151,11 @@
 .pointer {
 	cursor: pointer;
 }
+
+.deleteicon {
+	border: none;
+}
+
+.editicon{
+	border: none;
+}

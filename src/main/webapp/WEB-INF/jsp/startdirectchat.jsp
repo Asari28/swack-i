@@ -31,6 +31,7 @@
           </p>-->
 
 				<form action="CreateDirectServlet" method="post">
+					<input type="hidden" value="${room.roomId}">
 					<div class="form-group mt-5">
 						<label class="control-label">ユーザを選択する</label> <select
 							name="joinUserId" id="names" class="form-select" multiple>
