@@ -35,4 +35,18 @@ public class UserModel {
 
 	}
 
+	/**
+	 * ユーザのIDからそのユーザとダイレクトチャットをしていないユーザ一覧を取得するメソッド
+	 * CreateDeirectServletで使用する
+	 * @return ArrayList<User> userList ユーザとダイレクトチャットをしていないユーザ一覧
+	 * @throws SwackException
+	 */
+	public ArrayList<User> getUnDirectedUsers(String userId) throws SwackException {
+		// UserDAOからルームIDのルームに参加していないユーザ一覧を取得
+		UsersDAO usersDAO = new UsersDAO();
+		ArrayList<User> userList = usersDAO.selectUnDirectedUser(userId);
+		return userList;
+
+	}
+
 }
