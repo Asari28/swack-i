@@ -49,4 +49,25 @@ public class UserModel {
 
 	}
 
+	/**
+	 * ダイレクトチャットのルーム名を渡すメソっド
+	 * CreateDeirectServletで使用する
+	 * @return String roomName ダイレクトチャットのルーム名
+	 * @throws SwackException
+	 */
+	public String getUnDirectRoomName(String target, String userId) throws SwackException {
+		// UserDAOからルームIDのルームに参加していないユーザ一覧を取得
+		int iUserId = Integer.parseInt(userId.substring(1));
+		int iTarget = Integer.parseInt(target.substring(1));
+
+		if (iTarget > iUserId) {
+			String work = target;
+			target = userId;
+			userId = work;
+		}
+		String roomName = "P" + target + "," + userId;
+		return roomName;
+
+	}
+
 }
