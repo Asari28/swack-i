@@ -49,7 +49,7 @@
 					</a>
 				</details>
 				<details open>
-					<summary> ダイレクト </summary>
+					<summary> ダイレクト <a href="CreateDirectServlet"><button>＋</button></a></summary>
 					<c:forEach var="direct" items="${directList}">
 						<a class="list-name" href="MainServlet?roomId=${direct.roomId}">#
 							${direct.roomName}</a>
