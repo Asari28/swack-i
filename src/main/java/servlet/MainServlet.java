@@ -27,8 +27,11 @@ public class MainServlet extends LoginCheckServlet {
 		// 画面から取得
 		String roomId = request.getParameter("roomId");
 		if (roomId == null) {
-			// 初期ルームをeveryoneにする
-			roomId = "R0000";
+			roomId = (String) request.getAttribute("roomId");
+			if (roomId == null) {
+				// 初期ルームをeveryoneにする
+				roomId = "R0000";
+			}
 		}
 		// ログイン情報から取得
 		HttpSession session = request.getSession();
