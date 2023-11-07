@@ -12,11 +12,10 @@
 
 <!-- CDN : Bootstrap CSS -->
 <link
-  href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
-  rel="stylesheet"
-  integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
-  crossorigin="anonymous"
-/>
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+	rel="stylesheet"
+	integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+	crossorigin="anonymous" />
 
 <link rel="stylesheet" href="css/style.css">
 <link rel="stylesheet" href="css/main.css">
@@ -43,13 +42,16 @@
 							${room.roomName}</a>
 						<br>
 					</c:forEach>
-					<a href="JoinRoomServlet?roomId=${room.roomId}" class="allroom" data-bs-toggle="tooltip" data-bs-placement="top" title="参加できるルーム一覧"> 
-<!-- 					<img src="images/serchicon.svg" class="serchicon"/> -->
-					<span>参加できるルーム一覧</span>
+					<a href="JoinRoomServlet?roomId=${room.roomId}" class="allroom"
+						data-bs-toggle="tooltip" data-bs-placement="top"
+						title="参加できるルーム一覧"> <!-- 					<img src="images/serchicon.svg" class="serchicon"/> -->
+						<span>参加できるルーム一覧</span>
 					</a>
 				</details>
 				<details open>
-					<summary> ダイレクト <a href="CreateDirectServlet"><button>＋</button></a></summary>
+					<summary>
+						ダイレクト <a href="CreateDirectServlet?roomId=${room.roomId}"><button>＋</button></a>
+					</summary>
 					<c:forEach var="direct" items="${directList}">
 						<a class="list-name" href="MainServlet?roomId=${direct.roomId}">#
 							${direct.roomName}</a>
@@ -65,8 +67,8 @@
 					</div>
 				</c:if>
 				<h2>
-					${room.roomName}(${room.memberCount})
-					<img src="images/reload.svg" class="reload pointer" onclick="doReload();"/>
+					${room.roomName}(${room.memberCount}) <img src="images/reload.svg"
+						class="reload pointer" onclick="doReload();" />
 				</h2>
 				<hr>
 				<div id="logArea" class="contents-main">
@@ -77,16 +79,53 @@
 						</c:if>
 						<div class="log-area" id="${chatLog.chatLogId}">
 							<div class="log-icon">
-								<img src="images/${chatLog.userId}.png" onerror="this.src='images/profile.png;'">
+								<img src="images/${chatLog.userId}.png"
+									onerror="this.src='images/profile.png;'">
 							</div>
 							<div class="log-box">
 								<p class="log-name">
-									${chatLog.userName} <span class="log-time">[${chatLog.createdAt}]</span>
+									${chatLog.userName} <span class="log-time">[${chatLog.createdAt}]
+										<button type="button" class="deleteicon"
+											data-bs-toggle="modal" data-bs-target="#exampleModal"
+											data-bs-whatever="${chatLog.chatLogId}">
+											<img src="images/trash.svg">
+										</button>
+										<button class="editicon">
+											<img src="images/pencil.svg">
+										</button>
+									</span>
 								</p>
+
 								<p>${chatLog.message}</p>
 							</div>
 						</div>
 					</c:forEach>
+				</div>
+
+				<!-- モーダル -->
+				<div class="modal fade" id="exampleModal" tabindex="-1"
+					aria-labelledby="exampleModalLabel" aria-hidden="true">
+					<div class="modal-dialog">
+						<div class="modal-content">
+							<div class="modal-header">
+
+								<button type="button" class="btn-close" data-bs-dismiss="modal"
+									aria-label="Close"></button>
+							</div>
+							<div class="modal-body">
+								<h5 class="modal-title" id="exampleModalLabel">削除しますか？</h5>
+							</div>
+							<div class="modal-footer">
+								<form action="DeleteMessageServlet" method="post"></form>
+								<!-- 変更の可能性あり -->
+								<input type="hidden" name="chatLogId" id="chatLogIdInput">
+								<button type="button" class="btn btn-secondary"
+									data-bs-dismiss="modal">キャンセル</button>
+								<button type="button" class="btn btn-primary" name="action"
+									value="delete">削除</button>
+							</div>
+						</div>
+					</div>
 				</div>
 				<div class="contents-footer">
 					<form action="MainServlet" method="post" id="messageForm">
@@ -104,14 +143,14 @@
 	</div>
 	<!-- container -->
 
-    <!-- CDN : Bootstrap Bundle with Popper -->
-    <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
-      integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
-      crossorigin="anonymous"
-    ></script>
+	<!-- CDN : Bootstrap Bundle with Popper -->
+	<script
+		src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+		integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+		crossorigin="anonymous"></script>
 
 	<script src="js/main.js"></script>
-
-</body>
-</html>
+	<script src="js/messagedelete.js">
+		</body>
+		</html>
+	
