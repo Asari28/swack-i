@@ -44,8 +44,8 @@
 					</c:forEach>
 					<a href="JoinRoomServlet?roomId=${room.roomId}" class="allroom"
 						data-bs-toggle="tooltip" data-bs-placement="top"
-						title="参加できるルーム一覧"> <!-- 					<img src="images/serchicon.svg" class="serchicon"/> -->
-						<span>参加できるルーム一覧</span>
+						title="参加可能なルーム一覧を表示"> <!-- 					<img src="images/serchicon.svg" class="serchicon"/> -->
+						<span>+ルーム参加</span>
 					</a>
 				</details>
 				<details open>
