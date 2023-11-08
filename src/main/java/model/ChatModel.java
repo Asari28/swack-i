@@ -32,4 +32,9 @@ public class ChatModel {
 	public void saveChatLog(String roomId, String userId, String message) throws SwackException {
 		new ChatDAO().saveChatlog(roomId, userId, message);
 	}
+
+	public boolean deleteChatlog(int chatLogId) throws SwackException {
+		boolean result = new ChatDAO().deleteChatlog(chatLogId);
+		return result;
+	}
 }

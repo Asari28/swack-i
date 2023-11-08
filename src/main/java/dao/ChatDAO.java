@@ -163,4 +163,26 @@ public class ChatDAO extends BaseDAO {
 		}
 	}
 
+	public boolean deleteChatlog(int chatLogId) throws SwackException {
+		String sql = "DELETE FROM CHATLOG WHERE CHATLOGID = ?";
+
+		try (Connection conn = dataSource.getConnection()) {
+			PreparedStatement pStmt = conn.prepareStatement(sql);
+			pStmt.setInt(1, chatLogId);
+
+			//SQL実行
+			int result = pStmt.executeUpdate();
+
+			//結果
+			if (result != 1) {
+				return false;//失敗
+			}
+			return true;//成功
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new SwackException(ERR_DB_PROCESS, e);
+		}
+	}
+
 }
