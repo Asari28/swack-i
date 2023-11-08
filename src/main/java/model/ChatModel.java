@@ -34,6 +34,7 @@ public class ChatModel {
 	}
 
 	public boolean deleteChatlog(int chatLogId) throws SwackException {
+		//成功したらtrue、失敗したらfalseを返す
 		boolean result = new ChatDAO().deleteChatlog(chatLogId);
 		return result;
 	}

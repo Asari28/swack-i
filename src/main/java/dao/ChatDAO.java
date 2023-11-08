@@ -163,6 +163,12 @@ public class ChatDAO extends BaseDAO {
 		}
 	}
 
+	/**
+	 * chatLogIdのチャットログを削除する
+	 * @param chatLogId チャットログのID
+	 * @return boolean 成功(true)失敗(false)
+	 * @throws SwackException
+	 */
 	public boolean deleteChatlog(int chatLogId) throws SwackException {
 		String sql = "DELETE FROM CHATLOG WHERE CHATLOGID = ?";
 
