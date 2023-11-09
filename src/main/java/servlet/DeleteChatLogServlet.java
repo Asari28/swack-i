@@ -9,7 +9,9 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
+import bean.User;
 import exception.SwackException;
 import model.ChatModel;
 
@@ -38,10 +40,22 @@ public class DeleteChatLogServlet extends HttpServlet {
 		int chatLogId = Integer.parseInt(request.getParameter("chatLogId"));
 		ChatModel chatModel = new ChatModel();
 		request.setAttribute("roomId", roomId);
+		//セッションからuser取得
+		HttpSession session = request.getSession();
+		User user = (User) session.getAttribute("user");
 		try {
-			boolean result = chatModel.deleteChatlog(chatLogId);
-			if (!result) {
-				request.setAttribute("errorMsg", ERR_DB_PROCESS);
+			//チャットを打った人のUserId
+			String userId = chatModel.getChatlogUserId(chatLogId);
+			//操作している人がチャットを打った人か
+			if (userId.equals(user.getUserId())) {
+				//成功　削除処理
+				boolean result = chatModel.deleteChatLog(chatLogId);
+				if (!result) {
+					request.setAttribute("errorMsg", ERR_DB_PROCESS);
+				}
+			} else {
+				//失敗
+				request.setAttribute("errorMsg", "あなたは偽物です");
 			}
 			request.getRequestDispatcher("/WEB-INF/jsp/main.jsp").forward(request, response);
 		} catch (SwackException e) {
