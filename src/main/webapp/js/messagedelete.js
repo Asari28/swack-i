@@ -1,5 +1,5 @@
-var exampleModal = document.getElementById('exampleModal')
-exampleModal.addEventListener('show.bs.modal', function (event) {
+var deleteModal = document.getElementById('deleteModal')
+deleteModal.addEventListener('show.bs.modal', function (event) {
   // Button that triggered the modal
   var button = event.relatedTarget
   // Extract info from data-bs-* attributes
@@ -8,14 +8,17 @@ exampleModal.addEventListener('show.bs.modal', function (event) {
   // and then do the updating in a callback.
   //
   // Update the modal's content.
-  var modalTitle = exampleModal.querySelector('.modal-title')
-  var modalBodyInput = exampleModal.querySelector('.modal-body input')
+  var modalTitle = deleteModal.querySelector('.modal-title')
+  var modalBodyInput = deleteModal.querySelector('.modal-body input')
 
-  modalTitle.textContent = 'New message to ' + recipient
+  modalTitle.textContent = 'メッセージを削除しますか？'
   modalBodyInput.value = recipient
 })
 
-function setChatLogId() {
-    var chatLogId = document.querySelector("#exampleModal [data-bs-target='#exampleModal']").getAttribute("data-bs-whatever");
-    document.getElementById("chatLogIdInput").value = chatLogId;
-}
+document.querySelectorAll('.deleteicon').forEach(function (button) {
+    button.addEventListener('click', function () {
+        var chatLogId = button.getAttribute('data-bs-whatever');
+        
+        document.getElementById('chatLogIdInput').value = chatLogId;
+    });
+});

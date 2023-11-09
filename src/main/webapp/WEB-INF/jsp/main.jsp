@@ -85,13 +85,13 @@
 							<div class="log-box">
 								<p class="log-name">
 									${chatLog.userName} <span class="log-time">[${chatLog.createdAt}]
-										<button type="button" class="deleteicon"
-											data-bs-toggle="modal" data-bs-target="#exampleModal"
-											data-bs-whatever="${chatLog.chatLogId}">
-											<img src="images/trash.svg">
-										</button>
 										<button class="editicon">
 											<img src="images/pencil.svg">
+										</button>
+										<button type="button" class="deleteicon"
+											data-bs-toggle="modal" data-bs-target="#deleteModal"
+											data-bs-whatever="${chatLog.chatLogId}">
+											<img src="images/trash.svg">
 										</button>
 									</span>
 								</p>
@@ -100,32 +100,6 @@
 							</div>
 						</div>
 					</c:forEach>
-				</div>
-
-				<!-- モーダル -->
-				<div class="modal fade" id="exampleModal" tabindex="-1"
-					aria-labelledby="exampleModalLabel" aria-hidden="true">
-					<div class="modal-dialog">
-						<div class="modal-content">
-							<div class="modal-header">
-
-								<button type="button" class="btn-close" data-bs-dismiss="modal"
-									aria-label="Close"></button>
-							</div>
-							<div class="modal-body">
-								<h5 class="modal-title" id="exampleModalLabel">削除しますか？</h5>
-							</div>
-							<div class="modal-footer">
-								<form action="DeleteMessageServlet" method="post"></form>
-								<!-- 変更の可能性あり -->
-								<input type="hidden" name="chatLogId" id="chatLogIdInput">
-								<button type="button" class="btn btn-secondary"
-									data-bs-dismiss="modal">キャンセル</button>
-								<button type="button" class="btn btn-primary" name="action"
-									value="delete">削除</button>
-							</div>
-						</div>
-					</div>
 				</div>
 				<div class="contents-footer">
 					<form action="MainServlet" method="post" id="messageForm">
@@ -138,6 +112,31 @@
 				</div>
 			</div>
 			<!--contents -->
+			<!-- メッセージ削除モーダル -->
+			<div class="modal fade" id="deleteModal" tabindex="-1"
+				aria-labelledby="deleteModalLabel" aria-hidden="true">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="btn-close" data-bs-dismiss="modal"
+								aria-label="Close"></button>
+						</div>
+						<div class="modal-body">
+							<h5 class="modal-title" id="deleteModalLabel">メッセージを削除しますか？</h5>
+						</div>
+						<div class="modal-footer">
+							<form action="DeleteChatLogServlet" method="post">
+								<input type="hidden" name="chatLogId" id="chatLogIdInput">
+								<button type="button" class="btn btn-secondary"
+									data-bs-dismiss="modal">キャンセル</button>
+								<button type="submit" class="btn btn-primary" name="action"
+									value="delete">削除</button>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- /メッセージ削除モーダル -->
 		</section>
 		<!--main -->
 	</div>
@@ -150,7 +149,7 @@
 		crossorigin="anonymous"></script>
 
 	<script src="js/main.js"></script>
-	<script src="js/messagedelete.js">
+	<script src="js/messagedelete.js"></script>
 		</body>
 		</html>
 	
