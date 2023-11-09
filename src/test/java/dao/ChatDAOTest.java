@@ -26,14 +26,22 @@ class ChatDAOTest {
 	//		}
 	//		assertNotNull(chatLogList);
 	//	}
+	//
+	//	@Test
+	//	void testDeleteChatlog() throws SwackException {
+	//		boolean rs = ChatDAO.deleteChatlog(8);
+	//		if (rs) {
+	//			System.out.println("testGetChatlogList():成功");
+	//		} else { //拡張for文
+	//			System.out.println("testGetChatlogList():失敗");
+	//		}
+	//	}
 
 	@Test
-	void testDeleteChatlog() throws SwackException {
-		boolean rs = ChatDAO.deleteChatlog(8);
-		if (rs) {
-			System.out.println("testGetChatlogList():成功");
-		} else { //拡張for文
-			System.out.println("testGetChatlogList():失敗");
-		}
+	void testGetChatlogUserId() throws SwackException {
+		String userId = ChatDAO.getChatlogUserId(7);
+		System.out.println("testGetChatlogList():'U0001'なら成功");
+		System.out.println(userId);
+
 	}
 }

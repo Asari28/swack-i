@@ -191,4 +191,32 @@ public class ChatDAO extends BaseDAO {
 		}
 	}
 
+	/**
+	 * chatLogIdのチャットをしたユーザのIDを取得
+	 * @param chatLogId チャットログのID
+	 * @return String userId ユーザのID
+	 * @throws SwackException
+	 */
+	public String getChatlogUserId(int chatLogId) throws SwackException {
+		String sql = "SELECT USERID FROM CHATLOG WHERE CHATLOGID = ?";
+
+		String userId = null;
+
+		try (Connection conn = dataSource.getConnection()) {
+			PreparedStatement pst = conn.prepareStatement(sql);
+			pst.setInt(1, chatLogId);
+
+			ResultSet rs = pst.executeQuery();
+			if (rs.next()) {
+				userId = rs.getString("USERID");
+			}
+
+		} catch (Exception e) {
+			throw new SwackException(ERR_DB_PROCESS, e);
+		}
+
+		return userId;
+
+	}
+
 }

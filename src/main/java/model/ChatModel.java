@@ -38,9 +38,8 @@ public class ChatModel {
 		return new ChatDAO().deleteChatlog(chatLogId);
 	}
 
-	public ChatLog getChatlogData(int chatLogId) throws SwackException {
+	public String getChatlogUserId(int chatLogId) throws SwackException {
 		//成功したらtrue、失敗したらfalseを返す
-		return new ChatLog(1, "", "U0001", "", "", null);
-		//		return new ChatDAO().deleteChatlog(chatLogId);
+		return new ChatDAO().getChatlogUserId(chatLogId);
 	}
 }
