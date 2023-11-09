@@ -47,7 +47,7 @@ public class DeleteChatLogServlet extends HttpServlet {
 			//チャットを打った人のUserId
 			String userId = chatModel.getChatlogUserId(chatLogId);
 			//操作している人がチャットを打った人か
-			if (userId.equals(user.getUserId())) {
+			if (userId.equals(user.getUserId()) || user.getUserId().equals("U0000")) {
 				//成功　削除処理
 				boolean result = chatModel.deleteChatLog(chatLogId);
 				if (!result) {
