@@ -57,11 +57,11 @@ public class DeleteChatLogServlet extends HttpServlet {
 				//失敗
 				request.setAttribute("errorMsg", "あなたは偽物です");
 			}
-			request.getRequestDispatcher("MainServlet").forward(request, response);
+			response.sendRedirect("MainServlet");
 		} catch (SwackException e) {
 			e.printStackTrace();
 			request.setAttribute("errorMsg", ERR_SYSTEM);
-			request.getRequestDispatcher("MainServlet").forward(request, response);
+			response.sendRedirect("MainServlet");
 		}
 
 	}
