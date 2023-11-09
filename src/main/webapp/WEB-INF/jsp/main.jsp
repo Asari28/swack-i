@@ -112,6 +112,19 @@
 				</div>
 			</div>
 			<!--contents -->
+			<!-- エラーの表示について -->
+				<!-- コードが汚いので直したい -->
+			<c:if test="${errorMsg} != null" >
+			<script>
+				var isError = true;
+			</script>
+			</c:if>
+			<c:if test="${errorMsg} = null">
+				<script>
+					var isError = false;
+				</script>
+			</c:if>
+			<!-- /エラーの表示について -->
 			<!-- メッセージ削除モーダル -->
 			<div class="modal fade" id="deleteModal" tabindex="-1"
 				aria-labelledby="deleteModalLabel" aria-hidden="true">
@@ -136,7 +149,27 @@
 					</div>
 				</div>
 			</div>
-			<!-- /メッセージ削除モーダル -->
+			<!-- /メッセージ削除モーダルウィンドウ -->
+			<!-- メッセージ削除が失敗したときのモーダルウィンドウ -->
+			<div class="modal fade" id="errorModal" tabindex="-1"
+				aria-labelledby="errorModalLabel" aria-hidden="true">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title" id="errorModalLabel">Error</h5>
+							<button type="button" class="btn-close" data-bs-dismiss="modal"
+								aria-label="Close"></button>
+						</div>
+						<div class="modal-body" id="errorMessage"></div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-secondary"
+								data-bs-dismiss="modal">Close</button>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- /メッセージ削除が失敗したときのモーダルウィンドウ -->
 		</section>
 		<!--main -->
 	</div>
@@ -150,6 +183,5 @@
 
 	<script src="js/main.js"></script>
 	<script src="js/messagedelete.js"></script>
-		</body>
-		</html>
-	
+</body>
+</html>
