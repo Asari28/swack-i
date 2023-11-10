@@ -46,7 +46,7 @@ public class LastJoinRoomServlet extends HttpServlet {
 			if (!result) {
 				request.setAttribute("errorMsg", ERR_DB_PROCESS);
 			}
-			request.getRequestDispatcher("MainServlet").forward(request, response);
+			response.sendRedirect("MainServlet");
 			return;
 		} catch (SwackException e) {
 			e.printStackTrace();
