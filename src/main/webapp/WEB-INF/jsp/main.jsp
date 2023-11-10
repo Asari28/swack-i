@@ -167,5 +167,8 @@
 		</script>
 	</c:if>
 	<!-- /エラーの表示について -->
+	<div id="loading">
+		<div class="spinner"></div>
+	</div>
 </body>
 </html>
