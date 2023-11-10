@@ -44,7 +44,7 @@
 					</c:forEach>
 					<a href="JoinRoomServlet?roomId=${room.roomId}" class="allroom"
 						data-bs-toggle="tooltip" data-bs-placement="top"
-						title="参加可能なルーム一覧を表示"> <!-- 					<img src="images/serchicon.svg" class="serchicon"/> -->
+						title="参加可能なルーム一覧を表示"> <!--<img src="images/serchicon.svg" class="serchicon"/> -->
 						<span>+ルーム参加</span>
 					</a>
 				</details>
@@ -90,7 +90,7 @@
 										</button>
 										<button type="button" class="deleteicon"
 											data-bs-toggle="modal" data-bs-target="#deleteModal"
-											data-bs-whatever="${chatLog.chatLogId}">
+											data-bs-whatever="${chatLog.chatLogId}" data-bs-whatever2="${room.roomId}">
 											<img src="images/trash.svg">
 										</button>
 									</span>
@@ -112,19 +112,7 @@
 				</div>
 			</div>
 			<!--contents -->
-			<!-- エラーの表示について -->
-				<!-- コードが汚いので直したい -->
-			<c:if test="${errorMsg} != null" >
-			<script>
-				var isError = true;
-			</script>
-			</c:if>
-			<c:if test="${errorMsg} = null">
-				<script>
-					var isError = false;
-				</script>
-			</c:if>
-			<!-- /エラーの表示について -->
+
 			<!-- メッセージ削除モーダル -->
 			<div class="modal fade" id="deleteModal" tabindex="-1"
 				aria-labelledby="deleteModalLabel" aria-hidden="true">
@@ -140,6 +128,7 @@
 						<div class="modal-footer">
 							<form action="DeleteChatLogServlet" method="post">
 								<input type="hidden" name="chatLogId" id="chatLogIdInput">
+								<input type="hidden" name="roomId" id="roomIdInput">
 								<button type="button" class="btn btn-secondary"
 									data-bs-dismiss="modal">キャンセル</button>
 								<button type="submit" class="btn btn-primary" name="action"
@@ -150,31 +139,11 @@
 				</div>
 			</div>
 			<!-- /メッセージ削除モーダルウィンドウ -->
-			<!-- メッセージ削除が失敗したときのモーダルウィンドウ -->
-			<div class="modal fade" id="errorModal" tabindex="-1"
-				aria-labelledby="errorModalLabel" aria-hidden="true">
-				<div class="modal-dialog">
-					<div class="modal-content">
-						<div class="modal-header">
-							<h5 class="modal-title" id="errorModalLabel">Error</h5>
-							<button type="button" class="btn-close" data-bs-dismiss="modal"
-								aria-label="Close"></button>
-						</div>
-						<div class="modal-body" id="errorMessage"></div>
-						<div class="modal-footer">
-							<button type="button" class="btn btn-secondary"
-								data-bs-dismiss="modal">Close</button>
-						</div>
-					</div>
-				</div>
-			</div>
 
-			<!-- /メッセージ削除が失敗したときのモーダルウィンドウ -->
 		</section>
 		<!--main -->
 	</div>
 	<!-- container -->
-
 	<!-- CDN : Bootstrap Bundle with Popper -->
 	<script
 		src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
@@ -183,5 +152,20 @@
 
 	<script src="js/main.js"></script>
 	<script src="js/messagedelete.js"></script>
+	<!-- エラーの表示について -->
+	<!-- コードが汚い -->
+	<c:if test="${errorMsg eq '成功'}">
+		<script>
+			var isError = true;
+			deleteMessage(isError);
+		</script>
+	</c:if>
+	<c:if test="${errorMsg eq '失敗'}">
+		<script>
+			var isError = false;
+			deleteMessage(isError);
+		</script>
+	</c:if>
+	<!-- /エラーの表示について -->
 </body>
 </html>

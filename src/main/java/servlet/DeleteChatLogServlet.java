@@ -3,6 +3,7 @@ package servlet;
 import static parameter.Messages.*;
 
 import java.io.IOException;
+import java.net.URLEncoder;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -46,18 +47,28 @@ public class DeleteChatLogServlet extends HttpServlet {
 		try {
 			//チャットを打った人のUserId
 			String userId = chatModel.getChatlogUserId(chatLogId);
+			String errorMsg = null;
 			//操作している人がチャットを打った人か
 			if (userId.equals(user.getUserId()) || user.getUserId().equals("U0000")) {
 				//成功　削除処理
 				boolean result = chatModel.deleteChatLog(chatLogId);
 				if (!result) {
-					request.setAttribute("errorMsg", ERR_DB_PROCESS);
+					errorMsg = ERR_DB_PROCESS;
+				} else {
+					//エラーメッセージの有無で判断しようとすると、ログイン時などの
+					//関係ないときにも動いてしまうため変更しました。
+					//より良いコードがあれば置き換えていただいて構いません。
+
+					//成功
+					errorMsg = "成功";
 				}
 			} else {
 				//失敗
-				request.setAttribute("errorMsg", "あなたは偽物です");
+				errorMsg = "失敗";
 			}
-			response.sendRedirect("MainServlet");
+			response.sendRedirect("MainServlet?errorMsg=" + URLEncoder.encode(errorMsg, "UTF-8") + "&roomId="
+					+ URLEncoder.encode(roomId, "UTF-8"));
+
 		} catch (SwackException e) {
 			e.printStackTrace();
 			request.setAttribute("errorMsg", ERR_SYSTEM);

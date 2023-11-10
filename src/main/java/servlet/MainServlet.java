@@ -3,6 +3,7 @@ package servlet;
 import static parameter.Messages.*;
 
 import java.io.IOException;
+import java.net.URLDecoder;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -26,6 +27,17 @@ public class MainServlet extends LoginCheckServlet {
 			throws ServletException, IOException {
 		// 画面から取得
 		String roomId = request.getParameter("roomId");
+		//前工程でエラーメッセージがあれば取得(主にメッセージ削除)
+		try {
+			String errorMsg = request.getParameter("errorMsg");
+			if (errorMsg != null) {
+				errorMsg = URLDecoder.decode(errorMsg, "UTF-8");
+				request.setAttribute("errorMsg", errorMsg);
+			}
+			System.out.println("MainServlet(errorMsg):" + errorMsg);
+		} catch (Exception e) {
+			System.out.println("MainServlet(errorMsg):エラーメッセージ取得失敗");
+		}
 		if (roomId == null) {
 			roomId = (String) request.getAttribute("roomId");
 			if (roomId == null) {

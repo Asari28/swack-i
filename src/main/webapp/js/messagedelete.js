@@ -1,3 +1,5 @@
+"use strict";
+
 var deleteModal = document.getElementById('deleteModal')
 deleteModal.addEventListener('show.bs.modal', function(event) {
 	// モーダルを起動したボタン
@@ -17,23 +19,22 @@ document.querySelectorAll('.deleteicon').forEach(function(button) {
 	button.addEventListener('click', function() {
 		//ボタンに関連付けられたchatLogIdを取得
 		var chatLogId = button.getAttribute('data-bs-whatever');
+		var roomId = button.getAttribute('data-bs-whatever2')
 		//フォーム内のchatLogIdInputに値を設定
 		document.getElementById('chatLogIdInput').value = chatLogId;
+		//フォーム内のroomIdInputに値を設定
+		document.getElementById('roomIdInput').value = roomId;
 	});
 });
 
 //メッセージ削除が成功・失敗したときのスクリプト
-function deleteMessage() {
+function deleteMessage(isError) {
 	// エラーモーダル表示のための変数
-	var errorMessage = "<%= errorMsg %>"; // エラーメッセージがあれば設定
 	if (isError) {
-		// エラーモーダルを表示
-		var errorMessage = "An error occurred while deleting the message.";
-		document.getElementById('errorMessage').innerText = errorMessage;
-		var errorModal = new bootstrap.Modal(document.getElementById('errorModal'));
-		errorModal.show();
-	} else {
 		// メッセージの削除ロジックを続行
-		alert("Message deleted successfully!");
+		alert("チャットを削除しました");
+	} else {
+		// エラーモーダルを表示=エラーの時
+		alert("チャットの削除に失敗しました");
 	}
 }
