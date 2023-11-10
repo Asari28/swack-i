@@ -38,7 +38,7 @@
 						ルーム <a href="CreateRoomServlet"><button>＋</button></a>
 					</summary>
 					<c:forEach var="room" items="${roomList}">
-						<a class="list-name" href="MainServlet?roomId=${room.roomId}">#
+						<a class="list-name" href="LastJoinRoomServlet?roomId=${room.roomId}">#
 							${room.roomName}</a>
 						<br>
 					</c:forEach>

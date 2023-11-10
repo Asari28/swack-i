@@ -17,6 +17,7 @@ import bean.Room;
 import bean.User;
 import exception.SwackException;
 import model.ChatModel;
+import model.RoomModel;
 //import model.ChatModelDummy;
 
 @WebServlet("/MainServlet")
@@ -26,7 +27,7 @@ public class MainServlet extends LoginCheckServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// 画面から取得
-		String roomId = request.getParameter("roomId");
+		//		String roomId = request.getParameter("roomId");
 		//前工程でエラーメッセージがあれば取得(主にメッセージ削除)
 		try {
 			String errorMsg = request.getParameter("errorMsg");
@@ -38,21 +39,34 @@ public class MainServlet extends LoginCheckServlet {
 		} catch (Exception e) {
 			System.out.println("MainServlet(errorMsg):エラーメッセージ取得失敗");
 		}
-		if (roomId == null) {
-			roomId = (String) request.getAttribute("roomId");
-			if (roomId == null) {
-				// 初期ルームをeveryoneにする
-				roomId = "R0000";
-			}
-		}
+		//		if (roomId == null) {
+		//			roomId = (String) request.getAttribute("roomId");
+		//			if (roomId == null) {
+		//				// 初期ルームをeveryoneにする
+		//				roomId = "R0000";
+		//			}
+		//		}
 		// ログイン情報から取得
 		HttpSession session = request.getSession();
 		User user = (User) session.getAttribute("user");
+
+		RoomModel roomModel = new RoomModel();
+		String roomId;
+		try {
+			roomId = roomModel.getLastJoinRoom(user.getUserId());
+			System.out.println("roomId :" + roomId);
+		} catch (SwackException e1) {
+			e1.printStackTrace();
+			request.setAttribute("errorMsg", ERR_DB_PROCESS);
+			request.getRequestDispatcher("/WEB-INF/jsp/login.jsp").forward(request, response);
+			return;
+		}
 		try {
 			// ダミーデータ起動時はこちら
 			//			ChatModelDummy chatModel = new ChatModelDummy();
 			ChatModel chatModel = new ChatModel();
 			Room room = chatModel.getRoom(roomId, user.getUserId());
+			System.out.println(room.getRoomName());
 			List<Room> roomList = chatModel.getRoomList(user.getUserId());
 			List<Room> directList = chatModel.getDirectList(user.getUserId());
 			List<ChatLog> chatLogList = chatModel.getChatlogList(roomId);

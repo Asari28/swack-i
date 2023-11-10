@@ -86,4 +86,40 @@ public class RoomModel {
 		ArrayList<Room> roomList = roomDAO.selectUnJoinedRoom(userId);
 		return roomList;
 	}
+
+	/**
+	 * 新規登録したユーザをeveryoneを表示させる
+	 * @param userId 新規登録のユーザID
+	 * @return true = 成功 false = 失敗
+	 * @throws SwackException
+	 */
+	public boolean createLastJoinRoom(String userId) throws SwackException {
+		RoomDAO roomDAO = new RoomDAO();
+		return roomDAO.CreateLastRoom(userId);
+	}
+
+	/**
+	 * 自分が表示したルームを更新
+	 * @param userId 自分のユーザID
+	 * @param roomId 新しく表示したルームID
+	 * @return true = 成功 false = 失敗
+	 * @throws SwackException
+	 */
+	public boolean setLastJoinRoom(String userId, String roomId) throws SwackException {
+		RoomDAO roomDAO = new RoomDAO();
+		return roomDAO.updateLastRoom(userId, roomId);
+	}
+
+	/**
+	 * ユーザのIDから最後に表示していたルームのIDを取得するメソッド
+	 * MainServletで使用する
+	 * @return String roomId 最後に表示していたルームのID 
+	 * @throws SwackException
+	 */
+	public String getLastJoinRoom(String userId) throws SwackException {
+		// ユーザIDをもとにルームIDを取得
+		RoomDAO roomDAO = new RoomDAO();
+		String roomId = roomDAO.getLastRoom(userId);
+		return roomId;
+	}
 }

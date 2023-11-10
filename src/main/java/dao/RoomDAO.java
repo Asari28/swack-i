@@ -175,4 +175,89 @@ public class RoomDAO extends BaseDAO {
 		}
 	}
 
+	/**
+	 * LastRoomテーブルに新規参加したユーザを'R0000'にINSERTする
+	 * @param userId ユーザID
+	 * @param roomId ルームID
+	 * @return boolean 成功(true)失敗(false)
+	 * @throws SwackException
+	 */
+	public boolean CreateLastRoom(String userId) throws SwackException {
+		String sql = "INSERT INTO LASTROOM (USERID,ROOMID) VALUES(?,'R0000')";
+
+		try (Connection conn = dataSource.getConnection()) {
+			PreparedStatement pStmt = conn.prepareStatement(sql);
+			pStmt.setString(1, userId);
+
+			//SQL実行
+			int result = pStmt.executeUpdate();
+
+			//結果
+			if (result != 1) {
+				return false;//失敗
+			}
+			return true;//成功
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new SwackException(ERR_DB_PROCESS, e);
+		}
+	}
+
+	/**
+	 * userIdのroomIdを変更する
+	 * @param userId ユーザのID
+	 * @param roomId ルームのID
+	 * @return boolean 成功(true)失敗(false)
+	 * @throws SwackException
+	 */
+	public boolean updateLastRoom(String userId, String roomId) throws SwackException {
+		String sql = "UPDATE LASTROOM SET ROOMID = ? WHERE USERID = ?";
+
+		try (Connection conn = dataSource.getConnection()) {
+			PreparedStatement pStmt = conn.prepareStatement(sql);
+			pStmt.setString(1, roomId);
+			pStmt.setString(2, userId);
+
+			//SQL実行
+			int result = pStmt.executeUpdate();
+
+			//結果
+			if (result != 1) {
+				return false;//失敗
+			}
+			return true;//成功
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new SwackException(ERR_DB_PROCESS, e);
+		}
+	}
+
+	public String getLastRoom(String userId) throws SwackException {
+		//SQL
+		String sql = "SELECT ROOMID FROM LASTROOM WHERE USERID = ?";
+		try (Connection conn = dataSource.getConnection()) {
+			PreparedStatement pStmt = conn.prepareStatement(sql);
+			//SQL組み立て
+			pStmt.setString(1, userId);
+
+			//SQL実行
+			ResultSet rs = pStmt.executeQuery();
+
+			//結果をリストに詰める
+			String roomId = null;
+			if (rs.next()) {
+				roomId = rs.getString("ROOMID");
+
+			}
+
+			return roomId;
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new SwackException(ERR_DB_PROCESS, e);
+		}
+	}
+
 }

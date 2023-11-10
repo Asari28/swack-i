@@ -88,6 +88,12 @@ public class SignUpServlet extends HttpServlet {
 						request.setAttribute("errorMsg", INFO_USERS_ENTRY_SUCCESS);
 						request.getRequestDispatcher("/WEB-INF/jsp/login.jsp").forward(request, response);
 					}
+					//ユーザ登録が成功していたらログイン時R0000を表示させるようにする
+					joinResult = new RoomModel().createLastJoinRoom(user.getUserId());
+					if (joinResult) {
+						request.setAttribute("errorMsg", INFO_USERS_ENTRY_SUCCESS);
+						request.getRequestDispatcher("/WEB-INF/jsp/login.jsp").forward(request, response);
+					}
 				}
 				return;
 			} else {
