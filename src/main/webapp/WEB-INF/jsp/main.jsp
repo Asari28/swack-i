@@ -53,7 +53,7 @@
 						ダイレクト <a href="CreateDirectServlet?roomId=${room.roomId}"><button>＋</button></a>
 					</summary>
 					<c:forEach var="direct" items="${directList}">
-						<a class="list-name" href="MainServlet?roomId=${direct.roomId}">#
+						<a class="list-name" href="LastJoinRoomServlet?roomId=${direct.roomId}">#
 							${direct.roomName}</a>
 						<br>
 					</c:forEach>
