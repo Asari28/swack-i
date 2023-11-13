@@ -39,7 +39,8 @@
 						ルーム <a href="CreateRoomServlet"><button>＋</button></a>
 					</summary>
 					<c:forEach var="room" items="${roomList}">
-						<a class="list-name" href="LastJoinRoomServlet?roomId=${room.roomId}">#
+						<a class="list-name"
+							href="LastJoinRoomServlet?roomId=${room.roomId}">#
 							${room.roomName}</a>
 						<br>
 					</c:forEach>
@@ -54,7 +55,8 @@
 						ダイレクト <a href="CreateDirectServlet?roomId=${room.roomId}"><button>＋</button></a>
 					</summary>
 					<c:forEach var="direct" items="${directList}">
-						<a class="list-name" href="LastJoinRoomServlet?roomId=${direct.roomId}">#
+						<a class="list-name"
+							href="LastJoinRoomServlet?roomId=${direct.roomId}">#
 							${direct.roomName}</a>
 						<br>
 					</c:forEach>
@@ -86,18 +88,32 @@
 							<div class="log-box">
 								<p class="log-name">
 									${chatLog.userName} <span class="log-time">[${chatLog.createdAt}]
-										<button class="editicon">
+										<button class="editicon"
+											onclick="editChat(${chatLog.chatLogId},${chatLog.userId },${user.userId } })">
 											<img src="images/pencil.svg">
 										</button>
 										<button type="button" class="deleteicon"
 											data-bs-toggle="modal" data-bs-target="#deleteModal"
-											data-bs-whatever="${chatLog.chatLogId}" data-bs-whatever2="${room.roomId}">
+											data-bs-whatever="${chatLog.chatLogId}"
+											data-bs-whatever2="${room.roomId}">
 											<img src="images/trash.svg">
 										</button>
 									</span>
 								</p>
 
-								<p>${chatLog.message}</p>
+								<div>
+								<form action="EditChatLogServlet" method="post">
+									<a>${chatLog.message}</a>
+									<input type="text" id="message" name="message" value=""/>
+									<input type="hidden" name="chatLogId" value="${chatLog.chatLogId}">
+									<div>
+									<a href="MainServlet">
+									<input type="button" value="キャンセル">
+									</a>
+     								<input type="submit" id="regist" value="登録"　style="display:none;">
+									</div>
+								</form>
+								</div>
 							</div>
 						</div>
 					</c:forEach>
@@ -171,5 +187,7 @@
 	<div id="loading">
 		<div class="spinner"></div>
 	</div>
+	<!-- script -->
+	<script src="js/editchat.js"></script>
 </body>
 </html>
