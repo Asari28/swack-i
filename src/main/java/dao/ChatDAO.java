@@ -25,7 +25,8 @@ public class ChatDAO extends BaseDAO {
 	/**
 	 * 指定したルームのチャットログを取得する
 	 * @param roomId ログが欲しいルームのルームID
-	 * @return List<ChatLog> 
+	 * @return List<ChatLog> チャットログリスト
+	 * チャットログID、ユーザID、ユーザ名、メッセージ内容、時間
 	 * @throws SwackException
 	 */
 	public List<ChatLog> getChatlogList(String roomId) throws SwackException {
@@ -54,6 +55,15 @@ public class ChatDAO extends BaseDAO {
 		return chatLogList;
 	}
 
+	/**
+	 * ルーム情報を取得する？
+	 * @param roomId ほしいルームのID
+	 * @param userId 取得しようとしているユーザのID
+	 * @return Room ルーム情報
+	 * 複数人公開ルームの場合：ルーム名、人数
+	 * ダイレクトルームの場合：ルーム名、人数(２で固定)
+	 * @throws SwackException
+	 */
 	public Room getRoom(String roomId, String userId) throws SwackException {
 		String sqlGetRoom = "SELECT R.ROOMID, R.ROOMNAME, COUNT(*) AS MEMBER_COUNT, R.DIRECTED"
 				+ " FROM ROOMS R JOIN JOINROOM J ON R.ROOMID = J.ROOMID" + " WHERE R.ROOMID = ?"
@@ -94,6 +104,13 @@ public class ChatDAO extends BaseDAO {
 		return room;
 	}
 
+	/**
+	 * ルームリストを取得する
+	 * @param userId 取得しようとしているユーザのID
+	 * @return ArrayList<Room> 参加しているルームのリスト
+	 * ルームIDとルーム名が入っている
+	 * @throws SwackException
+	 */
 	public ArrayList<Room> getRoomList(String userId) throws SwackException {
 		String sql = "SELECT R.ROOMID, R.ROOMNAME FROM JOINROOM J JOIN ROOMS R ON J.ROOMID = R.ROOMID "
 				+ "WHERE J.USERID = ? AND R.DIRECTED = FALSE ORDER BY R.ROOMNAME ASC";
@@ -119,6 +136,13 @@ public class ChatDAO extends BaseDAO {
 
 	}
 
+	/**
+	 * ダイレクトチャットの一覧を取得する？
+	 * @param userId ユーザID
+	 * @return ArrayList<Room> ダイレクトチャットリスト。
+	 * ログ取得のためのルームID、左メニューに表示するためのルーム名(ユーザ名)が入っている
+	 * @throws SwackException
+	 */
 	public ArrayList<Room> getDirectList(String userId) throws SwackException {
 		String sql = "SELECT R.ROOMID, U.USERNAME AS ROOMNAME FROM JOINROOM R " + "JOIN USERS U ON R.USERID = U.USERID "
 				+ "WHERE R.USERID <> ? AND ROOMID IN "
@@ -147,6 +171,14 @@ public class ChatDAO extends BaseDAO {
 
 	}
 
+	/**
+	 * チャットログを保存(INSERT)する
+	 * @param roomId ルームID
+	 * @param userId ユーザID
+	 * @param message メッセージ内容
+	 * @return voidのためなし
+	 * @throws SwackException
+	 */
 	public void saveChatlog(String roomId, String userId, String message) throws SwackException {
 		String sql = "INSERT INTO CHATLOG (CHATLOGID, ROOMID, USERID, MESSAGE, CREATED_AT)"
 				+ " VALUES (nextval('CHATLOGID_SEQ'), ?, ?, ?, CURRENT_TIMESTAMP)";
@@ -217,6 +249,39 @@ public class ChatDAO extends BaseDAO {
 
 		return userId;
 
+	}
+
+	/**
+	 * チャットログのメッセージ内容を編集するDAO
+	 * @param chatLogId 編集するチャットログのID
+	 * @param message 置き換えるメッセージの内容
+	 * @return boolean（true:成功 false:失敗）
+	 * @throws SwackException
+	 */
+	public boolean editChatLog(int chatLogId, String message) throws SwackException {
+		//SQL文
+		String sql = "UPDATE chatlog SET message=? where chatlogid = ?";
+
+		try (Connection conn = dataSource.getConnection()) {
+
+			//SQL文作成
+			PreparedStatement pStmt = conn.prepareStatement(sql);
+			pStmt.setString(1, message);
+			pStmt.setInt(2, chatLogId);
+
+			//SQL実行
+			int result = pStmt.executeUpdate();
+
+			//結果
+			if (result != 1) {
+				return false;//失敗
+			}
+			return true;//成功
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new SwackException(ERR_DB_PROCESS, e);
+		}
 	}
 
 }

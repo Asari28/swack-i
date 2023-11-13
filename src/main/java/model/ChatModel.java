@@ -42,4 +42,9 @@ public class ChatModel {
 		//成功したらtrue、失敗したらfalseを返す
 		return new ChatDAO().getChatlogUserId(chatLogId);
 	}
+
+	public boolean editChatLog(int chatLogId, String message) throws SwackException {
+		//成功したらtrue、失敗したらfalseを返す
+		return new ChatDAO().editChatLog(chatLogId, message);
+	}
 }
