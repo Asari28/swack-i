@@ -19,6 +19,7 @@
 
 <link rel="stylesheet" href="css/style.css">
 <link rel="stylesheet" href="css/main.css">
+<link rel="stylesheet" href="css/editmessage.css">
 <!-- <link rel="stylesheet" href="css/loading.css"> -->
 
 </head>
@@ -73,6 +74,7 @@
 					${room.roomName}(${room.memberCount}) <img src="images/reload.svg"
 						class="reload pointer" onclick="doReload();" />
 				</h2>
+				<h3 style="color: red">${errorMsg }</h3>
 				<hr>
 				<div id="logArea" class="contents-main">
 					<c:forEach var="chatLog" items="${chatLogList}" varStatus="status">
@@ -102,17 +104,18 @@
 								</p>
 
 								<div>
-								<form action="EditChatLogServlet" method="post">
-									<a>${chatLog.message}</a>
-									<input type="text" id="message" name="message" value=""/>
-									<input type="hidden" name="chatLogId" value="${chatLog.chatLogId}">
-									<div>
-									<a href="MainServlet">
-									<input type="button" value="キャンセル">
-									</a>
-     								<input type="submit" id="regist" value="登録"　style="display:none;">
-									</div>
-								</form>
+									<form action="EditChatLogServlet" method="post">
+										<p class="message">${chatLog.message}</p>
+										 <input type="text"
+											class="input-Msg" name="message" value="" /> <input
+											type="hidden" name="chatLogId" value="${chatLog.chatLogId}">
+										<div>
+											<a href="MainServlet"> <input type="button"
+												class="msg-Not-Btn" value="キャンセル">
+											</a> <input type="submit" class="msg-Ok-Btn" id="regist"
+												value="登録">
+										</div>
+									</form>
 								</div>
 							</div>
 						</div>
