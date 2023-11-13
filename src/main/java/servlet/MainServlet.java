@@ -3,7 +3,6 @@ package servlet;
 import static parameter.Messages.*;
 
 import java.io.IOException;
-import java.net.URLDecoder;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -31,10 +30,17 @@ public class MainServlet extends LoginCheckServlet {
 		//前工程でエラーメッセージがあれば取得(主にメッセージ削除)
 		try {
 			String errorMsg = request.getParameter("errorMsg");
-			if (errorMsg != null) {
-				errorMsg = URLDecoder.decode(errorMsg, "UTF-8");
-				request.setAttribute("errorMsg", errorMsg);
+			if (errorMsg == null) {
+				errorMsg = "";
+			} else {
+				errorMsg += "<br>";
 			}
+			String ErrorMsg = (String) request.getAttribute("errorMsg");
+			if (ErrorMsg != null) {
+				System.out.println(ErrorMsg);
+				errorMsg += ErrorMsg;
+			}
+			request.setAttribute("errorMsg", errorMsg);
 			System.out.println("MainServlet(errorMsg):" + errorMsg);
 		} catch (Exception e) {
 			System.out.println("MainServlet(errorMsg):エラーメッセージ取得失敗");

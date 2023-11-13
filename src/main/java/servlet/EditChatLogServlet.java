@@ -3,7 +3,6 @@ package servlet;
 import static parameter.Messages.*;
 
 import java.io.IOException;
-import java.net.URLEncoder;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -30,42 +29,33 @@ public class EditChatLogServlet extends HttpServlet {
 	}
 
 	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
-	}
-
-	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		//パラメーター取得
-		String roomId = request.getParameter("roomId");
 		int chatLogId = Integer.parseInt(request.getParameter("chatLogId"));
-		String message=request.getParameter("message");
+		String message = request.getParameter("message");
 		ChatModel chatModel = new ChatModel();
 		String errorMsg = null;
 		try {
 			//編集処理
-			boolean result=chatModel.editChatLog(chatLogId , message);
-			if(result) {
-				errorMsg="編集処理成功";
-				response.sendRedirect("MainServlet?errorMsg=" + URLEncoder.encode(errorMsg, "UTF-8") + "&roomId="
-						+ URLEncoder.encode(roomId, "UTF-8"));
-			}else {
-				errorMsg="編集処理失敗";
-				response.sendRedirect("MainServlet?errorMsg=" + URLEncoder.encode(errorMsg, "UTF-8") + "&roomId="
-						+ URLEncoder.encode(roomId, "UTF-8"));
+			boolean result = chatModel.editChatLog(chatLogId, message);
+			if (result) {
+				errorMsg = "編集処理成功";
+				request.setAttribute("errorMsg", errorMsg);
+				response.sendRedirect("MainServlet");
+			} else {
+				errorMsg = "編集処理失敗";
+				request.setAttribute("errorMsg", errorMsg);
+				response.sendRedirect("MainServlet");
 			}
-		
-		}catch(SwackException e){
+
+		} catch (SwackException e) {
 			e.printStackTrace();
-			request.setAttribute("errorMsg", ERR_SYSTEM);
+			request.setAttribute("errorMsg", ERR_DB_PROCESS);
 			response.sendRedirect("MainServlet");
 		}
 
+	}
 }
