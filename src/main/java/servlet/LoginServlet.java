@@ -63,7 +63,7 @@ public class LoginServlet extends HttpServlet {
 				// 認証成功(ログイン情報をセッションに保持)
 				HttpSession session = request.getSession();
 				session.setAttribute("user", user);
-				response.sendRedirect("MainServlet?roomId=R0000");
+				request.getRequestDispatcher("/WEB-INF/jsp/loading.jsp").forward(request, response);
 				return;
 			}
 
