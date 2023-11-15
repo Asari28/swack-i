@@ -78,20 +78,21 @@ public class CreateRoomServlet extends HttpServlet {
 		RoomModel roommodel = new RoomModel();
 		boolean result = false;
 		boolean Privated;
-		if (privated.equals("on")) {
-			//ユーザがadminか確認
-			if (user.getUserId().equals("U0000")) {
-				Privated = true;
+		try {
+			if (privated != null) {
+				//ユーザがadminか確認
+				if (user.getUserId().equals("U0000")) {
+					Privated = true;
+				} else {
+					request.setAttribute("errorMsg", "作成権限がありません");
+					request.getRequestDispatcher("/WEB-INF/jsp/createroom.jsp").forward(request, response);
+					return;
+				}
+
 			} else {
-				request.setAttribute("errorMsg", "作成権限がありません");
-				request.getRequestDispatcher("/WEB-INF/jsp/createroom.jsp").forward(request, response);
-				return;
+				Privated = false;
 			}
 
-		} else {
-			Privated = false;
-		}
-		try {
 			result = roommodel.createRoom(roomname, user.getUserId(), directed, Privated);
 
 			if (result) {
