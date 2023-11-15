@@ -3,6 +3,7 @@ package servlet;
 import static parameter.Messages.*;
 
 import java.io.IOException;
+import java.net.URLEncoder;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -44,11 +45,11 @@ public class EditChatLogServlet extends HttpServlet {
 			if (result) {
 				errorMsg = "編集処理成功";
 				request.setAttribute("errorMsg", errorMsg);
-				response.sendRedirect("MainServlet");
+				response.sendRedirect("MainServlet?errorMsg=" + URLEncoder.encode(errorMsg, "UTF-8"));
 			} else {
 				errorMsg = "編集処理失敗";
 				request.setAttribute("errorMsg", errorMsg);
-				response.sendRedirect("MainServlet");
+				response.sendRedirect("MainServlet?errorMsg=" + URLEncoder.encode(errorMsg, "UTF-8"));
 			}
 
 		} catch (SwackException e) {

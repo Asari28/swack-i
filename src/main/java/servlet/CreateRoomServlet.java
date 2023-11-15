@@ -70,7 +70,7 @@ public class CreateRoomServlet extends HttpServlet {
 		boolean directed = false;
 		//		System.out.println(roomname);
 		//		System.out.println(joinuserid);
-		//		System.out.println(privated);
+
 		//セッションからuserを取得する
 		HttpSession session = request.getSession();
 		User user = (User) session.getAttribute("user");
@@ -78,8 +78,16 @@ public class CreateRoomServlet extends HttpServlet {
 		RoomModel roommodel = new RoomModel();
 		boolean result = false;
 		boolean Privated;
-		if (privated == "on") {
-			Privated = true;
+		if (privated.equals("on")) {
+			//ユーザがadminか確認
+			if (user.getUserId().equals("U0000")) {
+				Privated = true;
+			} else {
+				request.setAttribute("errorMsg", "作成権限がありません");
+				request.getRequestDispatcher("/WEB-INF/jsp/createroom.jsp").forward(request, response);
+				return;
+			}
+
 		} else {
 			Privated = false;
 		}
@@ -99,12 +107,12 @@ public class CreateRoomServlet extends HttpServlet {
 					response.sendRedirect("MainServlet");
 				} else {
 					request.setAttribute("errorMsg", ERR_SYSTEM);
-					doGet(request, response);
+					request.getRequestDispatcher("/WEB-INF/jsp/createroom.jsp").forward(request, response);
 					return;
 				}
 			} else {
 				request.setAttribute("errorMsg", ERR_SYSTEM);
-				doGet(request, response);
+				request.getRequestDispatcher("/WEB-INF/jsp/createroom.jsp").forward(request, response);
 				return;
 			}
 		} catch (SwackException e) {

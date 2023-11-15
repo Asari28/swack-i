@@ -19,7 +19,7 @@
 
 <link rel="stylesheet" href="css/style.css">
 <link rel="stylesheet" href="css/main.css">
-<link rel="stylesheet" href="css/editmessage.css">
+<link rel="stylesheet" href="css/editchat.css">
 <!-- <link rel="stylesheet" href="css/loading.css"> -->
 
 </head>
@@ -90,8 +90,7 @@
 							<div class="log-box">
 								<p class="log-name">
 									${chatLog.userName} <span class="log-time">[${chatLog.createdAt}]
-										<button class="editicon"
-											onclick="editChat(${chatLog.chatLogId},${chatLog.userId },${user.userId } })">
+										<button class="editicon" onclick="editChat(${chatLog.chatLogId},'${chatLog.userId }','${user.userId }');">
 											<img src="images/pencil.svg">
 										</button>
 										<button type="button" class="deleteicon"
@@ -103,17 +102,18 @@
 									</span>
 								</p>
 
-								<div>
+								<div id="">
 									<form action="EditChatLogServlet" method="post">
-										<p class="message">${chatLog.message}</p>
-										 <input type="text"
-											class="input-Msg" name="message" value="" /> <input
-											type="hidden" name="chatLogId" value="${chatLog.chatLogId}">
-										<div>
+										<p class="message ${chatLog.chatLogId}">${chatLog.message}</p>
+										 <textarea
+											class="input-Msg ${chatLog.chatLogId} active" name="message"></textarea> 
+											<input
+											type="hidden" name="chatLogId" value="${chatLog.chatLogId}"/>
+										<div class="edit-bnt-box">
 											<a href="MainServlet"> <input type="button"
-												class="msg-Not-Btn" value="キャンセル">
-											</a> <input type="submit" class="msg-Ok-Btn" id="regist"
-												value="登録">
+												class="msg-Not-Btn ${chatLog.chatLogId} active" value="キャンセル">
+											</a> <input type="submit" class="msg-Ok-Btn ${chatLog.chatLogId} active" id="regist"
+												value="登録"/>
 										</div>
 									</form>
 								</div>
@@ -170,7 +170,6 @@
 		integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
 		crossorigin="anonymous"></script>
 
-	<script src="js/main.js"></script>
 	<script src="js/messagedelete.js"></script>
 	<!-- エラーの表示について -->
 	<!-- コードが汚い -->
@@ -191,6 +190,7 @@
 		<div class="spinner"></div>
 	</div>
 	<!-- script -->
+	<script src="js/main.js"></script>
 	<script src="js/editchat.js"></script>
 </body>
 </html>
