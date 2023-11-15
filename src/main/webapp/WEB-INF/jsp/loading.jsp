@@ -7,14 +7,16 @@
 <title>Loading</title>
 <link rel="stylesheet" href="css/style.css" />
 <link rel="stylesheet" href="css/loading.css" />
-<link href='https://fonts.googleapis.com/css?family=Actor' rel='stylesheet' type='text/css'>
+<link href='https://fonts.googleapis.com/css?family=Actor'
+	rel='stylesheet' type='text/css'>
 </head>
 <body>
-<div class="loader">
-    <h1>LOADING</h1>
-    <span></span>
-    <span></span>
-    <span></span>
-</div>
+	<div class="loader">
+		<h1>LOADING</h1>
+		<span></span> <span></span> <span></span>
+		</form>
+	</div>
+	<form action="MainServlet" id="form" method="get">
+		<script src="js/loading.js"></script>
 </body>
 </html>
