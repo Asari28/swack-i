@@ -73,23 +73,16 @@ public class JoinMemberServlet extends HttpServlet {
 		Room room = (Room) session.getAttribute("room");
 		//パラメーター取得
 		String RoomId = request.getParameter("roomId");
-		String[] joinUseridlist = request.getParameterValues("joinUserIdList");
+		String joinUserid = request.getParameter("joinUserIdList");
 		System.out.println(RoomId);
-		System.out.println(joinUseridlist);
+		System.out.println(joinUserid);
 		//準備
 		RoomModel roommodel = new RoomModel();
 
 		try {
 			//受け取った招待するIDリストを順番にデータベースに格納させる
 			boolean result = false;
-			for (String joinuser : joinUseridlist) {
-				result = roommodel.joinUser(RoomId, joinuser);
-				if (result) {
-					return;
-				} else {
-					break;
-				}
-			}
+			result = roommodel.joinUser(RoomId, joinUserid);
 			if (result) {
 				//正常に終了した場合はuser,roomをセットしてMainServletにリダイレクト
 				session.setAttribute("user", user);

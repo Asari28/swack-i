@@ -60,11 +60,11 @@ public class DeleteChatLogServlet extends HttpServlet {
 					//より良いコードがあれば置き換えていただいて構いません。
 
 					//成功
-					errorMsg = "成功";
+					errorMsg = "削除しました";
 				}
 			} else {
 				//失敗
-				errorMsg = "失敗";
+				errorMsg = "削除する権限がありません";
 			}
 			response.sendRedirect("MainServlet?errorMsg=" + URLEncoder.encode(errorMsg, "UTF-8") + "&roomId="
 					+ URLEncoder.encode(roomId, "UTF-8"));
