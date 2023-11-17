@@ -53,10 +53,17 @@ public class LoginServlet extends HttpServlet {
 		// 処理
 		try {
 			// ログインチェック
-			User user = new LoginModel().checkLogin(mailAddress, password);
+			LoginModel loginModel = new LoginModel();
+			User user = loginModel.checkLogin(mailAddress, password);
+			boolean result = loginModel.checkExit(user);
 			if (user == null) {
 				// 認証失敗
 				request.setAttribute("errorMsg", ERR_LOGIN_PARAM_MISTAKE);
+				request.getRequestDispatcher("/WEB-INF/jsp/login.jsp").forward(request, response);
+				return;
+			} else if (result) {
+				// 認証失敗
+				request.setAttribute("errorMsg", ACCOUNT_EXIT);
 				request.getRequestDispatcher("/WEB-INF/jsp/login.jsp").forward(request, response);
 				return;
 			} else {

@@ -18,7 +18,8 @@ public class Messages {
 	public static final String ERR_SESSION_TIMEOUT = "ログイン情報の取得に失敗しました。再度ログインしてください。";
 	public static final String ERR_LOGIN_PARAM_MISTAKE = "メールアドレス、またはパスワードに誤りがあります。入力項目を確認し、再度ログインしてください。";
 	public static final String INFO_BIGIN = "ワークスペースに参加済みの方はログインしてください。初めての方はワークスペースに参加してください。";
-
+	public static final String ACCOUNT_EXIT = "強制退会されています。<br>詳細はワークスペース管理者に直接連絡してください。";
+	public static final String ACCOUNT_LOCK = "試行回数が上限に達しましたので、アカウントがロックされました。<br>解除したい場合は、管理者に直接連絡してください。";
 	/** ユーザ管理 */
 	public static final String ERR_USERS_ISREGISTERED = "このユーザは登録済みです。入力項目を確認し、登録し直してください。";
 	public static final String ERR_USERS_PARAM_MISTAKE = "ユーザ情報に誤りがあります。入力項目を確認し、再度登録してください。";

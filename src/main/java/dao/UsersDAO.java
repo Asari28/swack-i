@@ -264,4 +264,28 @@ public class UsersDAO extends BaseDAO {
 			throw new SwackException(ERR_DB_PROCESS, e);
 		}
 	}
+
+	public String checkExit(String userId) throws SwackException {
+		//ユーザの状態を取得するSQL
+		String sql = "SELECT state FROM userstate WHERE userId = ?";
+		try (Connection conn = dataSource.getConnection()) {
+			PreparedStatement pStmt = conn.prepareStatement(sql);
+			pStmt.setString(1, userId);
+
+			//SQL実行
+			ResultSet rs = pStmt.executeQuery();
+
+			//結果をリストに詰める
+			String state = null;
+			if (rs.next()) {
+				state = rs.getString("state");
+			}
+
+			return state;
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new SwackException(ERR_DB_PROCESS, e);
+		}
+	}
 }

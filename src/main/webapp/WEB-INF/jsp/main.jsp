@@ -26,7 +26,7 @@
 <body>
 	<div class="container">
 		<header class="header">
-			<div>${user.userName}<a href="ExitServlet">ユーザ一覧</a></div>
+			<div class="top">${user.userName}<a href="ExitServlet" id="alluser-btn" name="${user.userId}" class="active"><button>ユーザ一覧</button></a></div>
 			<form action="LogoutServlet" id="logoutForm" method="get">
 				<input type="submit" value="ログアウト" onclick="logout();">
 			</form>
@@ -192,5 +192,6 @@
 	<!-- script -->
 	<script src="js/main.js"></script>
 	<script src="js/editchat.js"></script>
+	<script src="js/exit.js"></script>
 </body>
 </html>

@@ -10,7 +10,7 @@ import exception.SwackException;
 public class LoginModel {
 
 	/**
-	 * ログイン認証を行う
+	 * 存在するユーザか確認
 	 * @param mailAddress メールアドレス
 	 * @param password パスワード
 	 * @return ユーザ情報(ログインできなかった場合はnull)
@@ -19,6 +19,21 @@ public class LoginModel {
 		UsersDAO usersDAO = new UsersDAO();
 		User user = usersDAO.select(mailAddress, password);
 		return user;
+	}
+
+	/**
+	 * 退会、ロックされているかの確認
+	 * @param user ユーザの情報
+	 * @return ture(退会、ロック済み)　false(異常なし)
+	 */
+	public boolean checkExit(User user) throws SwackException {
+		UsersDAO usersDAO = new UsersDAO();
+		boolean result = false;
+		if (usersDAO.checkExit(user.getUserId()) != null) {
+			result = true;
+		}
+
+		return result;
 	}
 
 }

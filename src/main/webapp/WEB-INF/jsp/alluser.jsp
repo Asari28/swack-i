@@ -65,6 +65,6 @@ pageEncoding="UTF-8"%>
       crossorigin="anonymous"
     ></script>
 
-	<script type="js/alluser.js"></script>
+	<script src="js/alluser.js"></script>
   </body>
 </html>
