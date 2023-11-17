@@ -26,7 +26,7 @@
 <body>
 	<div class="container">
 		<header class="header">
-			<div>${user.userName}</div>
+			<div>${user.userName}<a href="ExitServlet">ユーザ一覧</a></div>
 			<form action="LogoutServlet" id="logoutForm" method="get">
 				<input type="submit" value="ログアウト" onclick="logout();">
 			</form>

@@ -153,7 +153,7 @@ public class UsersDAO extends BaseDAO {
 	public ArrayList<User> selectAllUser(String userId) throws SwackException {
 		//SQL
 		//Adminと自分を除去したリストを取得するSQL
-		String sql = "SELECT * FROM USERS WHERE userid <> 'U0000' AND userid<>?";
+		String sql = "SELECT u.userId,userName,mailAddress FROM USERS u JOIN USERSTATE s ON u.USERID = s.USERID WHERE u.userid <> 'U0000' AND u.userid <> ? AND (s.state <> 'EXIT' OR s.state is null)";
 		try (Connection conn = dataSource.getConnection()) {
 			PreparedStatement pStmt = conn.prepareStatement(sql);
 			pStmt.setString(1, userId);
@@ -235,6 +235,29 @@ public class UsersDAO extends BaseDAO {
 			}
 
 			return userList;
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new SwackException(ERR_DB_PROCESS, e);
+		}
+	}
+
+	public boolean exitUser(String userId) throws SwackException {
+		//SQL
+		//Adminとすでに参加しているユーザを除去したリストを取得するSQL
+		String sql = "UPDATE USERSTATE SET STATE = 'EXIT' WHERE USERID = ?";
+		try (Connection conn = dataSource.getConnection()) {
+			PreparedStatement pStmt = conn.prepareStatement(sql);
+			pStmt.setString(1, userId);
+
+			//SQL実行
+			int result = pStmt.executeUpdate();
+
+			//結果
+			if (result != 1) {
+				return false;//失敗
+			}
+			return true;//成功
 
 		} catch (SQLException e) {
 			e.printStackTrace();

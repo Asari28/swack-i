@@ -1,6 +1,6 @@
 package dao;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayList;
 
@@ -77,15 +77,15 @@ class UsersDAOTest {
 	//
 	//	}
 	//
-	//	@Test
-	//	void testSelectAllUser() throws SwackException {
-	//		ArrayList<User> userList = usersDAO.selectAllUser("U0001");
-	//		System.out.println("testSelectAllUser():Adminと情報太郎が出力されなければ成功");
-	//		for (User user : userList) { //拡張for文
-	//			System.out.println(user);
-	//		}
-	//		assertNotNull(userList);
-	//	}
+	@Test
+	void testSelectAllUser() throws SwackException {
+		ArrayList<User> userList = usersDAO.selectAllUser("U0001");
+		System.out.println("testSelectAllUser():Adminと情報太郎が出力されなければ成功");
+		for (User user : userList) { //拡張for文
+			System.out.println(user);
+		}
+		assertNotNull(userList);
+	}
 	//
 	//	@Test
 	//	void testSelectNotJoinUser() throws SwackException {
@@ -97,14 +97,21 @@ class UsersDAOTest {
 	//		assertNotNull(userList);
 	//	}
 
-	@Test
-	void testSelectUnDirectedUser() throws SwackException {
-		ArrayList<User> userList = usersDAO.selectUnDirectedUser("U0001");
-		System.out.println("testSelectNotJoinUser():情報太郎、情報次郎、情報花子以外が出力されたら成功");
-		for (User user : userList) {//拡張for文
-			System.out.println(user);
-		}
-		assertNotNull(userList);
-	}
+	//	@Test
+	//	void testSelectUnDirectedUser() throws SwackException {
+	//		ArrayList<User> userList = usersDAO.selectUnDirectedUser("U0001");
+	//		System.out.println("testSelectNotJoinUser():情報太郎、情報次郎、情報花子以外が出力されたら成功");
+	//		for (User user : userList) {//拡張for文
+	//			System.out.println(user);
+	//		}
+	//		assertNotNull(userList);
+	//	}
+
+	//	@Test
+	//	void testExitUser() throws SwackException {
+	//		System.out.println("trueがでたら成功");
+	//		boolean rs = usersDAO.exitUser("U0001");
+	//		System.out.println(rs);
+	//	}
 
 }

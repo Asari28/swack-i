@@ -30,7 +30,7 @@ pageEncoding="UTF-8"%>
         <div class="col-md-12 member-form">
           <h3>ワークスペースから退会させる</h3>
 		  <p class="error" id="errorMsg">${errorMsg }</p>
-          <form action="JoinMemberServlet" method="post">
+          <form action="ExitServlet" method="post">
             <div class="form-group">
               <label class="control-label">メンバー</label>
               <select id="users" name="userIdList" class="form-select" multiple>

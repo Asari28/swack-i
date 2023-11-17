@@ -70,4 +70,24 @@ public class UserModel {
 
 	}
 
+	/**
+	 * ダイレクトチャットのルーム名を渡すメソっド
+	 * CreateDeirectServletで使用する
+	 * @return String roomName ダイレクトチャットのルーム名
+	 * @throws SwackException
+	 */
+	public boolean exitUser(String[] userIdList) throws SwackException {
+		// UserDAOに退会させたいユーザのIDを渡す
+		boolean result = true;
+		for (String userId : userIdList) {
+			if (!(new UsersDAO().exitUser(userId))) {
+				result = false;
+				break;
+			}
+		}
+
+		return result;
+
+	}
+
 }
