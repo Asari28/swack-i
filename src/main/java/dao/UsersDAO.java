@@ -153,7 +153,7 @@ public class UsersDAO extends BaseDAO {
 	public ArrayList<User> selectAllUser(String userId) throws SwackException {
 		//SQL
 		//Adminと自分を除去したリストを取得するSQL
-		String sql = "SELECT u.userId,userName,mailAddress FROM USERS u JOIN USERSTATE s ON u.USERID = s.USERID WHERE u.userid <> 'U0000' AND u.userid <> ? AND (s.state <> 'EXIT' OR s.state is null)";
+		String sql = "SELECT userId,userName,mailAddress FROM USERS WHERE userid <> 'U0000' AND userid <> ? AND (state <> 'EXIT' OR state is null)";
 		try (Connection conn = dataSource.getConnection()) {
 			PreparedStatement pStmt = conn.prepareStatement(sql);
 			pStmt.setString(1, userId);
@@ -244,8 +244,7 @@ public class UsersDAO extends BaseDAO {
 
 	public boolean exitUser(String userId) throws SwackException {
 		//SQL
-		//Adminとすでに参加しているユーザを除去したリストを取得するSQL
-		String sql = "UPDATE USERSTATE SET STATE = 'EXIT' WHERE USERID = ?";
+		String sql = "UPDATE USERS SET STATE = 'EXIT' WHERE USERID = ?";
 		try (Connection conn = dataSource.getConnection()) {
 			PreparedStatement pStmt = conn.prepareStatement(sql);
 			pStmt.setString(1, userId);
@@ -267,7 +266,7 @@ public class UsersDAO extends BaseDAO {
 
 	public String checkExit(String userId) throws SwackException {
 		//ユーザの状態を取得するSQL
-		String sql = "SELECT state FROM userstate WHERE userId = ?";
+		String sql = "SELECT state FROM users WHERE userId = ?";
 		try (Connection conn = dataSource.getConnection()) {
 			PreparedStatement pStmt = conn.prepareStatement(sql);
 			pStmt.setString(1, userId);
@@ -282,6 +281,30 @@ public class UsersDAO extends BaseDAO {
 			}
 
 			return state;
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new SwackException(ERR_DB_PROCESS, e);
+		}
+	}
+
+	public String getUserName(String userId) throws SwackException {
+		//ユーザの状態を取得するSQL
+		String sql = "SELECT username FROM users WHERE userId = ?";
+		try (Connection conn = dataSource.getConnection()) {
+			PreparedStatement pStmt = conn.prepareStatement(sql);
+			pStmt.setString(1, userId);
+
+			//SQL実行
+			ResultSet rs = pStmt.executeQuery();
+
+			//結果をリストに詰める
+			String userName = null;
+			if (rs.next()) {
+				userName = rs.getString("usesrname");
+			}
+
+			return userName;
 
 		} catch (SQLException e) {
 			e.printStackTrace();

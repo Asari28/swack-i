@@ -58,6 +58,11 @@
 	color: rgba(255, 225, 255, 1);
 }
 
+.top{
+	display: flex;
+	flex-wrap: wrap;
+}
+
 /*.serchicon{*/
 /*	width: 20px;*/
 /*	height: 20px;*/

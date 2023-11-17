@@ -12,9 +12,9 @@
 </head>
 <body>
 	<div class="loader">
-		<h1>LOADING</h1>
+		<h1 id="msg">LOADING</h1>
 		<span></span> <span></span> <span></span>
-		</form>
+		
 	</div>
 	<form action="MainServlet" id="form" method="get">
 		<script src="js/loading.js"></script>
