@@ -243,12 +243,13 @@ public class UsersDAO extends BaseDAO {
 		}
 	}
 
-	public boolean exitUser(String userId) throws SwackException {
+	public boolean setState(String userId, String state) throws SwackException {
 		//SQL
-		String sql = "UPDATE USERS SET STATE = 'EXIT' WHERE USERID = ?";
+		String sql = "UPDATE USERS SET STATE = ? WHERE USERID = ?";
 		try (Connection conn = dataSource.getConnection()) {
 			PreparedStatement pStmt = conn.prepareStatement(sql);
-			pStmt.setString(1, userId);
+			pStmt.setString(1, state);
+			pStmt.setString(2, userId);
 
 			//SQL実行
 			int result = pStmt.executeUpdate();
@@ -337,4 +338,50 @@ public class UsersDAO extends BaseDAO {
 		}
 	}
 
+	public int getMissCount(String userId) throws SwackException {
+		//ユーザの状態を取得するSQL
+		String sql = "SELECT miss_coount FROM users WHERE userId = ?";
+		try (Connection conn = dataSource.getConnection()) {
+			PreparedStatement pStmt = conn.prepareStatement(sql);
+			pStmt.setString(1, userId);
+
+			//SQL実行
+			ResultSet rs = pStmt.executeQuery();
+
+			//結果をリストに詰める
+			int count = 0;
+			if (rs.next()) {
+				count = rs.getInt("miss_coount");
+			}
+
+			return count;
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new SwackException(ERR_DB_PROCESS, e);
+		}
+	}
+
+	public boolean setMissCount(String userId, int count) throws SwackException {
+		//SQL
+		String sql = "UPDATE USERS SET MISS_COUNT = ? WHERE USERID = ?";
+		try (Connection conn = dataSource.getConnection()) {
+			PreparedStatement pStmt = conn.prepareStatement(sql);
+			pStmt.setInt(1, count);
+			pStmt.setString(2, userId);
+
+			//SQL実行
+			int result = pStmt.executeUpdate();
+
+			//結果
+			if (result != 1) {
+				return false;//失敗
+			}
+			return true;//成功
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new SwackException(ERR_DB_PROCESS, e);
+		}
+	}
 }

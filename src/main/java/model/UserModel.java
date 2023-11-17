@@ -80,7 +80,7 @@ public class UserModel {
 		// UserDAOに退会させたいユーザのIDを渡す
 		boolean result = true;
 		for (String userId : userIdList) {
-			if (!(new UsersDAO().exitUser(userId))) {
+			if (!(new UsersDAO().setState(userId, "EXIT"))) {
 				result = false;
 				break;
 			}
@@ -99,7 +99,7 @@ public class UserModel {
 	public boolean lockUser(String userId) throws SwackException {
 		boolean result = false;
 		UsersDAO usersdao = new UsersDAO();
-		boolean Result = usersdao.lockUser(userId);
+		boolean Result = usersdao.setState(userId, "LOCK");
 		if (Result) {
 			result = true;
 		} else {
@@ -117,7 +117,7 @@ public class UserModel {
 	public boolean unlockUser(String userId) throws SwackException {
 		boolean result = false;
 		UsersDAO usersdao = new UsersDAO();
-		boolean Result = usersdao.unlockUser(userId);
+		boolean Result = usersdao.setState(userId, null);
 		if (Result) {
 			result = true;
 		} else {
