@@ -58,7 +58,8 @@ public class LoginServlet extends HttpServlet {
 			LoginModel loginModel = new LoginModel();
 			User user = loginModel.checkLogin(mailAddress, password);
 			boolean result = loginModel.checkExit(user);
-			String RESULT=loginModel.checkDate(users.getUserId());
+			String Date = loginModel.checkDate(users.getUserId());
+			System.out.println(Date);
 			if (user == null) {
 				// 認証失敗
 				request.setAttribute("errorMsg", ERR_LOGIN_PARAM_MISTAKE);
@@ -70,16 +71,16 @@ public class LoginServlet extends HttpServlet {
 				request.getRequestDispatcher("/WEB-INF/jsp/login.jsp").forward(request, response);
 				return;
 			} else {
-				if(RESULT) {
-					
-				}
+				//				int ans=
+				//				if(RESULT) {
+				//					
+				//				}
 				// 認証成功(ログイン情報をセッションに保持)
-				HttpSession session = request.getSession();
 				session.setAttribute("user", user);
 				request.getRequestDispatcher("/WEB-INF/jsp/loading.jsp").forward(request, response);
 				return;
 			}
-			boolean RESULT=loginModel.
+			//			boolean RESULT=loginModel.
 
 		} catch (SwackException e) {
 			e.printStackTrace();
