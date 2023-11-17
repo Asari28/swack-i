@@ -36,7 +36,7 @@ public class LoginServlet extends HttpServlet {
 		String mailAddress = request.getParameter("mailAddress");
 		String password = request.getParameter("password");
 		HttpSession session = request.getSession();
-		User users = (User) session.getAttribute("user");
+		User user = (User) session.getAttribute("user");
 
 		// パラメータチェック
 		StringBuilder errorMsg = new StringBuilder();
@@ -57,11 +57,11 @@ public class LoginServlet extends HttpServlet {
 		try {
 			// ログインチェック
 			LoginModel loginModel = new LoginModel();
-			User user = loginModel.checkLogin(mailAddress, password);
+			User users = loginModel.checkLogin(mailAddress, password);
 			boolean result = loginModel.checkExit(user);
 			int cnt = loginModel.getCount(user);
 			boolean rs = loginModel.checkDate(users.getUserId());
-			if (user == null || rs || cnt >= 5) {
+			if (users == null || rs || cnt >= 5) {
 				// 認証失敗
 				request.setAttribute("errorMsg", ERR_LOGIN_PARAM_MISTAKE);
 				cnt += 1;
