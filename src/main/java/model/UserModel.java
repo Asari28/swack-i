@@ -90,4 +90,22 @@ public class UserModel {
 
 	}
 
+	/**
+	 * アカウントロックするメソッド
+	 * LoginServletで使用する
+	 * @return true or false
+	 * @throws SwackException
+	 */
+	public boolean lockUser(String userId) throws SwackException {
+		boolean result = false;
+		UsersDAO usersdao = new UsersDAO();
+		boolean Result = usersdao.lockUser(userId);
+		if (Result) {
+			result = true;
+		} else {
+			result = false;
+		}
+		return result;
+	}
+
 }

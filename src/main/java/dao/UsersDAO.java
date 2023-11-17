@@ -288,4 +288,10 @@ public class UsersDAO extends BaseDAO {
 			throw new SwackException(ERR_DB_PROCESS, e);
 		}
 	}
+
+	public boolean lockUser(String userId) throws SwackException {
+		//SQL
+		String sql = "UPDATE WHERE USERID=?";
+
+	}
 }
