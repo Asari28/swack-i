@@ -3,6 +3,7 @@ package servlet;
 import static parameter.Messages.*;
 
 import java.io.IOException;
+import java.sql.Date;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -58,7 +59,7 @@ public class LoginServlet extends HttpServlet {
 			LoginModel loginModel = new LoginModel();
 			User user = loginModel.checkLogin(mailAddress, password);
 			boolean result = loginModel.checkExit(user);
-			String Date = loginModel.checkDate(users.getUserId());
+			Date Date = loginModel.checkDate(users.getUserId());
 			System.out.println(Date);
 			if (user == null) {
 				// 認証失敗

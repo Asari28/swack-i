@@ -1,5 +1,7 @@
 package model;
 
+import java.sql.Date;
+
 import bean.User;
 import dao.UsersDAO;
 import exception.SwackException;
@@ -36,10 +38,15 @@ public class LoginModel {
 		return result;
 	}
 
-	public String checkDate(String userid) throws SwackException {
+	public boolean checkDate(String userid) throws SwackException {
 		UsersDAO usersdao = new UsersDAO();
-		String date = usersdao.checkDate(userid);
-		return date;
+		Date date = usersdao.checkDate(userid);
+		Date nowDate = (Date) new java.util.Date();
+		boolean rs = true;
+		if (nowDate.getTime() - date.getTime() > 21) {
+			rs = false;
+		}
+		return rs;
 	}
 
 }

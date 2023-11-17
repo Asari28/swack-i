@@ -1,6 +1,7 @@
 package dao;
 
 import java.sql.Date;
+import java.text.SimpleDateFormat;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -114,9 +115,11 @@ class UsersDAOTest {
 	@Test
 	void testCheckDate() throws SwackException {
 		System.out.println("trueがでたら成功");
-		Date rs = usersDAO.checkDate("U0001");
+		Date rs1 = usersDAO.checkDate("U0001");
+		Date rs2 = usersDAO.checkDate("U0000");
+		SimpleDateFormat df = new SimpleDateFormat("yyyy/MM/dd");
 
-		System.out.println(rs.add(0, 0));
+		System.out.println(rs1.getTime() - rs2.getTime());
 	}
 
 }
