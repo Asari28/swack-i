@@ -58,8 +58,8 @@ public class LoginServlet extends HttpServlet {
 			// ログインチェック
 			LoginModel loginModel = new LoginModel();
 			User user = loginModel.checkLogin(mailAddress, password);
-			boolean result = loginModel.checkExit(user);
-			int cnt = loginModel.getCount(user);
+			boolean result = loginModel.checkExit(users);
+			int cnt = loginModel.getCount(users);
 			boolean rs = loginModel.checkDate(users.getUserId());
 			if (user == null || rs || cnt >= 5) {
 				// 認証失敗
@@ -67,13 +67,13 @@ public class LoginServlet extends HttpServlet {
 				cnt += 1;
 				if (cnt >= 5) {
 					UserModel usermodel = new UserModel();
-					if (!(usermodel.lockUser(user.getUserId()))) {
+					if (!(usermodel.lockUser(users.getUserId()))) {
 						request.setAttribute("errorMsg", ERR_DB_PROCESS);
 						cnt -= 1;
 					} else {
 						request.setAttribute("errorMsg", ACCOUNT_LOCK);
 					}
-					loginModel.setCount(user, cnt);
+					loginModel.setCount(users, cnt);
 
 				}
 				request.getRequestDispatcher("/WEB-INF/jsp/login.jsp").forward(request, response);
@@ -85,8 +85,8 @@ public class LoginServlet extends HttpServlet {
 				return;
 			} else {
 				// 認証成功(ログイン情報をセッションに保持)
-				loginModel.setCount(user, 0);
-				session.setAttribute("user", user);
+				loginModel.setCount(users, 0);
+				session.setAttribute("user", users);
 				request.getRequestDispatcher("/WEB-INF/jsp/loading.jsp").forward(request, response);
 				return;
 			}
