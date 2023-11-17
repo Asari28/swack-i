@@ -3,7 +3,6 @@ package servlet;
 import static parameter.Messages.*;
 
 import java.io.IOException;
-import java.sql.Date;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -15,6 +14,7 @@ import javax.servlet.http.HttpSession;
 import bean.User;
 import exception.SwackException;
 import model.LoginModel;
+import model.UserModel;
 
 /**
  * ログイン処理を実行するServlet
@@ -59,11 +59,23 @@ public class LoginServlet extends HttpServlet {
 			LoginModel loginModel = new LoginModel();
 			User user = loginModel.checkLogin(mailAddress, password);
 			boolean result = loginModel.checkExit(user);
-			Date Date = loginModel.checkDate(users.getUserId());
-			System.out.println(Date);
-			if (user == null) {
+			int cnt = loginModel.getCount(user);
+			boolean rs = loginModel.checkDate(users.getUserId());
+			if (user == null || rs || cnt >= 5) {
 				// 認証失敗
 				request.setAttribute("errorMsg", ERR_LOGIN_PARAM_MISTAKE);
+				cnt += 1;
+				if (cnt >= 5) {
+					UserModel usermodel = new UserModel();
+					if (!(usermodel.lockUser(user.getUserId()))) {
+						request.setAttribute("errorMsg", ERR_DB_PROCESS);
+						cnt -= 1;
+					} else {
+						request.setAttribute("errorMsg", ACCOUNT_LOCK);
+					}
+					loginModel.setCount(user, cnt);
+
+				}
 				request.getRequestDispatcher("/WEB-INF/jsp/login.jsp").forward(request, response);
 				return;
 			} else if (result) {
@@ -72,16 +84,12 @@ public class LoginServlet extends HttpServlet {
 				request.getRequestDispatcher("/WEB-INF/jsp/login.jsp").forward(request, response);
 				return;
 			} else {
-				//				int ans=
-				//				if(RESULT) {
-				//					
-				//				}
 				// 認証成功(ログイン情報をセッションに保持)
+				loginModel.setCount(user, 0);
 				session.setAttribute("user", user);
 				request.getRequestDispatcher("/WEB-INF/jsp/loading.jsp").forward(request, response);
 				return;
 			}
-			//			boolean RESULT=loginModel.
 
 		} catch (SwackException e) {
 			e.printStackTrace();
