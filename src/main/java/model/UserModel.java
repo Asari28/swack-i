@@ -126,4 +126,17 @@ public class UserModel {
 		return result;
 	}
 
+	/**
+	 * ユーザ名を取得する
+	 * 複数人ダイレクトチャットの名前作成に使用
+	 * @param userId ユーザID
+	 * @return ユーザ名
+	 * @throws SwackException
+	 */
+	public String getUserName(String userId) throws SwackException {
+		UsersDAO usersDAO = new UsersDAO();
+		String userName = usersDAO.getUserName(userId);
+		return userName;
+	}
+
 }

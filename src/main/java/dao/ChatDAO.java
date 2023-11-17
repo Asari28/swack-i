@@ -70,7 +70,8 @@ public class ChatDAO extends BaseDAO {
 				+ " GROUP BY R.ROOMID, R.ROOMNAME, R.DIRECTED";
 		String sqlGetDirectRoom = "SELECT U.USERNAME AS ROOMNAME FROM JOINROOM R"
 				+ " JOIN USERS U ON R.USERID = U.USERID" + " WHERE R.USERID <> ? AND ROOMID = ?";
-
+		//複数人ダイレクトチャット確認のSQL文
+		String checkSql = "SELECT roomName,memberCount FROM directgroups WHERE roomId = ?";
 		boolean directed = false;
 		String roomName = "";
 		int memberCount = 0;
@@ -87,12 +88,20 @@ public class ChatDAO extends BaseDAO {
 
 			// for Direct
 			if (directed) {
-				PreparedStatement pStmt2 = conn.prepareStatement(sqlGetDirectRoom);
-				pStmt2.setString(1, userId);
-				pStmt2.setString(2, roomId);
-
-				ResultSet rs2 = pStmt2.executeQuery();
-				if (rs2.next()) {
+				PreparedStatement cpst = conn.prepareStatement(checkSql);
+				cpst.setString(1, roomId);
+				ResultSet crs = cpst.executeQuery();
+				crs.next();
+				try {
+					roomName = crs.getString("roomName");
+					memberCount = crs.getInt("memberCount");
+				} catch (Exception e) {
+					PreparedStatement pStmt2 = conn.prepareStatement(sqlGetDirectRoom);
+					pStmt2.setString(1, userId);
+					pStmt2.setString(2, roomId);
+					//SQL実行
+					ResultSet rs2 = pStmt2.executeQuery();
+					rs2.next();
 					roomName = rs2.getString("ROOMNAME");
 					memberCount = 2;
 				}
@@ -144,23 +153,47 @@ public class ChatDAO extends BaseDAO {
 	 * @throws SwackException
 	 */
 	public ArrayList<Room> getDirectList(String userId) throws SwackException {
+		//取得のためのSQL文
 		String sql = "SELECT R.ROOMID, U.USERNAME AS ROOMNAME FROM JOINROOM R " + "JOIN USERS U ON R.USERID = U.USERID "
 				+ "WHERE R.USERID <> ? AND ROOMID IN "
 				+ "(SELECT R.ROOMID FROM JOINROOM J JOIN ROOMS R ON J.ROOMID = R.ROOMID "
 				+ "WHERE J.USERID = ? AND R.DIRECTED = TRUE) " + "ORDER BY R.USERID";
+		//複数人ダイレクトチャット確認のSQL文
+		String checkSql = "SELECT roomName FROM directgroups WHERE roomId = ?";
 
 		ArrayList<Room> roomlist = new ArrayList<Room>();
 
 		try (Connection conn = dataSource.getConnection()) {
+			//sql組み立て
 			PreparedStatement pst = conn.prepareStatement(sql);
 			pst.setString(1, userId);
 			pst.setString(2, userId);
 
+			String roomName;
+			String holdRoomId = null;
+
 			ResultSet rs = pst.executeQuery();
 			while (rs.next()) {
 				String roomId = rs.getString("ROOMID");
-				String roomName = rs.getString("ROOMNAME");
-				roomlist.add(new Room(roomId, roomName));
+				if (roomId.equals(holdRoomId)) {
+					continue;
+				}
+				//checkSql組み立て
+				PreparedStatement cPst = conn.prepareStatement(checkSql);
+				cPst.setString(1, roomId);
+				ResultSet cRs = cPst.executeQuery();
+				cRs.next();
+				try {
+					roomName = cRs.getString("roomName");
+					if (roomName == null || roomName.length() == 0) {
+						throw new Exception();
+					}
+					roomlist.add(new Room(roomId, roomName));
+					holdRoomId = roomId;
+				} catch (Exception e) {
+					roomName = rs.getString("ROOMNAME");
+					roomlist.add(new Room(roomId, roomName));
+				}
 			}
 
 		} catch (Exception e) {

@@ -34,7 +34,7 @@
 					<input type="hidden" value="${room.roomId}">
 					<div class="form-group mt-5">
 						<label class="control-label">ユーザを選択する</label> <select
-							name="joinUserId" id="names" class="form-select" multiple>
+							name="joinUserId[]" id="names" class="form-select" multiple>
 							<c:forEach var="user" items="${userList }">
 								<option value="${user.userId}">${user.userName}</option>
 							</c:forEach>

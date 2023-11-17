@@ -26,7 +26,6 @@ public class MainServlet extends LoginCheckServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// 画面から取得
-		//		String roomId = request.getParameter("roomId");
 		//前工程でエラーメッセージがあれば取得(主にメッセージ削除)
 		try {
 			String errorMsg = request.getParameter("errorMsg");
@@ -45,13 +44,6 @@ public class MainServlet extends LoginCheckServlet {
 		} catch (Exception e) {
 			System.out.println("MainServlet(errorMsg):エラーメッセージ取得失敗");
 		}
-		//		if (roomId == null) {
-		//			roomId = (String) request.getAttribute("roomId");
-		//			if (roomId == null) {
-		//				// 初期ルームをeveryoneにする
-		//				roomId = "R0000";
-		//			}
-		//		}
 		// ログイン情報から取得
 		HttpSession session = request.getSession();
 		User user = (User) session.getAttribute("user");
@@ -68,8 +60,6 @@ public class MainServlet extends LoginCheckServlet {
 			return;
 		}
 		try {
-			// ダミーデータ起動時はこちら
-			//			ChatModelDummy chatModel = new ChatModelDummy();
 			ChatModel chatModel = new ChatModel();
 			Room room = chatModel.getRoom(roomId, user.getUserId());
 			System.out.println(room.getRoomName());

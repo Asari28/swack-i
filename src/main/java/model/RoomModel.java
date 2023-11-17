@@ -122,4 +122,18 @@ public class RoomModel {
 		String roomId = roomDAO.getLastRoom(userId);
 		return roomId;
 	}
+
+	/**
+	 * 複数人ダイレクトチャット専用テーブルにINERTする
+	 * @param roomId ルームID
+	 * @param roomName ルーム名
+	 * @param membercount メンバー数
+	 * @return true(成功) false(失敗)
+	 * @throws SwackException
+	 */
+	public boolean insertDirectGroup(String roomId, String roomName, int membercount) throws SwackException {
+		RoomDAO roomDAO = new RoomDAO();
+		boolean result = roomDAO.insertDirectGroup(roomId, roomName, membercount);
+		return result;
+	}
 }

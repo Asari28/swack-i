@@ -234,6 +234,12 @@ public class RoomDAO extends BaseDAO {
 		}
 	}
 
+	/**
+	 * ユーザが最後に表示していたルームを取得する
+	 * @param userId ユーザID
+	 * @return 最後に表示していたルームのルームID
+	 * @throws SwackException
+	 */
 	public String getLastRoom(String userId) throws SwackException {
 		//SQL
 		String sql = "SELECT ROOMID FROM LASTROOM WHERE USERID = ?";
@@ -253,6 +259,37 @@ public class RoomDAO extends BaseDAO {
 			}
 
 			return roomId;
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new SwackException(ERR_DB_PROCESS, e);
+		}
+	}
+
+	/**
+	 * 複数人ダイレクトチャットだった場合に専用テーブルにINSERTする
+	 * @param roomId ルームID
+	 * @param roomName ルーム名
+	 * @param membercount メンバー数
+	 * @return true(成功) false(失敗)
+	 * @throws SwackException
+	 */
+	public boolean insertDirectGroup(String roomId, String roomName, int membercount) throws SwackException {
+		//SQL
+		String sql = "INSERT INTO directgroups (roomid,roomname,membercount) VALUES (?,?,?)";
+		try (Connection conn = dataSource.getConnection()) {
+			PreparedStatement pStmt = conn.prepareStatement(sql);
+			//SQL組み立て
+			pStmt.setString(1, roomId);
+			pStmt.setString(2, roomName);
+			pStmt.setInt(3, membercount);
+
+			//SQL実行
+			int rs = pStmt.executeUpdate();
+			if (rs != 1) {
+				return false;
+			}
+			return true;
 
 		} catch (SQLException e) {
 			e.printStackTrace();
