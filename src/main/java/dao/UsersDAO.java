@@ -311,4 +311,29 @@ public class UsersDAO extends BaseDAO {
 			throw new SwackException(ERR_DB_PROCESS, e);
 		}
 	}
+
+	public String checkDate(String userId) throws SwackException {
+		//ユーザの状態を取得するSQL
+		String sql = "SELECT login_date FROM users WHERE userId = ?";
+		try (Connection conn = dataSource.getConnection()) {
+			PreparedStatement pStmt = conn.prepareStatement(sql);
+			pStmt.setString(1, userId);
+
+			//SQL実行
+			ResultSet rs = pStmt.executeQuery();
+
+			//結果をリストに詰める
+			String date = null;
+			if (rs.next()) {
+				date = rs.getString("login_date");
+			}
+
+			return date;
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new SwackException(ERR_DB_PROCESS, e);
+		}
+	}
+
 }
