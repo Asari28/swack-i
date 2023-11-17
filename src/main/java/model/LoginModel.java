@@ -36,4 +36,10 @@ public class LoginModel {
 		return result;
 	}
 
+	public String checkDate(String userid) throws SwackException {
+		UsersDAO usersdao = new UsersDAO();
+		String date = usersdao.checkDate(userid);
+		return date;
+	}
+
 }

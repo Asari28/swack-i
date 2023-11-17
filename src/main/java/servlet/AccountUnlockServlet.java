@@ -47,7 +47,7 @@ public class AccountUnlockServlet extends HttpServlet {
 		boolean result = false;
 		String errorMsg;
 		try {
-			result = usermodel.unlock(userId);
+			result = usermodel.unlockUser(userid);
 			if (result) {
 				errorMsg = "ユーザのアカウントロックを解除しました";
 				request.setAttribute("errorMsg", errorMsg);
