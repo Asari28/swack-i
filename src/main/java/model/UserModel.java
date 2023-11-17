@@ -108,4 +108,22 @@ public class UserModel {
 		return result;
 	}
 
+	/**
+	 * アカウントロックを解除するメソッド
+	 * AccountUnlockServletで使用する
+	 * @return true or false
+	 * @throws SwackException
+	 */
+	public boolean unlockUser(String userId) throws SwackException {
+		boolean result = false;
+		UsersDAO usersdao = new UsersDAO();
+		boolean Result = usersdao.unlockUser(userId);
+		if (Result) {
+			result = true;
+		} else {
+			result = false;
+		}
+		return result;
+	}
+
 }
