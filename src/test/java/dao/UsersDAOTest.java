@@ -1,13 +1,10 @@
 package dao;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-import java.util.ArrayList;
+import java.sql.Date;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import bean.User;
 import context.SetUpDBConnectionPool;
 import exception.SwackException;
 
@@ -77,15 +74,15 @@ class UsersDAOTest {
 	//
 	//	}
 	//
-	@Test
-	void testSelectAllUser() throws SwackException {
-		ArrayList<User> userList = usersDAO.selectAllUser("U0001");
-		System.out.println("testSelectAllUser():Adminと情報太郎が出力されなければ成功");
-		for (User user : userList) { //拡張for文
-			System.out.println(user);
-		}
-		assertNotNull(userList);
-	}
+	//	@Test
+	//	void testSelectAllUser() throws SwackException {
+	//		ArrayList<User> userList = usersDAO.selectAllUser("U0001");
+	//		System.out.println("testSelectAllUser():Adminと情報太郎が出力されなければ成功");
+	//		for (User user : userList) { //拡張for文
+	//			System.out.println(user);
+	//		}
+	//		assertNotNull(userList);
+	//	}
 	//
 	//	@Test
 	//	void testSelectNotJoinUser() throws SwackException {
@@ -113,5 +110,13 @@ class UsersDAOTest {
 	//		boolean rs = usersDAO.exitUser("U0001");
 	//		System.out.println(rs);
 	//	}
+
+	@Test
+	void testCheckDate() throws SwackException {
+		System.out.println("trueがでたら成功");
+		Date rs = usersDAO.checkDate("U0001");
+
+		System.out.println(rs.add(0, 0));
+	}
 
 }
