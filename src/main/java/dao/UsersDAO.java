@@ -341,7 +341,7 @@ public class UsersDAO extends BaseDAO {
 
 	public int getMissCount(String userId) throws SwackException {
 		//ユーザの状態を取得するSQL
-		String sql = "SELECT miss_coount FROM users WHERE userId = ?";
+		String sql = "SELECT miss_count FROM users WHERE userId = ?";
 		try (Connection conn = dataSource.getConnection()) {
 			PreparedStatement pStmt = conn.prepareStatement(sql);
 			pStmt.setString(1, userId);
@@ -352,7 +352,7 @@ public class UsersDAO extends BaseDAO {
 			//結果をリストに詰める
 			int count = 0;
 			if (rs.next()) {
-				count = rs.getInt("miss_coount");
+				count = rs.getInt("miss_count");
 			}
 
 			return count;

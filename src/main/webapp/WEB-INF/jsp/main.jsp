@@ -26,7 +26,11 @@
 <body>
 	<div class="container">
 		<header class="header">
-			<div class="top">${user.userName}<a href="ExitServlet" id="alluser-btn" name="${user.userId}" class="active"><button>ユーザ一覧</button></a></div>
+			<div class="top">
+				${user.userName}<a href="ExitServlet" id="alluser-btn" name="${user.userId}" class="active"><button>ユーザ一覧</button></a>
+				${user.userName}<a href="AccountUnlockServlet" id="accountlock-btn" name="${user.userId}" class="active"><button>アカウントロック解除</button></a>
+				${user.userName}<a href="AccountdeleteServlet" id="accountdelete-btn" name="${user.userId}" class="active"><button>アカウント削除</button></a>
+			</div>
 			<form action="LogoutServlet" id="logoutForm" method="get">
 				<input type="submit" value="ログアウト" onclick="logout();">
 			</form>
@@ -90,7 +94,8 @@
 							<div class="log-box">
 								<p class="log-name">
 									${chatLog.userName} <span class="log-time">[${chatLog.createdAt}]
-										<button class="editicon" onclick="editChat(${chatLog.chatLogId},'${chatLog.userId }','${user.userId }');">
+										<button class="editicon"
+											onclick="editChat(${chatLog.chatLogId},'${chatLog.userId }','${user.userId }');">
 											<img src="images/pencil.svg">
 										</button>
 										<button type="button" class="deleteicon"
@@ -105,15 +110,17 @@
 								<div id="">
 									<form action="EditChatLogServlet" method="post">
 										<p class="message ${chatLog.chatLogId}">${chatLog.message}</p>
-										 <textarea
-											class="input-Msg ${chatLog.chatLogId} active" name="message"></textarea> 
-											<input
-											type="hidden" name="chatLogId" value="${chatLog.chatLogId}"/>
+										<textarea class="input-Msg ${chatLog.chatLogId} active"
+											name="message"></textarea>
+										<input type="hidden" name="chatLogId"
+											value="${chatLog.chatLogId}" />
 										<div class="edit-bnt-box">
 											<a href="MainServlet"> <input type="button"
-												class="msg-Not-Btn ${chatLog.chatLogId} active" value="キャンセル">
-											</a> <input type="submit" class="msg-Ok-Btn ${chatLog.chatLogId} active" id="regist"
-												value="登録"/>
+												class="msg-Not-Btn ${chatLog.chatLogId} active"
+												value="キャンセル">
+											</a> <input type="submit"
+												class="msg-Ok-Btn ${chatLog.chatLogId} active" id="regist"
+												value="登録" />
 										</div>
 									</form>
 								</div>
