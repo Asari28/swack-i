@@ -27,9 +27,8 @@
 	<div class="container">
 		<header class="header">
 			<div class="top">
-				${user.userName}<a href="ExitServlet" id="alluser-btn" name="${user.userId}" class="active"><button>ユーザ一覧</button></a>
 				${user.userName}<a href="AccountUnlockServlet" id="accountlock-btn" name="${user.userId}" class="active"><button>アカウントロック解除</button></a>
-				${user.userName}<a href="AccountdeleteServlet" id="accountdelete-btn" name="${user.userId}" class="active"><button>アカウント削除</button></a>
+				<a href="ExitServlet" id="accountdelete-btn" name="${user.userId}" class="active"><button>アカウント削除</button></a>
 			</div>
 			<form action="LogoutServlet" id="logoutForm" method="get">
 				<input type="submit" value="ログアウト" onclick="logout();">

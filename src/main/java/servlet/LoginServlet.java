@@ -36,7 +36,7 @@ public class LoginServlet extends HttpServlet {
 		String mailAddress = request.getParameter("mailAddress");
 		String password = request.getParameter("password");
 		HttpSession session = request.getSession();
-		User users = (User) session.getAttribute("user");
+		User user = (User) session.getAttribute("user");
 
 		// パラメータチェック
 		StringBuilder errorMsg = new StringBuilder();
@@ -57,23 +57,29 @@ public class LoginServlet extends HttpServlet {
 		try {
 			// ログインチェック
 			LoginModel loginModel = new LoginModel();
-			User user = loginModel.checkLogin(mailAddress, password);
-			boolean result = loginModel.checkExit(users);
-			int cnt = loginModel.getCount(users);
-			boolean rs = loginModel.checkDate(users.getUserId());
-			if (user == null || rs || cnt >= 5) {
+			user = loginModel.checkLogin(mailAddress, password);
+			if (user == null) {
 				// 認証失敗
 				request.setAttribute("errorMsg", ERR_LOGIN_PARAM_MISTAKE);
+
+				request.getRequestDispatcher("/WEB-INF/jsp/login.jsp").forward(request, response);
+				return;
+			}
+			boolean result = loginModel.checkExit(user);
+			int cnt = loginModel.getCount(user);
+			boolean rs = loginModel.checkDate(user.getUserId());
+			if (rs || cnt >= 5) {
+				// 認証失敗
 				cnt += 1;
 				if (cnt >= 5) {
 					UserModel usermodel = new UserModel();
-					if (!(usermodel.lockUser(users.getUserId()))) {
+					if (!(usermodel.lockUser(user.getUserId()))) {
 						request.setAttribute("errorMsg", ERR_DB_PROCESS);
 						cnt -= 1;
 					} else {
 						request.setAttribute("errorMsg", ACCOUNT_LOCK);
 					}
-					loginModel.setCount(users, cnt);
+					loginModel.setCount(user, cnt);
 
 				}
 				request.getRequestDispatcher("/WEB-INF/jsp/login.jsp").forward(request, response);
@@ -85,8 +91,8 @@ public class LoginServlet extends HttpServlet {
 				return;
 			} else {
 				// 認証成功(ログイン情報をセッションに保持)
-				loginModel.setCount(users, 0);
-				session.setAttribute("user", users);
+				loginModel.setCount(user, 0);
+				session.setAttribute("user", user);
 				request.getRequestDispatcher("/WEB-INF/jsp/loading.jsp").forward(request, response);
 				return;
 			}

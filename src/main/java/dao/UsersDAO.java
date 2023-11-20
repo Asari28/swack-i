@@ -3,7 +3,6 @@ package dao;
 import static parameter.Messages.*;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -315,9 +314,9 @@ public class UsersDAO extends BaseDAO {
 		}
 	}
 
-	public Date checkDate(String userId) throws SwackException {
+	public int checkDate(String userId) throws SwackException {
 		//ユーザの状態を取得するSQL
-		String sql = "SELECT login_date FROM users WHERE userId = ?";
+		String sql = "SELECT EXTRACT(DAY FROM (CURRENT_TIMESTAMP - login_date))  AS date FROM users WHERE userId = ?";
 		try (Connection conn = dataSource.getConnection()) {
 			PreparedStatement pStmt = conn.prepareStatement(sql);
 			pStmt.setString(1, userId);
@@ -326,9 +325,9 @@ public class UsersDAO extends BaseDAO {
 			ResultSet rs = pStmt.executeQuery();
 
 			//結果をリストに詰める
-			Date date = null;
+			int date = 0;
 			if (rs.next()) {
-				date = rs.getDate("login_date");
+				date = rs.getInt("date");
 			}
 
 			return date;
@@ -355,6 +354,7 @@ public class UsersDAO extends BaseDAO {
 				count = rs.getInt("miss_count");
 			}
 
+			System.out.println(count);
 			return count;
 
 		} catch (SQLException e) {

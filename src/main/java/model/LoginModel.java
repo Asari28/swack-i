@@ -1,7 +1,5 @@
 package model;
 
-import java.sql.Date;
-
 import bean.User;
 import dao.UsersDAO;
 import exception.SwackException;
@@ -31,23 +29,24 @@ public class LoginModel {
 	public boolean checkExit(User user) throws SwackException {
 		UsersDAO usersDAO = new UsersDAO();
 		boolean result = false;
-		String state = usersDAO.checkExit(user.getUserId());
-		if (state == "Exit") {
-			result = true;
+		try {
+			String state = usersDAO.checkExit(user.getUserId());
+			if (state == "Exit") {
+				result = true;
+			}
+		} catch (NullPointerException e) {
+			return result;
 		}
 
 		return result;
 	}
 
 	public boolean checkDate(String userid) throws SwackException {
-		UsersDAO usersdao = new UsersDAO();
-		Date date = usersdao.checkDate(userid);
-		System.out.println(date);
-		Date nowDate = (Date) new java.util.Date();
-		System.out.println(nowDate);
 		boolean rs = false;
-		System.out.println(nowDate.getTime() - date.getTime());
-		if (nowDate.getTime() - date.getTime() > 21) {
+		UsersDAO usersdao = new UsersDAO();
+		int date = usersdao.checkDate(userid);
+		System.out.println(date);
+		if (date > 21) {
 			rs = true;
 		}
 		return rs;
