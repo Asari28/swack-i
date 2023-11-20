@@ -28,7 +28,6 @@ public class DeleteChatLogServlet extends HttpServlet {
 	 */
 	public DeleteChatLogServlet() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	/**
@@ -45,7 +44,7 @@ public class DeleteChatLogServlet extends HttpServlet {
 		HttpSession session = request.getSession();
 		User user = (User) session.getAttribute("user");
 		try {
-			//チャットを打った人のUserId
+			//チャットを打った人のUserIdを取得
 			String userId = chatModel.getChatlogUserId(chatLogId);
 			String errorMsg = null;
 			//操作している人がチャットを打った人か
@@ -66,6 +65,7 @@ public class DeleteChatLogServlet extends HttpServlet {
 				//失敗
 				errorMsg = "削除する権限がありません";
 			}
+			//エラーメッセージとルームIDを入れてリダイレクト
 			response.sendRedirect("MainServlet?errorMsg=" + URLEncoder.encode(errorMsg, "UTF-8") + "&roomId="
 					+ URLEncoder.encode(roomId, "UTF-8"));
 

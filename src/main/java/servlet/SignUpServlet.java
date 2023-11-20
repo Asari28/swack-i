@@ -36,6 +36,7 @@ public class SignUpServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		//signup.jspにフォワード
 		request.getRequestDispatcher("/WEB-INF/jsp/signup.jsp").forward(request, response);
 	}
 
@@ -99,6 +100,8 @@ public class SignUpServlet extends HttpServlet {
 			} else {
 
 				// 登録内容に不備あり
+				//エラーメッセージをセット
+				//signup.jspにフォワード
 				request.setAttribute("errorMsg", ERR_USERS_ISREGISTERED);
 				request.getRequestDispatcher("/WEB-INF/jsp/signup.jsp").forward(request, response);
 				return;

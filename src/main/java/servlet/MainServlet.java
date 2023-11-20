@@ -47,9 +47,9 @@ public class MainServlet extends LoginCheckServlet {
 		// ログイン情報から取得
 		HttpSession session = request.getSession();
 		User user = (User) session.getAttribute("user");
-
 		RoomModel roomModel = new RoomModel();
 		String roomId;
+		//最後に開いていたルームを表示させる
 		try {
 			roomId = roomModel.getLastJoinRoom(user.getUserId());
 			System.out.println("roomId :" + roomId);
@@ -59,6 +59,7 @@ public class MainServlet extends LoginCheckServlet {
 			request.getRequestDispatcher("/WEB-INF/jsp/login.jsp").forward(request, response);
 			return;
 		}
+		//ルーム、ダイレクト、チャットログの情報を取得
 		try {
 			ChatModel chatModel = new ChatModel();
 			Room room = chatModel.getRoom(roomId, user.getUserId());
@@ -78,6 +79,7 @@ public class MainServlet extends LoginCheckServlet {
 			request.getRequestDispatcher("/WEB-INF/jsp/login.jsp").forward(request, response);
 			return;
 		}
+		//main.jspにフォワード
 		request.getRequestDispatcher("/WEB-INF/jsp/main.jsp").forward(request, response);
 	}
 
@@ -90,7 +92,7 @@ public class MainServlet extends LoginCheckServlet {
 		// ログイン情報から取得
 		HttpSession session = request.getSession();
 		User user = (User) session.getAttribute("user");
-
+		//入力されたメッセージをＤＢに保存
 		try {
 			new ChatModel().saveChatLog(roomId, user.getUserId(), message);
 		} catch (SwackException e) {
