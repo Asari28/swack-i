@@ -56,27 +56,33 @@ public class ChatDAO extends BaseDAO {
 	}
 
 	/**
-	 * ルーム情報を取得する？
+	 * ルーム情報を取得する
 	 * @param roomId ほしいルームのID
 	 * @param userId 取得しようとしているユーザのID
 	 * @return Room ルーム情報
 	 * 複数人公開ルームの場合：ルーム名、人数
-	 * ダイレクトルームの場合：ルーム名、人数(２で固定)
+	 * 1対1のダイレクトルームの場合：ルーム名、人数(２固定)
+	 * 複数人ダイレクトルームの場合：ルーム名、人数(登録されてる人数)
 	 * @throws SwackException
 	 */
 	public Room getRoom(String roomId, String userId) throws SwackException {
+		//ルーム取得のSQL
 		String sqlGetRoom = "SELECT R.ROOMID, R.ROOMNAME, COUNT(*) AS MEMBER_COUNT, R.DIRECTED"
 				+ " FROM ROOMS R JOIN JOINROOM J ON R.ROOMID = J.ROOMID" + " WHERE R.ROOMID = ?"
 				+ " GROUP BY R.ROOMID, R.ROOMNAME, R.DIRECTED";
+		//ダイレクトルーム取得のSQL
 		String sqlGetDirectRoom = "SELECT U.USERNAME AS ROOMNAME FROM JOINROOM R"
 				+ " JOIN USERS U ON R.USERID = U.USERID" + " WHERE R.USERID <> ? AND ROOMID = ?";
 		//複数人ダイレクトチャット確認のSQL文
 		String checkSql = "SELECT roomName,memberCount FROM directgroups WHERE roomId = ?";
+
+		//必要変数の初期化
 		boolean directed = false;
 		String roomName = "";
 		int memberCount = 0;
 
 		try (Connection conn = dataSource.getConnection()) {
+			//ルーム取得のSQL
 			PreparedStatement pStmt = conn.prepareStatement(sqlGetRoom);
 			pStmt.setString(1, roomId);
 			ResultSet rs = pStmt.executeQuery();
@@ -86,16 +92,17 @@ public class ChatDAO extends BaseDAO {
 				memberCount = rs.getInt("MEMBER_COUNT");
 			}
 
-			// for Direct
+			// ダイレクトルームだった場合
 			if (directed) {
+				//ダイレクトグループか確認する
 				PreparedStatement cpst = conn.prepareStatement(checkSql);
 				cpst.setString(1, roomId);
 				ResultSet crs = cpst.executeQuery();
 				crs.next();
-				try {
+				try {//ダイレクトグループだったとき
 					roomName = crs.getString("roomName");
 					memberCount = crs.getInt("memberCount");
-				} catch (Exception e) {
+				} catch (Exception e) {//個人ダイレクトルームだったとき
 					PreparedStatement pStmt2 = conn.prepareStatement(sqlGetDirectRoom);
 					pStmt2.setString(1, userId);
 					pStmt2.setString(2, roomId);
@@ -129,7 +136,7 @@ public class ChatDAO extends BaseDAO {
 		try (Connection conn = dataSource.getConnection()) {
 			PreparedStatement pst = conn.prepareStatement(sql);
 			pst.setString(1, userId);
-
+			//SQL実行
 			ResultSet rs = pst.executeQuery();
 			while (rs.next()) {
 				String roomId = rs.getString("ROOMID");
@@ -169,6 +176,7 @@ public class ChatDAO extends BaseDAO {
 			pst.setString(1, userId);
 			pst.setString(2, userId);
 
+			//変数初期化
 			String roomName;
 			String holdRoomId = null;
 
