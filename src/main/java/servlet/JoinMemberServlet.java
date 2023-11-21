@@ -30,7 +30,6 @@ public class JoinMemberServlet extends HttpServlet {
 	 */
 	public JoinMemberServlet() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	/**
@@ -78,7 +77,6 @@ public class JoinMemberServlet extends HttpServlet {
 		System.out.println(joinUserid);
 		//準備
 		RoomModel roommodel = new RoomModel();
-
 		try {
 			//受け取った招待するIDリストを順番にデータベースに格納させる
 			boolean result = false;

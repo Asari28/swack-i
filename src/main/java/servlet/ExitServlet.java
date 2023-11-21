@@ -28,7 +28,6 @@ public class ExitServlet extends HttpServlet {
 	 */
 	public ExitServlet() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	/**
@@ -36,12 +35,14 @@ public class ExitServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		//セッションからuserを取得
 		HttpSession session = request.getSession();
 		User user = (User) session.getAttribute("user");
-
+		//エラーメッセージを取得後セット
 		request.setAttribute("errorMsg", request.getAttribute("errorMsg"));
-
 		try {
+			//ユーザリストを取得
+			//ユーザリストをセットしてalluser.jspにフォワード
 			ArrayList<User> userList = new UserModel().getUsers(user.getUserId());
 			request.setAttribute("userList", userList);
 			request.getRequestDispatcher("WEB-INF/jsp/alluser.jsp").forward(request, response);
@@ -58,10 +59,13 @@ public class ExitServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		//画面からユーザＩＤリストを取得
 		String[] userIdList = request.getParameterValues("userIdList");
 		try {
+			//ユーザを退会させる
 			boolean result = new UserModel().exitUser(userIdList);
 			if (!result) {
+				//失敗
 				request.setAttribute("errorMsg", ERR_DB_PROCESS);
 			}
 			doGet(request, response);

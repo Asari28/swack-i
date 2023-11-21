@@ -39,14 +39,17 @@ public class CreateRoomServlet extends HttpServlet {
 		//セッションからuserを取得する
 		HttpSession session = request.getSession();
 		User user = (User) session.getAttribute("user");
-
+		//エラーメッセージを取得
 		String errorMsg = (String) request.getAttribute("errorMsg");
 		System.out.println(errorMsg);
 		UserModel usermodel = new UserModel();
 		try {
+			//ユーザリストを取得
+			//エラーメッセージとユーザリストをセット
 			ArrayList<User> userlist = usermodel.getUsers(user.getUserId());
 			request.setAttribute("userList", userlist);
 			request.setAttribute("errorMsg", errorMsg);
+			//createroom.jspにフォワード
 			request.getRequestDispatcher("/WEB-INF/jsp/createroom.jsp").forward(request, response);
 		} catch (SwackException e) {
 			e.printStackTrace();
@@ -74,7 +77,7 @@ public class CreateRoomServlet extends HttpServlet {
 		//セッションからuserを取得する
 		HttpSession session = request.getSession();
 		User user = (User) session.getAttribute("user");
-
+		//準備
 		RoomModel roommodel = new RoomModel();
 		boolean result = false;
 		boolean Privated;
@@ -82,8 +85,10 @@ public class CreateRoomServlet extends HttpServlet {
 			if (privated != null) {
 				//ユーザがadminか確認
 				if (user.getUserId().equals("U0000")) {
+					//adminの場合
 					Privated = true;
 				} else {
+					//他ユーザの場合
 					request.setAttribute("errorMsg", "作成権限がありません");
 					request.getRequestDispatcher("/WEB-INF/jsp/createroom.jsp").forward(request, response);
 					return;
@@ -92,33 +97,43 @@ public class CreateRoomServlet extends HttpServlet {
 			} else {
 				Privated = false;
 			}
-
+			//新しくルームを作る
 			result = roommodel.createRoom(roomname, user.getUserId(), directed, Privated);
-
 			if (result) {
+				//成功
+				//作った本人をルームに追加
 				boolean Result = false;
 				String roomId = roommodel.getMaxRoomId();
 				boolean userresult = roommodel.joinUser(roomId, user.getUserId());
 				if (userresult) {
+					//ルームに他に参加させるユーザを追加
 					Result = roommodel.joinUser(roomId, joinuserid);
-				}
-
-				if (Result) {
-					session.setAttribute("user", user);
-					response.sendRedirect("MainServlet");
-				} else {
-					request.setAttribute("errorMsg", ERR_SYSTEM);
-					request.getRequestDispatcher("/WEB-INF/jsp/createroom.jsp").forward(request, response);
-					return;
+					if (Result) {
+						//成功
+						//セッションにuserをセット
+						//リダイレクト
+						session.setAttribute("user", user);
+						response.sendRedirect("MainServlet");
+					} else {
+						//失敗
+						//エラーメッセージをセットしてcreateroom.jspにフォワード
+						request.setAttribute("errorMsg", ERR_SYSTEM);
+						request.getRequestDispatcher("/WEB-INF/jsp/createroom.jsp").forward(request, response);
+						return;
+					}
 				}
 			} else {
+				//失敗
+				//エラーメッセージをセットしてcreateroom.jspにフォワード
 				request.setAttribute("errorMsg", ERR_SYSTEM);
 				request.getRequestDispatcher("/WEB-INF/jsp/createroom.jsp").forward(request, response);
 				return;
 			}
 		} catch (SwackException e) {
-
 			e.printStackTrace();
+			request.setAttribute("errorMsg", ERR_SYSTEM);
+			request.getRequestDispatcher("/WEB-INF/jsp/createroom.jsp").forward(request, response);
+			return;
 		}
 
 	}

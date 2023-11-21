@@ -19,7 +19,7 @@ public class RoomModel {
 	 */
 	public boolean createRoom(String roomName, String createdUserId,
 			boolean directed, boolean privated) throws SwackException {
-		//新しいユーザIDの取得
+		//新しいルームIDの取得
 		GetNewIdModel getNewIdModel = new GetNewIdModel();
 		String roomId = getNewIdModel.RoomId();
 		//INSERT

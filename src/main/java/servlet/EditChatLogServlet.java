@@ -26,7 +26,6 @@ public class EditChatLogServlet extends HttpServlet {
 	 */
 	public EditChatLogServlet() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	/**
@@ -43,10 +42,14 @@ public class EditChatLogServlet extends HttpServlet {
 			//編集処理
 			boolean result = chatModel.editChatLog(chatLogId, message);
 			if (result) {
+				//成功
+				//MainServletにエラーメッセージをセットしてリダイレクト
 				errorMsg = "編集処理成功";
 				request.setAttribute("errorMsg", errorMsg);
 				response.sendRedirect("MainServlet?errorMsg=" + URLEncoder.encode(errorMsg, "UTF-8"));
 			} else {
+				//失敗
+				//MainServletにエラーメッセージをセットしてリダイレクト
 				errorMsg = "編集処理失敗";
 				request.setAttribute("errorMsg", errorMsg);
 				response.sendRedirect("MainServlet?errorMsg=" + URLEncoder.encode(errorMsg, "UTF-8"));

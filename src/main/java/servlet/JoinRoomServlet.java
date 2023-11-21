@@ -29,7 +29,6 @@ public class JoinRoomServlet extends HttpServlet {
 	 */
 	public JoinRoomServlet() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	/**
