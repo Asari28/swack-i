@@ -7,7 +7,7 @@ const msgList = ["Loading now...","ローディング中...","こんにちは！
 document.addEventListener('DOMContentLoaded',() => {
 
 });
-
+//ログイン成功時２秒後にメイン画面へ
 setTimeout(function(){
 	form.submit();
 }, 2000);
