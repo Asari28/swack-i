@@ -74,7 +74,7 @@ public class ChatDAO extends BaseDAO {
 		String sqlGetDirectRoom = "SELECT U.USERNAME AS ROOMNAME FROM JOINROOM R"
 				+ " JOIN USERS U ON R.USERID = U.USERID" + " WHERE R.USERID <> ? AND ROOMID = ?";
 		//複数人ダイレクトチャット確認のSQL文
-		String checkSql = "SELECT roomName,memberCount FROM directgroups WHERE roomId = ?";
+		String checkSql = "SELECT roomName,memberCount FROM directgroups WHERE groupId = ?";
 
 		//必要変数の初期化
 		boolean directed = false;
@@ -166,7 +166,7 @@ public class ChatDAO extends BaseDAO {
 				+ "(SELECT R.ROOMID FROM JOINROOM J JOIN ROOMS R ON J.ROOMID = R.ROOMID "
 				+ "WHERE J.USERID = ? AND R.DIRECTED = TRUE) " + "ORDER BY R.USERID";
 		//複数人ダイレクトチャット確認のSQL文
-		String checkSql = "SELECT roomName FROM directgroups WHERE roomId = ?";
+		String checkSql = "SELECT roomName FROM directgroups WHERE groupId = ?";
 
 		ArrayList<Room> roomlist = new ArrayList<Room>();
 
