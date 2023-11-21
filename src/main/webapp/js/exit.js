@@ -1,8 +1,10 @@
 "use strict";
 
-const btn = document.getElementById("alluser-btn");
+const abtn = document.getElementById("accountlock-btn");
+const btn = document.getElementById("accountdelete-btn");
 
 if(btn.name == "U0000"){
-	btn.classList.toggle("active");
+	abtn.classList.remove("active");
+	btn.classList.remove("active");
 }
 

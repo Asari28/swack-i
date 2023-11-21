@@ -24,13 +24,12 @@ public class UsersDAO extends BaseDAO {
 	 * @return User(該当ユーザデータを返却)
 	 * @throws SwackException
 	 */
-	public User select(String mailAddress, String password) throws SwackException {
-		String sql = "SELECT USERID, USERNAME FROM USERS WHERE MAILADDRESS = ? AND PASSWORD = ?";
+	public User selectmailAddress(String mailAddress) throws SwackException {
+		String sql = "SELECT USERID, USERNAME FROM USERS WHERE MAILADDRESS = ?";
 		User user = null;
 		try (Connection conn = dataSource.getConnection()) {
 			PreparedStatement pStmt = conn.prepareStatement(sql);
 			pStmt.setString(1, mailAddress);
-			pStmt.setString(2, password);
 
 			ResultSet rs = pStmt.executeQuery();
 			if (rs.next()) {
@@ -44,6 +43,33 @@ public class UsersDAO extends BaseDAO {
 			throw new SwackException(ERR_DB_PROCESS, e);
 		}
 		return user;
+	}
+
+	/**
+	 * メールアドレスとパスワードがあっているか確認する
+	 * （備え付けのまま変更なし）
+	 * @param mailAddress メールアドレス
+	 * @param password パスワード
+	 * @return User(該当ユーザデータを返却)
+	 * @throws SwackException
+	 */
+	public boolean selectPassword(String mailAddress, String password) throws SwackException {
+		String sql = "SELECT USERID, USERNAME FROM USERS WHERE MAILADDRESS = ? AND PASSWORD = ?";
+		boolean result = true;
+		try (Connection conn = dataSource.getConnection()) {
+			PreparedStatement pStmt = conn.prepareStatement(sql);
+			pStmt.setString(1, mailAddress);
+			pStmt.setString(2, password);
+
+			ResultSet rs = pStmt.executeQuery();
+			if (rs.next()) {
+				result = false;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new SwackException(ERR_DB_PROCESS, e);
+		}
+		return result;
 	}
 
 	/**
@@ -266,7 +292,7 @@ public class UsersDAO extends BaseDAO {
 		}
 	}
 
-	public String checkExit(String userId) throws SwackException {
+	public String checkState(String userId) throws SwackException {
 		//ユーザの状態を取得するSQL
 		String sql = "SELECT state FROM users WHERE userId = ?";
 		try (Connection conn = dataSource.getConnection()) {

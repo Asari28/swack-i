@@ -57,38 +57,52 @@ public class LoginServlet extends HttpServlet {
 		try {
 			// ログインチェック
 			LoginModel loginModel = new LoginModel();
-			user = loginModel.checkLogin(mailAddress, password);
-			if (user == null) {
+			if (loginModel.checkMailAddress(mailAddress)) {
 				// 認証失敗
-				request.setAttribute("errorMsg", ERR_LOGIN_PARAM_MISTAKE);
+				request.setAttribute("errorMsg", ERR_LOGIN_MAILADDRESS_MISTAKE);
 
 				request.getRequestDispatcher("/WEB-INF/jsp/login.jsp").forward(request, response);
 				return;
 			}
-			boolean result = loginModel.checkExit(user);
-			int cnt = loginModel.getCount(user);
-			boolean rs = loginModel.checkDate(user.getUserId());
-			if (rs || cnt >= 5) {
-				// 認証失敗
-				cnt += 1;
-				if (cnt >= 5) {
-					UserModel usermodel = new UserModel();
-					if (!(usermodel.lockUser(user.getUserId()))) {
-						request.setAttribute("errorMsg", ERR_DB_PROCESS);
-						cnt -= 1;
-					} else {
-						request.setAttribute("errorMsg", ACCOUNT_LOCK);
-					}
-					loginModel.setCount(user, cnt);
-
-				}
-				request.getRequestDispatcher("/WEB-INF/jsp/login.jsp").forward(request, response);
-				return;
-			} else if (result) {
+			user = loginModel.selectMailAddress(mailAddress);
+			if (loginModel.checkExit(user)) {
 				// 認証失敗
 				request.setAttribute("errorMsg", ACCOUNT_EXIT);
 				request.getRequestDispatcher("/WEB-INF/jsp/login.jsp").forward(request, response);
 				return;
+			}
+			if (loginModel.checkLock(user)) {
+				// 認証失敗
+				request.setAttribute("errorMsg", ACCOUNT_LOCK);
+				request.getRequestDispatcher("/WEB-INF/jsp/login.jsp").forward(request, response);
+				return;
+			}
+			if (loginModel.checkPassword(mailAddress, password)) {
+				int cnt = loginModel.getCount(user);
+				boolean rs = loginModel.checkDate(user.getUserId());
+				cnt += 1;
+				loginModel.setCount(user, cnt);
+				if (rs || cnt >= 5) {
+					// 認証失敗
+					if (cnt >= 5) {
+						UserModel usermodel = new UserModel();
+						if (!(usermodel.lockUser(user.getUserId()))) {
+							request.setAttribute("errorMsg", ERR_DB_PROCESS);
+						} else {
+							request.setAttribute("errorMsg", ACCOUNT_LOCK);
+						}
+						request.getRequestDispatcher("/WEB-INF/jsp/login.jsp").forward(request, response);
+						return;
+					} else {
+						request.setAttribute("errorMsg", ACCOUNT_LOCK);
+						request.getRequestDispatcher("/WEB-INF/jsp/login.jsp").forward(request, response);
+						return;
+					}
+				} else {
+					request.setAttribute("errorMsg", ERR_LOGIN_PASSWORD_MISTAKE);
+					request.getRequestDispatcher("/WEB-INF/jsp/login.jsp").forward(request, response);
+					return;
+				}
 			} else {
 				// 認証成功(ログイン情報をセッションに保持)
 				loginModel.setCount(user, 0);

@@ -82,7 +82,7 @@ public class SignUpServlet extends HttpServlet {
 				boolean results = new SignUpModel().insert(username, mailAddress, password);
 				if (results) {
 					//新規ユーザのユーザIDを取得するためログインモデルを使用してユーザ情報取得
-					User user = new LoginModel().checkLogin(mailAddress, password);
+					User user = new LoginModel().selectMailAddress(mailAddress);
 					//ユーザ登録が成功していたらR0000に参加させる
 					boolean joinResult = new RoomModel().joinUser("R0000", user.getUserId());
 					if (joinResult) {

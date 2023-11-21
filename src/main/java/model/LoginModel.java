@@ -15,23 +15,66 @@ public class LoginModel {
 	 * @param password パスワード
 	 * @return ユーザ情報(ログインできなかった場合はnull)
 	 */
-	public User checkLogin(String mailAddress, String password) throws SwackException {
+	public User selectMailAddress(String mailAddress) throws SwackException {
 		UsersDAO usersDAO = new UsersDAO();
-		User user = usersDAO.select(mailAddress, password);
-		return user;
+		return usersDAO.selectmailAddress(mailAddress);
+
 	}
 
 	/**
-	 * 退会、ロックされているかの確認
+	 * 存在するユーザか確認
+	 * @param mailAddress メールアドレス
+	 * @param password パスワード
+	 * @return ユーザ情報(ログインできなかった場合はnull)
+	 */
+	public boolean checkMailAddress(String mailAddress) throws SwackException {
+		UsersDAO usersDAO = new UsersDAO();
+		return usersDAO.checkMailAddress(mailAddress);
+
+	}
+
+	/**
+	 * 存在するユーザか確認
+	 * @param mailAddress メールアドレス
+	 * @param password パスワード
+	 * @return ユーザ情報(ログインできなかった場合はnull)
+	 */
+	public boolean checkPassword(String mailAddress, String password) throws SwackException {
+		UsersDAO usersDAO = new UsersDAO();
+		return usersDAO.selectPassword(mailAddress, password);
+	}
+
+	/**
+	 * 退会されているかの確認
 	 * @param user ユーザの情報
-	 * @return ture(退会、ロック済み)　false(異常なし)
+	 * @return ture(退会)　false(異常なし)
 	 */
 	public boolean checkExit(User user) throws SwackException {
 		UsersDAO usersDAO = new UsersDAO();
 		boolean result = false;
 		try {
-			String state = usersDAO.checkExit(user.getUserId());
-			if (state == "Exit") {
+			String state = usersDAO.checkState(user.getUserId());
+			if (state.equals("EXIT")) {
+				result = true;
+			}
+		} catch (NullPointerException e) {
+			return result;
+		}
+
+		return result;
+	}
+
+	/**
+	 * ロックされているかの確認
+	 * @param user ユーザの情報
+	 * @return ture(ロック済み)　false(異常なし)
+	 */
+	public boolean checkLock(User user) throws SwackException {
+		UsersDAO usersDAO = new UsersDAO();
+		boolean result = false;
+		try {
+			String state = usersDAO.checkState(user.getUserId());
+			if (state.equals("LOCK")) {
 				result = true;
 			}
 		} catch (NullPointerException e) {
