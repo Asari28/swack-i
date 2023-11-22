@@ -118,6 +118,8 @@ public class CreateDirectServlet extends HttpServlet {
 			String roomId = roommodel.getMaxRoomId();
 			//作成したルームにユーザを登録していく
 			//受け取ったIDリストを順番にデータベースに格納させる
+			//Adminの登録
+			roommodel.joinUser(roomId, "U0000");
 			boolean result = roommodel.joinUser(roomId, user.getUserId());
 			for (String joinuser : userIdList) {
 				if (result) {
