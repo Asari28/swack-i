@@ -16,6 +16,8 @@ public class User implements Serializable {
 	private String mailAddress;
 	/** パスワード */
 	private String password;
+	/** ステート */
+	private String state;
 
 	public User() {
 		// for JSP
@@ -59,6 +61,14 @@ public class User implements Serializable {
 	public String toString() {
 		return "User [userId=" + userId + ", userName=" + userName + ", mailAddress=" + mailAddress + ", password="
 				+ password + "]";
+	}
+
+	public String getState() {
+		return state;
+	}
+
+	public void setState(String state) {
+		this.state = state;
 	}
 
 }

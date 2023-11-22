@@ -205,6 +205,33 @@ public class UsersDAO extends BaseDAO {
 		}
 	}
 
+	public ArrayList<User> selectLockUser() throws SwackException {
+		//SQL
+		//Adminと自分を除去したリストを取得するSQL
+		String sql = "SELECT userId,userName FROM USERS WHERE state='LOCK'";
+		try (Connection conn = dataSource.getConnection()) {
+			PreparedStatement pStmt = conn.prepareStatement(sql);
+
+			//SQL実行
+			ResultSet rs = pStmt.executeQuery();
+
+			//結果をリストに詰める
+			ArrayList<User> userList = new ArrayList<User>();
+			while (rs.next()) {
+				String listUserId = rs.getString("userId");
+				String userName = rs.getString("userName");
+				User user = new User(listUserId, userName);
+				userList.add(user);
+			}
+
+			return userList;
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new SwackException(ERR_DB_PROCESS, e);
+		}
+	}
+
 	/**
 	 * 招待するルームに参加していないユーザのユーザIDとユーザ名を取得する
 	 * @param roomId 招待するルームID
