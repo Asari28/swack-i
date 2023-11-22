@@ -21,7 +21,7 @@ pageEncoding="UTF-8"%>
     />
 
     <link rel="stylesheet" href="css/style.css" />
-    <link rel="stylesheet" href="css/alluser.css" />
+    <link rel="stylesheet" href="css/accountlock.css" />
   </head>
 
   <body>
@@ -30,10 +30,10 @@ pageEncoding="UTF-8"%>
         <div class="col-md-12 member-form">
           <h3>アカウントロックを解除する</h3>
 		  <p class="error" id="errorMsg">${errorMsg }</p>
-          <form action="ExitServlet" method="post">
+          <form action="AccountUnlockServlet" method="post">
             <div class="form-group">
               <label class="control-label">メンバー</label>
-              <select id="users" name="userIdList" class="form-select" multiple>
+              <select id="users" name="userId" class="form-select" multiple>
               	<c:forEach var="user" items="${userList}">
 	            	<option value="${user.userId}">${user.userName}</option>
 	            </c:forEach>
@@ -44,7 +44,7 @@ pageEncoding="UTF-8"%>
             </div>
 
             <div class="member-form-btn">
-              <a href="MainServlet?roomId=${roomId}"
+              <a href="MainServlet"
                 ><input
                   type="button"
                   class="btn btn-default"

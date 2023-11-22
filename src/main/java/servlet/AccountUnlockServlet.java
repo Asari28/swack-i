@@ -66,7 +66,7 @@ public class AccountUnlockServlet extends HttpServlet {
 			if (result) {
 				errorMsg = "ユーザのアカウントロックを解除しました";
 				request.setAttribute("errorMsg", errorMsg);
-				request.getRequestDispatcher("MainServlet").forward(request, response);
+				response.sendRedirect("MainServlet");
 				return;
 			} else {
 				errorMsg = "ユーザのアカウントロックを解除できませんでした";
