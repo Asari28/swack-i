@@ -92,9 +92,13 @@ public class MainServlet extends LoginCheckServlet {
 		// ログイン情報から取得
 		HttpSession session = request.getSession();
 		User user = (User) session.getAttribute("user");
+
+		ChatModel chatModel = new ChatModel();
+		message = chatModel.sanitizing(message);
+
 		//入力されたメッセージをＤＢに保存
 		try {
-			new ChatModel().saveChatLog(roomId, user.getUserId(), message);
+			chatModel.saveChatLog(roomId, user.getUserId(), message);
 		} catch (SwackException e) {
 			e.printStackTrace();
 			request.setAttribute("errorMsg", ERR_SYSTEM);
@@ -102,7 +106,7 @@ public class MainServlet extends LoginCheckServlet {
 			return;
 		}
 		//GET処理にリダイレクト
-		response.sendRedirect("MainServlet?roomId=" + roomId);
+		response.sendRedirect("MainServlet");
 	}
 
 }

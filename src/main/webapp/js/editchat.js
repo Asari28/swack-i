@@ -1,8 +1,10 @@
 "use strict";
 
 function editChat(chatId, target, userId) {
+	
+	console.log(userId + target);
 //	編集ボタンを押下したユーザとチャットしたユーザが
-	if (target != userId || target != "U0000") {
+	if (target != userId && target != "U0000") {
 //		一致していなかったらエラーのダイアログを出す
 		alert("あなたのチャットではありません");
 		return;

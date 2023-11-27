@@ -276,7 +276,7 @@ public class RoomDAO extends BaseDAO {
 	 */
 	public boolean insertDirectGroup(String roomId, String roomName, int membercount) throws SwackException {
 		//SQL
-		String sql = "INSERT INTO directgroups (roomid,roomname,membercount) VALUES (?,?,?)";
+		String sql = "INSERT INTO directgroups (groupid,roomname,membercount) VALUES (?,?,?)";
 		try (Connection conn = dataSource.getConnection()) {
 			PreparedStatement pStmt = conn.prepareStatement(sql);
 			//SQL組み立て

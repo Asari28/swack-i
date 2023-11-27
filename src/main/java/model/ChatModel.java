@@ -47,4 +47,18 @@ public class ChatModel {
 		//成功したらtrue、失敗したらfalseを返す
 		return new ChatDAO().editChatLog(chatLogId, message);
 	}
+
+	public String sanitizing(String str) {
+		if (null == str || "".equals(str)) {
+			return str;
+		}
+
+		str = str.replaceAll("&", "&amp;");
+		str = str.replaceAll("<", "&lt;");
+		str = str.replaceAll(">", "&gt;");
+		str = str.replaceAll("\"", "&quot;");
+		str = str.replaceAll("\'", "&#39;");
+
+		return str;
+	}
 }

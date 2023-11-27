@@ -59,7 +59,7 @@ public class UserModel {
 	public ArrayList<User> getUnDirectedUsers(String userId) throws SwackException {
 		// UserDAOからルームIDのルームに参加していないユーザ一覧を取得
 		UsersDAO usersDAO = new UsersDAO();
-		ArrayList<User> userList = usersDAO.selectUnDirectedUser(userId);
+		ArrayList<User> userList = usersDAO.selectAllUser(userId);
 		return userList;
 
 	}
