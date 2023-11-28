@@ -71,8 +71,7 @@ public class ChatDAO extends BaseDAO {
 				+ " FROM ROOMS R JOIN JOINROOM J ON R.ROOMID = J.ROOMID" + " WHERE R.ROOMID = ?"
 				+ " GROUP BY R.ROOMID, R.ROOMNAME, R.DIRECTED";
 		//ダイレクトルーム取得のSQL
-		String sqlGetDirectRoom = "SELECT U.USERNAME AS ROOMNAME FROM JOINROOM R"
-				+ " JOIN USERS U ON R.USERID = U.USERID" + " WHERE R.USERID <> ? AND ROOMID = ?";
+		String sqlGetDirectRoom = "SELECT U.USERNAME AS ROOMNAME FROM JOINROOM R JOIN USERS U ON R.USERID = U.USERID WHERE R.USERID <> 'U0000' AND R.USERID <> ? AND ROOMID = ?";
 		//複数人ダイレクトチャット確認のSQL文
 		String checkSql = "SELECT roomName,memberCount FROM directgroups WHERE groupId = ?";
 
@@ -115,6 +114,7 @@ public class ChatDAO extends BaseDAO {
 						roomName += ",";
 						roomName += Adrs.getString("USERNAME2");
 					} else {
+						//一般ユーザの場合
 						PreparedStatement pStmt2 = conn.prepareStatement(sqlGetDirectRoom);
 						pStmt2.setString(1, userId);
 						pStmt2.setString(2, roomId);
@@ -174,10 +174,7 @@ public class ChatDAO extends BaseDAO {
 	 */
 	public ArrayList<Room> getDirectList(String userId) throws SwackException {
 		//取得のためのSQL文
-		String sql = "SELECT R.ROOMID, U.USERNAME AS ROOMNAME FROM JOINROOM R " + "JOIN USERS U ON R.USERID = U.USERID "
-				+ "WHERE R.USERID <> ? AND ROOMID IN "
-				+ "(SELECT R.ROOMID FROM JOINROOM J JOIN ROOMS R ON J.ROOMID = R.ROOMID "
-				+ "WHERE J.USERID = ? AND R.DIRECTED = TRUE) " + "ORDER BY R.USERID";
+		String sql = "SELECT R.ROOMID, U.USERNAME AS ROOMNAME FROM JOINROOM R JOIN USERS U ON R.USERID = U.USERID WHERE R.USERID <> 'U0000' AND R.USERID <> ? AND ROOMID IN (SELECT R.ROOMID FROM JOINROOM J JOIN ROOMS R ON J.ROOMID = R.ROOMID WHERE J.USERID = ? AND R.DIRECTED = TRUE) ORDER BY R.USERID";
 		//複数人ダイレクトチャット確認のSQL文
 		String checkSql = "SELECT roomName FROM directgroups WHERE groupId = ?";
 

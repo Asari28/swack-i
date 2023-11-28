@@ -70,4 +70,11 @@ class ChatDAOTest {
 			System.out.println(r.getRoomName());
 		}
 	}
+
+	@Test
+	void testGetRoom() throws SwackException {
+		Room room = ChatDAO.getRoom("R0006", "U0004");
+		System.out.println(room.getRoomName());
+
+	}
 }
