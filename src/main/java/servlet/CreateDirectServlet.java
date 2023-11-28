@@ -37,9 +37,10 @@ public class CreateDirectServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		//セッションから情報取得
 		HttpSession session = request.getSession();
 		User user = (User) session.getAttribute("user");
-
+		//パラメーター取得
 		String roomId = request.getParameter("roomId");
 		if (roomId == null) {
 			roomId = (String) request.getAttribute("roomId");
