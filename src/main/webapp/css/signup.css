@@ -1,6 +1,10 @@
 @charset "UTF-8";
 
 /* login.jsp */
+body{
+	overflow: hidden;
+}
+
 .container {
 	width: 90%;
 	max-width: 500px;
