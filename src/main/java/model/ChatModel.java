@@ -1,5 +1,6 @@
 package model;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,8 +22,16 @@ public class ChatModel {
 		return new ChatDAO().getRoomList(userId);
 	}
 
-	public ArrayList<Room> getDirectList(String userId) throws SwackException {
-		return new ChatDAO().getDirectList(userId);
+	public ArrayList<Room> getDirectList(String userId) throws SwackException, SQLException {
+		ArrayList<Room> roomList = new ArrayList<Room>();
+		ChatDAO chatDAO = new ChatDAO();
+		if (userId.equals("U0000")) {
+			//Admin用ダイレクトルーム取得
+			roomList = chatDAO.adminGetDirectList();
+			return roomList;
+		}
+		roomList.addAll(chatDAO.getDirectList(userId));
+		return roomList;
 	}
 
 	public List<ChatLog> getChatlogList(String roomId) throws SwackException {

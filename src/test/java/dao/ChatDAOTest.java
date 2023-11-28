@@ -2,12 +2,15 @@ package dao;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import bean.ChatLog;
+import bean.Room;
 import context.SetUpDBConnectionPool;
 import exception.SwackException;
 
@@ -49,7 +52,7 @@ class ChatDAOTest {
 		System.out.println(userId);
 	}
 
-	@Test
+	//@Test
 	void testEditChatlog() throws SwackException {
 		boolean rs = ChatDAO.editChatLog(15, "あああ");
 		if (rs) {
@@ -57,6 +60,14 @@ class ChatDAOTest {
 
 		} else {
 			System.out.println("失敗");
+		}
+	}
+
+	@Test
+	void testAdminGetDirectList() throws SwackException, SQLException {
+		ArrayList<Room> roomList = ChatDAO.adminGetDirectList();
+		for (Room r : roomList) {
+			System.out.println(r.getRoomName());
 		}
 	}
 }

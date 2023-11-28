@@ -103,13 +103,26 @@ public class ChatDAO extends BaseDAO {
 					roomName = crs.getString("roomName");
 					memberCount = crs.getInt("memberCount");
 				} catch (Exception e) {//個人ダイレクトルームだったとき
-					PreparedStatement pStmt2 = conn.prepareStatement(sqlGetDirectRoom);
-					pStmt2.setString(1, userId);
-					pStmt2.setString(2, roomId);
-					//SQL実行
-					ResultSet rs2 = pStmt2.executeQuery();
-					rs2.next();
-					roomName = rs2.getString("ROOMNAME");
+					//取得しようとしているのがAdminの場合
+					if (userId.equals("U0000")) {
+						//Admin用ダイレクトチャット取得のSQL
+						String AdminSql = "SELECT R.roomId,R.USERID1,U1.USERNAME AS USERNAME1,R.USERID2,U2.USERNAME AS USERNAME2 FROM (SELECT R.roomId , U1.userId AS USERID1 , U2.userId AS USERID2 FROM joinroom R JOIN (SELECT R.roomId, MIN(R.userId) AS userId FROM joinroom R JOIN users U ON R.userid = U.userId WHERE U.userID <> 'U0000' AND ROOMID IN(SELECT R.ROOMID FROM JOINROOM J JOIN ROOMS R ON J.ROOMID = R.ROOMID AND R.DIRECTED = TRUE)GROUP BY R.roomId ORDER BY roomId) U1 ON R.roomId = U1.roomId  JOIN(SELECT R.roomId, MAX(R.userId) AS userId FROM joinroom R JOIN users U ON R.userid = U.userId WHERE ROOMID IN(SELECT R.ROOMID FROM JOINROOM J JOIN ROOMS R ON J.ROOMID = R.ROOMID AND R.DIRECTED = TRUE)GROUP BY R.roomId ORDER BY roomId) U2 ON R.roomId = U2.roomId WHERE  u1.userId <> 'U0000' AND R.ROOMID IN(SELECT R.ROOMID FROM JOINROOM J JOIN ROOMS R ON J.ROOMID = R.ROOMID AND R.DIRECTED = TRUE)GROUP BY R.roomId , U1.userId , U2.userId ORDER by R.roomId) R JOIN users U1 ON R.USERID1 = U1.userId JOIN users U2 ON R.USERID2 = U2.userId WHERE roomId=?";
+						PreparedStatement AdPst = conn.prepareStatement(AdminSql);
+						AdPst.setString(1, roomId);
+						ResultSet Adrs = AdPst.executeQuery();
+						Adrs.next();
+						roomName = Adrs.getString("USERNAME1");
+						roomName += ",";
+						roomName += Adrs.getString("USERNAME2");
+					} else {
+						PreparedStatement pStmt2 = conn.prepareStatement(sqlGetDirectRoom);
+						pStmt2.setString(1, userId);
+						pStmt2.setString(2, roomId);
+						//SQL実行
+						ResultSet rs2 = pStmt2.executeQuery();
+						rs2.next();
+						roomName = rs2.getString("ROOMNAME");
+					}
 					memberCount = 2;
 				}
 			}
@@ -210,6 +223,44 @@ public class ChatDAO extends BaseDAO {
 
 		return roomlist;
 
+	}
+
+	/**
+	 * Admin用のダイレクトチャットルーム一覧取得
+	 * @return ArrayList<Room> ダイレクトチャットの一覧
+	 * @throws SQLException
+	 */
+	public ArrayList<Room> adminGetDirectList() throws SQLException {
+		//1対1のダイレクトチャットルーム取得用
+		String sql = "SELECT R.roomId,R.USERID1,U1.USERNAME AS USERNAME1,R.USERID2,U2.USERNAME AS USERNAME2 FROM (SELECT R.roomId , U1.userId AS USERID1 , U2.userId AS USERID2 FROM joinroom R JOIN (SELECT R.roomId, MIN(R.userId) AS userId FROM joinroom R JOIN users U ON R.userid = U.userId WHERE U.userID <> 'U0000' AND ROOMID IN(SELECT R.ROOMID FROM JOINROOM J JOIN ROOMS R ON J.ROOMID = R.ROOMID AND R.DIRECTED = TRUE)GROUP BY R.roomId ORDER BY roomId) U1 ON R.roomId = U1.roomId  JOIN(SELECT R.roomId, MAX(R.userId) AS userId FROM joinroom R JOIN users U ON R.userid = U.userId WHERE ROOMID IN(SELECT R.ROOMID FROM JOINROOM J JOIN ROOMS R ON J.ROOMID = R.ROOMID AND R.DIRECTED = TRUE)GROUP BY R.roomId ORDER BY roomId) U2 ON R.roomId = U2.roomId WHERE  u1.userId <> 'U0000' AND R.ROOMID IN(SELECT R.ROOMID FROM JOINROOM J JOIN ROOMS R ON J.ROOMID = R.ROOMID AND R.DIRECTED = TRUE)GROUP BY R.roomId , U1.userId , U2.userId ORDER by R.roomId) R JOIN users U1 ON R.USERID1 = U1.userId JOIN users U2 ON R.USERID2 = U2.userId";
+		//複数人のダイレクトチャットルーム取得用
+		String Gsql = "SELECT groupId,roomName,memberCount FROM directgroups ";
+
+		ArrayList<Room> roomlist = new ArrayList<Room>();
+
+		try (Connection conn = dataSource.getConnection()) {
+			PreparedStatement pst = conn.prepareStatement(sql);
+			//SQL実行
+			ResultSet rs = pst.executeQuery();
+			while (rs.next()) {
+				String roomId = rs.getString("ROOMID");
+				String roomName = rs.getString("USERNAME1");
+				roomName += ",";
+				roomName += rs.getString("USERNAME2");
+				roomlist.add(new Room(roomId, roomName, 2, true));
+			}
+
+			PreparedStatement Gpst = conn.prepareStatement(Gsql);
+			ResultSet Grs = Gpst.executeQuery();
+			while (Grs.next()) {
+				String roomId = Grs.getString("groupId");
+				String roomName = Grs.getString("roomName");
+				int memberCount = Grs.getInt("memberCount");
+				roomlist.add(new Room(roomId, roomName, memberCount, true));
+			}
+
+			return roomlist;
+		}
 	}
 
 	/**

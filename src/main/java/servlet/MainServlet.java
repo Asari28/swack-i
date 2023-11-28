@@ -3,6 +3,7 @@ package servlet;
 import static parameter.Messages.*;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -74,6 +75,11 @@ public class MainServlet extends LoginCheckServlet {
 			request.setAttribute("directList", directList);
 			request.setAttribute("chatLogList", chatLogList);
 		} catch (SwackException e) {
+			e.printStackTrace();
+			request.setAttribute("errorMsg", ERR_SYSTEM);
+			request.getRequestDispatcher("/WEB-INF/jsp/login.jsp").forward(request, response);
+			return;
+		} catch (SQLException e) {
 			e.printStackTrace();
 			request.setAttribute("errorMsg", ERR_SYSTEM);
 			request.getRequestDispatcher("/WEB-INF/jsp/login.jsp").forward(request, response);
