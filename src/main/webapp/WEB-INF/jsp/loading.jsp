@@ -7,6 +7,7 @@
 <title>Loading</title>
 <link rel="stylesheet" href="css/style.css" />
 <link rel="stylesheet" href="css/loading.css" />
+<link rel="shortcut icon" href="images/favicon.ico" />
 <link href='https://fonts.googleapis.com/css?family=Actor'
 	rel='stylesheet' type='text/css'>
 </head>
