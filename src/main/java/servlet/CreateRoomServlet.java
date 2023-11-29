@@ -103,10 +103,12 @@ public class CreateRoomServlet extends HttpServlet {
 				//成功
 				boolean Result = false;
 				String roomId = roommodel.getMaxRoomId();
-				//Adminをルームに追加
-				roommodel.joinUser(roomId, "U0000");
 				//作った本人をルームに追加
 				boolean userresult = roommodel.joinUser(roomId, user.getUserId());
+				//Adminが作った本人でなければルームに追加
+				if (!(user.getUserId().equals("U0000"))) {
+					roommodel.joinUser(roomId, "U0000");
+				}
 				if (userresult) {
 					//ルームに他に参加させるユーザを追加
 					Result = roommodel.joinUser(roomId, joinuserid);
