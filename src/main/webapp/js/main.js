@@ -20,7 +20,6 @@ document.addEventListener("DOMContentLoaded", () => {
 		limit.textContent = str.substring(0, len) + "…";
 	}
 
-
 	// ログ表示部の最下部へ(110はheader+footerのheight)
 	elLogArea.scrollTop = elLogArea.scrollHeight + 110;
 

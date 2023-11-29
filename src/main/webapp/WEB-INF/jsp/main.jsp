@@ -77,7 +77,7 @@
 					${room.roomName}(${room.memberCount}) <img src="images/reload.svg"
 						class="reload pointer" onclick="doReload();" />
 				</h2>
-				<h3 style="color: red">${errorMsg }</h3>
+				<h3 id="error" class="error" style="color: red">${errorMsg }</h3>
 				<hr>
 				<div id="logArea" class="contents-main">
 					<c:forEach var="chatLog" items="${chatLogList}" varStatus="status">
@@ -199,5 +199,6 @@
 	<script src="js/main.js"></script>
 	<script src="js/editchat.js"></script>
 	<script src="js/exit.js"></script>
+	<script src="js/error.js"></script>
 </body>
 </html>
