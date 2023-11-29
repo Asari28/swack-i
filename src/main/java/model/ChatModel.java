@@ -30,7 +30,7 @@ public class ChatModel {
 			roomList = chatDAO.adminGetDirectList();
 			return roomList;
 		}
-		roomList.addAll(chatDAO.getDirectList(userId));
+		roomList = (chatDAO.getDirectList(userId));
 		return roomList;
 	}
 

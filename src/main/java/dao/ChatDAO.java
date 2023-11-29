@@ -173,48 +173,43 @@ public class ChatDAO extends BaseDAO {
 	 * @throws SwackException
 	 */
 	public ArrayList<Room> getDirectList(String userId) throws SwackException {
-		//取得のためのSQL文
-		String sql = "SELECT R.ROOMID, U.USERNAME AS ROOMNAME FROM JOINROOM R JOIN USERS U ON R.USERID = U.USERID WHERE R.USERID <> 'U0000' AND R.USERID <> ? AND ROOMID IN (SELECT R.ROOMID FROM JOINROOM J JOIN ROOMS R ON J.ROOMID = R.ROOMID WHERE J.USERID = ? AND R.DIRECTED = TRUE) ORDER BY R.USERID";
-		//複数人ダイレクトチャット確認のSQL文
-		String checkSql = "SELECT roomName FROM directgroups WHERE groupId = ?";
+		//1対1ダイレクトチャット取得のためのSQL文
+		String sql = "SELECT R.ROOMID, U.USERNAME AS ROOMNAME FROM JOINROOM R JOIN USERS U ON R.USERID = U.USERID WHERE R.USERID <> 'U0000' AND R.USERID <>? AND ROOMID IN (SELECT R.ROOMID FROM JOINROOM J JOIN ROOMS R ON J.ROOMID = R.ROOMID WHERE J.USERID =? AND R.DIRECTED = TRUE) AND ROOMID NOT IN(SELECT groupId FROM directgroups) ORDER BY R.USERID";
+		//複数人ダイレクトチャット取得のSQL文
+		String dSql = "SELECT groupId,roomName,membercount FROM directgroups WHERE GROUPID IN (SELECT roomId FROM joinroom where userId=? )";
 
 		ArrayList<Room> roomlist = new ArrayList<Room>();
 
 		try (Connection conn = dataSource.getConnection()) {
+			//1対1ダイレクトチャット取得
+			//組み立て
 			//sql組み立て
 			PreparedStatement pst = conn.prepareStatement(sql);
 			pst.setString(1, userId);
 			pst.setString(2, userId);
 
-			//変数初期化
-			String roomName;
-			String holdRoomId = null;
-
 			ResultSet rs = pst.executeQuery();
 			while (rs.next()) {
 				String roomId = rs.getString("ROOMID");
-				if (roomId.equals(holdRoomId)) {
-					continue;
-				}
-				//checkSql組み立て
-				PreparedStatement cPst = conn.prepareStatement(checkSql);
-				cPst.setString(1, roomId);
-				ResultSet cRs = cPst.executeQuery();
-				cRs.next();
-				try {
-					roomName = cRs.getString("roomName");
-					if (roomName == null || roomName.length() == 0) {
-						throw new Exception();
-					}
-					roomlist.add(new Room(roomId, roomName));
-					holdRoomId = roomId;
-				} catch (Exception e) {
-					roomName = rs.getString("ROOMNAME");
-					roomlist.add(new Room(roomId, roomName));
-				}
+				String roomName = rs.getString("ROOMNAME");
+				roomlist.add(new Room(roomId, roomName, 2, true));
 			}
 
-		} catch (Exception e) {
+			//複数人ダイレクトチャット取得
+			PreparedStatement dPst = conn.prepareStatement(dSql);
+			dPst.setString(1, userId);
+
+			ResultSet drs = dPst.executeQuery();
+			while (drs.next()) {
+				String roomId = drs.getString("GROUPID");
+				String roomName = drs.getString("roomName");
+				int memberCount = drs.getInt("membercount");
+				roomlist.add(new Room(roomId, roomName, memberCount, true));
+			}
+
+		} catch (
+
+		Exception e) {
 			throw new SwackException(ERR_DB_PROCESS, e);
 		}
 
@@ -229,7 +224,33 @@ public class ChatDAO extends BaseDAO {
 	 */
 	public ArrayList<Room> adminGetDirectList() throws SQLException {
 		//1対1のダイレクトチャットルーム取得用
-		String sql = "SELECT R.roomId,R.USERID1,U1.USERNAME AS USERNAME1,R.USERID2,U2.USERNAME AS USERNAME2 FROM (SELECT R.roomId , U1.userId AS USERID1 , U2.userId AS USERID2 FROM joinroom R JOIN (SELECT R.roomId, MIN(R.userId) AS userId FROM joinroom R JOIN users U ON R.userid = U.userId WHERE U.userID <> 'U0000' AND ROOMID IN(SELECT R.ROOMID FROM JOINROOM J JOIN ROOMS R ON J.ROOMID = R.ROOMID AND R.DIRECTED = TRUE)GROUP BY R.roomId ORDER BY roomId) U1 ON R.roomId = U1.roomId  JOIN(SELECT R.roomId, MAX(R.userId) AS userId FROM joinroom R JOIN users U ON R.userid = U.userId WHERE ROOMID IN(SELECT R.ROOMID FROM JOINROOM J JOIN ROOMS R ON J.ROOMID = R.ROOMID AND R.DIRECTED = TRUE)GROUP BY R.roomId ORDER BY roomId) U2 ON R.roomId = U2.roomId WHERE  u1.userId <> 'U0000' AND R.ROOMID IN(SELECT R.ROOMID FROM JOINROOM J JOIN ROOMS R ON J.ROOMID = R.ROOMID AND R.DIRECTED = TRUE)GROUP BY R.roomId , U1.userId , U2.userId ORDER by R.roomId) R JOIN users U1 ON R.USERID1 = U1.userId JOIN users U2 ON R.USERID2 = U2.userId";
+		//String sql = "SELECT R.roomId,R.USERID1,U1.USERNAME AS USERNAME1,R.USERID2,U2.USERNAME AS USERNAME2 FROM (SELECT R.roomId , U1.userId AS USERID1 , U2.userId AS USERID2 FROM joinroom R JOIN (SELECT R.roomId, MIN(R.userId) AS userId FROM joinroom R JOIN users U ON R.userid = U.userId WHERE U.userID <> 'U0000' AND ROOMID IN(SELECT R.ROOMID FROM JOINROOM J JOIN ROOMS R ON J.ROOMID = R.ROOMID AND R.DIRECTED = TRUE)GROUP BY R.roomId ORDER BY roomId) U1 ON R.roomId = U1.roomId  JOIN(SELECT R.roomId, MAX(R.userId) AS userId FROM joinroom R JOIN users U ON R.userid = U.userId WHERE ROOMID IN(SELECT R.ROOMID FROM JOINROOM J JOIN ROOMS R ON J.ROOMID = R.ROOMID AND R.DIRECTED = TRUE)GROUP BY R.roomId ORDER BY roomId) U2 ON R.roomId = U2.roomId WHERE  u1.userId <> 'U0000' AND R.ROOMID IN(SELECT R.ROOMID FROM JOINROOM J JOIN ROOMS R ON J.ROOMID = R.ROOMID AND R.DIRECTED = TRUE)GROUP BY R.roomId , U1.userId , U2.userId ORDER by R.roomId) R JOIN users U1 ON R.USERID1 = U1.userId JOIN users U2 ON R.USERID2 = U2.userId";
+		String sql = "SELECT R.roomId,R.USERID1,U1.USERNAME AS USERNAME1,R.USERID2,U2.USERNAME AS USERNAME2\r\n"
+				+ "FROM (SELECT R.roomId , U1.userId AS USERID1 , U2.userId AS USERID2\r\n"
+				+ "		FROM joinroom R JOIN\r\n"
+				+ "			(SELECT R.roomId, MIN(R.userId) AS userId\r\n"
+				+ "			 FROM joinroom R JOIN users U ON R.userid = U.userId\r\n"
+				+ "			 WHERE U.userID <> 'U0000' AND ROOMID IN\r\n"
+				+ "				(SELECT R.ROOMID\r\n"
+				+ "				 FROM JOINROOM J JOIN ROOMS R ON J.ROOMID = R.ROOMID AND R.DIRECTED = TRUE)\r\n"
+				+ "				GROUP BY R.roomId ORDER BY roomId) U1\r\n"
+				+ "			ON R.roomId = U1.roomId  JOIN\r\n"
+				+ "				(SELECT R.roomId, MAX(R.userId) AS userId\r\n"
+				+ "				 FROM joinroom R JOIN users U ON R.userid = U.userId\r\n"
+				+ "				 WHERE ROOMID IN\r\n"
+				+ "					(SELECT R.ROOMID FROM JOINROOM J\r\n"
+				+ "					JOIN ROOMS R ON J.ROOMID = R.ROOMID AND R.DIRECTED = TRUE)\r\n"
+				+ "					GROUP BY R.roomId ORDER BY roomId) U2\r\n"
+				+ "			ON R.roomId = U2.roomId\r\n"
+				+ "		WHERE  u1.userId <> 'U0000'\r\n"
+				+ "			AND R.ROOMID IN\r\n"
+				+ "				(SELECT R.ROOMID FROM JOINROOM J\r\n"
+				+ "				 JOIN ROOMS R ON J.ROOMID = R.ROOMID AND R.DIRECTED = TRUE)\r\n"
+				+ "				 GROUP BY R.roomId , U1.userId , U2.userId\r\n"
+				+ "				 ORDER by R.roomId) R\r\n"
+				+ "	JOIN users U1 ON R.USERID1 = U1.userId\r\n"
+				+ "	JOIN users U2 ON R.USERID2 = U2.userId\r\n"
+				+ "WHERE ROOMID NOT IN (SELECT GROUPID FROM directgroups)";
 		//複数人のダイレクトチャットルーム取得用
 		String Gsql = "SELECT groupId,roomName,memberCount FROM directgroups ";
 
